@@ -41,8 +41,8 @@ struct Lesson {
 }
 
 struct Class {
-    1. required Lesson lesson,
-    2. required WeekDay weekday,
-    3. required i16     start,
-    4. required i16     end
+    1: required Lesson lesson,
+    2: required WeekDay weekday,
+    3: required i16     start,
+    4: required i16     duration
 }
