@@ -22,6 +22,271 @@
 }
 @end
 
+@interface ping_args : NSObject <NSCoding> {
+  NSString * __input;
+
+  BOOL __input_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=input, setter=setInput:) NSString * input;
+#endif
+
+- (id) initWithInput: (NSString *) input;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (NSString *) input;
+- (void) setInput: (NSString *) input;
+- (BOOL) inputIsSet;
+
+@end
+
+@implementation ping_args
+
+- (id) initWithInput: (NSString *) input
+{
+  self = [super init];
+  __input = [input retain];
+  __input_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"input"])
+  {
+    __input = [[decoder decodeObjectForKey: @"input"] retain];
+    __input_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__input_isset)
+  {
+    [encoder encodeObject: __input forKey: @"input"];
+  }
+}
+
+- (void) dealloc
+{
+  [__input release];
+  [super dealloc];
+}
+
+- (NSString *) input {
+  return [[__input retain] autorelease];
+}
+
+- (void) setInput: (NSString *) input {
+  [input retain];
+  [__input release];
+  __input = input;
+  __input_isset = YES;
+}
+
+- (BOOL) inputIsSet {
+  return __input_isset;
+}
+
+- (void) unsetInput {
+  [__input release];
+  __input = nil;
+  __input_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setInput: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"ping_args"];
+  if (__input_isset) {
+    if (__input != nil) {
+      [outProtocol writeFieldBeginWithName: @"input" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __input];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"ping_args("];
+  [ms appendString: @"input:"];
+  [ms appendFormat: @"\"%@\"", __input];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface Ping_result : NSObject <NSCoding> {
+  NSString * __success;
+
+  BOOL __success_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=success, setter=setSuccess:) NSString * success;
+#endif
+
+- (id) initWithSuccess: (NSString *) success;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (NSString *) success;
+- (void) setSuccess: (NSString *) success;
+- (BOOL) successIsSet;
+
+@end
+
+@implementation Ping_result
+
+- (id) initWithSuccess: (NSString *) success
+{
+  self = [super init];
+  __success = [success retain];
+  __success_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [[decoder decodeObjectForKey: @"success"] retain];
+    __success_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__success_isset)
+  {
+    [encoder encodeObject: __success forKey: @"success"];
+  }
+}
+
+- (void) dealloc
+{
+  [__success release];
+  [super dealloc];
+}
+
+- (NSString *) success {
+  return [[__success retain] autorelease];
+}
+
+- (void) setSuccess: (NSString *) success {
+  [success retain];
+  [__success release];
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  [__success release];
+  __success = nil;
+  __success_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 0:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setSuccess: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"Ping_result"];
+
+  if (__success_isset) {
+    if (__success != nil) {
+      [outProtocol writeFieldBeginWithName: @"success" type: TType_STRING fieldID: 0];
+      [outProtocol writeString: __success];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"Ping_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"\"%@\"", __success];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
 @interface login_by_mail_args : NSObject <NSCoding> {
   int64_t __client_id;
   NSString * __client_secret;
@@ -1234,6 +1499,46 @@
   [super dealloc];
 }
 
+- (void) send_ping: (NSString *) input
+{
+  [outProtocol writeMessageBeginWithName: @"ping" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"ping_args"];
+  if (input != nil)  {
+    [outProtocol writeFieldBeginWithName: @"input" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: input];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (NSString *) recv_ping
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  Ping_result * result = [[[Ping_result alloc] init] autorelease];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"ping failed: unknown result"];
+}
+
+- (NSString *) ping: (NSString *) input
+{
+  [self send_ping: input];
+  return [self recv_ping];
+}
+
 - (void) send_login_by_mail: (int64_t) client_id : (NSString *) client_secret : (NSString *) mail : (NSString *) password
 {
   [outProtocol writeMessageBeginWithName: @"login_by_mail" type: TMessageType_CALL sequenceID: 0];
@@ -1420,6 +1725,14 @@
   mService = [service retain];
   mMethodMap = [[NSMutableDictionary dictionary] retain];
   {
+    SEL s = @selector(process_ping_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"ping"];
+  }
+  {
     SEL s = @selector(process_login_by_mail_withSequenceID:inProtocol:outProtocol:);
     NSMethodSignature * sig = [self methodSignatureForSelector: s];
     NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
@@ -1490,6 +1803,23 @@
   [i setTarget: self];
   [i invoke];
   return YES;
+}
+
+- (void) process_ping_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  ping_args * args = [[ping_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  Ping_result * result = [[Ping_result alloc] init];
+  [result setSuccess: [mService ping: [args input]]];
+  [outProtocol writeMessageBeginWithName: @"ping"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release];
+  [args release];
 }
 
 - (void) process_login_by_mail_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol

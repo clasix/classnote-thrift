@@ -15,6 +15,7 @@
 #import "type.h"
 
 @protocol ClassNote <NSObject>
+- (NSString *) ping: (NSString *) input;  // throws TException
 - (AuthResponse *) login_by_mail: (int64_t) client_id : (NSString *) client_secret : (NSString *) mail : (NSString *) password;  // throws TException
 - (void) logout: (NSString *) access_token;  // throws TException
 - (User *) user_get: (NSString *) access_token : (int64_t) gid;  // throws TException

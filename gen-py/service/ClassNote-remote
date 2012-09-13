@@ -23,6 +23,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print 'Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] function [arg1 [arg2...]]'
   print ''
   print 'Functions:'
+  print '  string ping(string input)'
   print '  AuthResponse login_by_mail(i64 client_id, string client_secret, string mail, string password)'
   print '  void logout(string access_token)'
   print '  User user_get(string access_token, i64 gid)'
@@ -78,7 +79,13 @@ protocol = TBinaryProtocol.TBinaryProtocol(transport)
 client = ClassNote.Client(protocol)
 transport.open()
 
-if cmd == 'login_by_mail':
+if cmd == 'ping':
+  if len(args) != 1:
+    print 'ping requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.ping(args[0],))
+
+elif cmd == 'login_by_mail':
   if len(args) != 4:
     print 'login_by_mail requires 4 args'
     sys.exit(1)

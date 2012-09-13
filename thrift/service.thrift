@@ -1,8 +1,12 @@
 include "type.thrift"
 
 service ClassNote {
-    # Auth
+    # Ping Test
+    string ping(
+        1: string   input
+    )
 
+    # Auth
     type.AuthResponse login_by_mail(
         1: i64      client_id,  # what the use of this?
         2: string   client_secret,
