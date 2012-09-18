@@ -5,7 +5,7 @@ typedef i64 timestamp
 # Auth
 
 struct AuthResponse {
-    1: required string      access_token,
+    1: required string      auth_token,
     2: required timestamp   expire_in,
     3: required i64         user_id
 }

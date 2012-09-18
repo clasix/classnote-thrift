@@ -1,0 +1,71 @@
+ new_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
+     while (AuthToken.objects.filter(auth_token=new_token)):
+                 new_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
+                     return new_token
+
+
+                     ////////////////////////////////
+                     delta = timedelta(seconds=60*60*2)
+                     while(AuthToken.all().count() > 0):
+                           authtokens = AuthToken.all().fetch(1000)
+                             for authtoken in authtokens:
+                                     if datetime.now() > authtoken.created + delta:
+                                               db.delete(authtoken)
+
+                                               //
+                                               https://github.com/lehrblogger/where-do-you-go/blob/861920e011614a0d76e9165eaddd33b70fe8a678/models.py
+
+                                               https://github.com/BloatIt/bloatit/blob/1081aae47397ba8f7690670ed4842d65d95bc18b/src/bloatit/framework/loginmanager.py
+
+                                               User {
+                                                   gid
+                                                   optional email
+                                                   optional phone
+                                                   optional name
+                                                   optinal activate
+                                               }
+
+                                               // FIXME: how to modify all the password of one user.
+                                               accouts {
+                                                   userid   // 全局唯一的， (Ex. gmail, useid can be email address. email address of ITEye can be modified.)
+                                                   passoword
+                                               }
+
+                                               create_user(email, password) {
+                                                    user = new_User(email, password)    // activate = false
+                                                        activate = new_activate(userid, code)
+                                                            send_email_or_phone(user, activate.code)
+                                                                return TRUE | FALSE;
+                                               }
+
+                                               activate_user(userid, activatecode) {
+                                                   if activate.get_codebyuser(user_id) = activatecode:
+                                                        user.get(user_id).activate = TRUE;
+                                                        activate.remove_by_userid(userid)
+                                               }
+
+                                               // email must be unique, if the phone or email transferred owner, then... the old one will be disabled.
+                                               login_by_email(email, password) {
+                                                    user = users.get_user_by_email(email)
+                                                        if user == None:
+                                                                    return None
+                                                                        else:
+                                                                                    if user.id in accouts and accounts[user.id] == password:
+                                                                                                    AuthToken token = new_authtoken(user);  // expire_in
+                                                                                                                return token;
+
+                                                                                                                login_by_login(login, password) {
+                                                                                                                        try login by email
+                                                                                                                            try login by phone
+                                                                                                                }
+
+                                                                                                                login_by_phone() {
+                                                                                                                }
+
+                                                                                                                refresh_auth_token(token_id) {
+                                                                                                                    token.old.remove();
+                                                                                                                    token.new();
+                                                                                                                    return new _ token_id;
+                                                                                                                }
+
+                                                                                                                do_something(auth_token, )
