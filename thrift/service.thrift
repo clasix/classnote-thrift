@@ -1,11 +1,31 @@
 include "type.thrift"
 
 service ClassNote {
-    # Ping Test
-    string ping(
-        1: string   input
+    string login_by_email(
+        1: string email,
+        2: string password
+    ) 
+
+    string login_by_username(
+        1: string username,
+        2: string password
     )
 
+    bool sign_up_email(
+        1: string email,
+        2: string password
+    )
+
+    bool sign_up_username(
+        1: string username,
+        2: string password
+    )
+
+    bool sign_out(
+        1: string auth_token
+    )
+
+/*
     void sign_up (
         1: string mail,
         2: string password
@@ -19,6 +39,7 @@ service ClassNote {
     void logout(
         1: string   auth_token
     )
+*/
 
     # User
     type.User user_get(

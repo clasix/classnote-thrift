@@ -66,20 +66,20 @@ class WeekDay:
 class AuthResponse:
   """
   Attributes:
-   - access_token
+   - auth_token
    - expire_in
    - user_id
   """
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRING, 'access_token', None, None, ), # 1
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
     (2, TType.I64, 'expire_in', None, None, ), # 2
     (3, TType.I64, 'user_id', None, None, ), # 3
   )
 
-  def __init__(self, access_token=None, expire_in=None, user_id=None,):
-    self.access_token = access_token
+  def __init__(self, auth_token=None, expire_in=None, user_id=None,):
+    self.auth_token = auth_token
     self.expire_in = expire_in
     self.user_id = user_id
 
@@ -94,7 +94,7 @@ class AuthResponse:
         break
       if fid == 1:
         if ftype == TType.STRING:
-          self.access_token = iprot.readString();
+          self.auth_token = iprot.readString();
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -117,9 +117,9 @@ class AuthResponse:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('AuthResponse')
-    if self.access_token is not None:
-      oprot.writeFieldBegin('access_token', TType.STRING, 1)
-      oprot.writeString(self.access_token)
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
       oprot.writeFieldEnd()
     if self.expire_in is not None:
       oprot.writeFieldBegin('expire_in', TType.I64, 2)
@@ -133,8 +133,8 @@ class AuthResponse:
     oprot.writeStructEnd()
 
   def validate(self):
-    if self.access_token is None:
-      raise TProtocol.TProtocolException(message='Required field access_token is unset!')
+    if self.auth_token is None:
+      raise TProtocol.TProtocolException(message='Required field auth_token is unset!')
     if self.expire_in is None:
       raise TProtocol.TProtocolException(message='Required field expire_in is unset!')
     if self.user_id is None:

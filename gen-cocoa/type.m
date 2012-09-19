@@ -17,11 +17,11 @@
 
 @implementation AuthResponse
 
-- (id) initWithAccess_token: (NSString *) access_token expire_in: (timestamp) expire_in user_id: (int64_t) user_id
+- (id) initWithAuth_token: (NSString *) auth_token expire_in: (timestamp) expire_in user_id: (int64_t) user_id
 {
   self = [super init];
-  __access_token = [access_token retain];
-  __access_token_isset = YES;
+  __auth_token = [auth_token retain];
+  __auth_token_isset = YES;
   __expire_in = expire_in;
   __expire_in_isset = YES;
   __user_id = user_id;
@@ -32,10 +32,10 @@
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"access_token"])
+  if ([decoder containsValueForKey: @"auth_token"])
   {
-    __access_token = [[decoder decodeObjectForKey: @"access_token"] retain];
-    __access_token_isset = YES;
+    __auth_token = [[decoder decodeObjectForKey: @"auth_token"] retain];
+    __auth_token_isset = YES;
   }
   if ([decoder containsValueForKey: @"expire_in"])
   {
@@ -52,9 +52,9 @@
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__access_token_isset)
+  if (__auth_token_isset)
   {
-    [encoder encodeObject: __access_token forKey: @"access_token"];
+    [encoder encodeObject: __auth_token forKey: @"auth_token"];
   }
   if (__expire_in_isset)
   {
@@ -68,29 +68,29 @@
 
 - (void) dealloc
 {
-  [__access_token release];
+  [__auth_token release];
   [super dealloc];
 }
 
-- (NSString *) access_token {
-  return [[__access_token retain] autorelease];
+- (NSString *) auth_token {
+  return [[__auth_token retain] autorelease];
 }
 
-- (void) setAccess_token: (NSString *) access_token {
-  [access_token retain];
-  [__access_token release];
-  __access_token = access_token;
-  __access_token_isset = YES;
+- (void) setAuth_token: (NSString *) auth_token {
+  [auth_token retain];
+  [__auth_token release];
+  __auth_token = auth_token;
+  __auth_token_isset = YES;
 }
 
-- (BOOL) access_tokenIsSet {
-  return __access_token_isset;
+- (BOOL) auth_tokenIsSet {
+  return __auth_token_isset;
 }
 
-- (void) unsetAccess_token {
-  [__access_token release];
-  __access_token = nil;
-  __access_token_isset = NO;
+- (void) unsetAuth_token {
+  [__auth_token release];
+  __auth_token = nil;
+  __auth_token_isset = NO;
 }
 
 - (int64_t) expire_in {
@@ -145,7 +145,7 @@
       case 1:
         if (fieldType == TType_STRING) {
           NSString * fieldValue = [inProtocol readString];
-          [self setAccess_token: fieldValue];
+          [self setAuth_token: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -177,10 +177,10 @@
 
 - (void) write: (id <TProtocol>) outProtocol {
   [outProtocol writeStructBeginWithName: @"AuthResponse"];
-  if (__access_token_isset) {
-    if (__access_token != nil) {
-      [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-      [outProtocol writeString: __access_token];
+  if (__auth_token_isset) {
+    if (__auth_token != nil) {
+      [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __auth_token];
       [outProtocol writeFieldEnd];
     }
   }
@@ -200,8 +200,8 @@
 
 - (NSString *) description {
   NSMutableString * ms = [NSMutableString stringWithString: @"AuthResponse("];
-  [ms appendString: @"access_token:"];
-  [ms appendFormat: @"\"%@\"", __access_token];
+  [ms appendString: @"auth_token:"];
+  [ms appendFormat: @"\"%@\"", __auth_token];
   [ms appendString: @",expire_in:"];
   [ms appendFormat: @"%qi", __expire_in];
   [ms appendString: @",user_id:"];

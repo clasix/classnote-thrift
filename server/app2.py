@@ -11,7 +11,6 @@ import model
 from model import User, AuthToken
 db = model.db_factory(app.config)
 
-auth = Auth(app, login_url_name='index')
 ctrl = Ctrl(db)
 
 #@login_required()
@@ -73,8 +72,8 @@ app.secret_key = 'N4BUdSXUzHxNoO8g'
 
 if __name__ == '__main__':
     try:
-        open('app.db')
+        open('app2.db')
     except IOError:
-        db.create_all()
+        pass #db.create_all()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

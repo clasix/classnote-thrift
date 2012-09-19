@@ -15,11 +15,13 @@
 #import "type.h"
 
 @protocol ClassNote <NSObject>
-- (NSString *) ping: (NSString *) input;  // throws TException
-- (AuthResponse *) login_by_mail: (int64_t) client_id : (NSString *) client_secret : (NSString *) mail : (NSString *) password;  // throws TException
-- (void) logout: (NSString *) access_token;  // throws TException
-- (User *) user_get: (NSString *) access_token : (int64_t) gid;  // throws TException
-- (void) user_set: (NSString *) access_token : (User *) user;  // throws TException
+- (NSString *) login_by_email: (NSString *) email : (NSString *) password;  // throws TException
+- (NSString *) login_by_username: (NSString *) username : (NSString *) password;  // throws TException
+- (BOOL) sign_up_email: (NSString *) email : (NSString *) password;  // throws TException
+- (BOOL) sign_up_username: (NSString *) username : (NSString *) password;  // throws TException
+- (BOOL) sign_out: (NSString *) auth_token;  // throws TException
+- (User *) user_get: (NSString *) auth_token : (int64_t) gid;  // throws TException
+- (void) user_set: (NSString *) auth_token : (User *) user;  // throws TException
 @end
 
 @interface ClassNoteClient : NSObject <ClassNote> {

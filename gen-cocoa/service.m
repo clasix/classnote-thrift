@@ -22,81 +22,121 @@
 }
 @end
 
-@interface ping_args : NSObject <NSCoding> {
-  NSString * __input;
+@interface login_by_email_args : NSObject <NSCoding> {
+  NSString * __email;
+  NSString * __password;
 
-  BOOL __input_isset;
+  BOOL __email_isset;
+  BOOL __password_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=input, setter=setInput:) NSString * input;
+@property (nonatomic, retain, getter=email, setter=setEmail:) NSString * email;
+@property (nonatomic, retain, getter=password, setter=setPassword:) NSString * password;
 #endif
 
-- (id) initWithInput: (NSString *) input;
+- (id) initWithEmail: (NSString *) email password: (NSString *) password;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (NSString *) input;
-- (void) setInput: (NSString *) input;
-- (BOOL) inputIsSet;
+- (NSString *) email;
+- (void) setEmail: (NSString *) email;
+- (BOOL) emailIsSet;
+
+- (NSString *) password;
+- (void) setPassword: (NSString *) password;
+- (BOOL) passwordIsSet;
 
 @end
 
-@implementation ping_args
+@implementation login_by_email_args
 
-- (id) initWithInput: (NSString *) input
+- (id) initWithEmail: (NSString *) email password: (NSString *) password
 {
   self = [super init];
-  __input = [input retain];
-  __input_isset = YES;
+  __email = [email retain];
+  __email_isset = YES;
+  __password = [password retain];
+  __password_isset = YES;
   return self;
 }
 
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"input"])
+  if ([decoder containsValueForKey: @"email"])
   {
-    __input = [[decoder decodeObjectForKey: @"input"] retain];
-    __input_isset = YES;
+    __email = [[decoder decodeObjectForKey: @"email"] retain];
+    __email_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"password"])
+  {
+    __password = [[decoder decodeObjectForKey: @"password"] retain];
+    __password_isset = YES;
   }
   return self;
 }
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__input_isset)
+  if (__email_isset)
   {
-    [encoder encodeObject: __input forKey: @"input"];
+    [encoder encodeObject: __email forKey: @"email"];
+  }
+  if (__password_isset)
+  {
+    [encoder encodeObject: __password forKey: @"password"];
   }
 }
 
 - (void) dealloc
 {
-  [__input release];
+  [__email release];
+  [__password release];
   [super dealloc];
 }
 
-- (NSString *) input {
-  return [[__input retain] autorelease];
+- (NSString *) email {
+  return [[__email retain] autorelease];
 }
 
-- (void) setInput: (NSString *) input {
-  [input retain];
-  [__input release];
-  __input = input;
-  __input_isset = YES;
+- (void) setEmail: (NSString *) email {
+  [email retain];
+  [__email release];
+  __email = email;
+  __email_isset = YES;
 }
 
-- (BOOL) inputIsSet {
-  return __input_isset;
+- (BOOL) emailIsSet {
+  return __email_isset;
 }
 
-- (void) unsetInput {
-  [__input release];
-  __input = nil;
-  __input_isset = NO;
+- (void) unsetEmail {
+  [__email release];
+  __email = nil;
+  __email_isset = NO;
+}
+
+- (NSString *) password {
+  return [[__password retain] autorelease];
+}
+
+- (void) setPassword: (NSString *) password {
+  [password retain];
+  [__password release];
+  __password = password;
+  __password_isset = YES;
+}
+
+- (BOOL) passwordIsSet {
+  return __password_isset;
+}
+
+- (void) unsetPassword {
+  [__password release];
+  __password = nil;
+  __password_isset = NO;
 }
 
 - (void) read: (id <TProtocol>) inProtocol
@@ -117,7 +157,15 @@
       case 1:
         if (fieldType == TType_STRING) {
           NSString * fieldValue = [inProtocol readString];
-          [self setInput: fieldValue];
+          [self setEmail: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setPassword: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -132,11 +180,18 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"ping_args"];
-  if (__input_isset) {
-    if (__input != nil) {
-      [outProtocol writeFieldBeginWithName: @"input" type: TType_STRING fieldID: 1];
-      [outProtocol writeString: __input];
+  [outProtocol writeStructBeginWithName: @"login_by_email_args"];
+  if (__email_isset) {
+    if (__email != nil) {
+      [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __email];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__password_isset) {
+    if (__password != nil) {
+      [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
+      [outProtocol writeString: __password];
       [outProtocol writeFieldEnd];
     }
   }
@@ -145,16 +200,18 @@
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"ping_args("];
-  [ms appendString: @"input:"];
-  [ms appendFormat: @"\"%@\"", __input];
+  NSMutableString * ms = [NSMutableString stringWithString: @"login_by_email_args("];
+  [ms appendString: @"email:"];
+  [ms appendFormat: @"\"%@\"", __email];
+  [ms appendString: @",password:"];
+  [ms appendFormat: @"\"%@\"", __password];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
 
 @end
 
-@interface Ping_result : NSObject <NSCoding> {
+@interface Login_by_email_result : NSObject <NSCoding> {
   NSString * __success;
 
   BOOL __success_isset;
@@ -175,7 +232,7 @@
 
 @end
 
-@implementation Ping_result
+@implementation Login_by_email_result
 
 - (id) initWithSuccess: (NSString *) success
 {
@@ -264,7 +321,7 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"Ping_result"];
+  [outProtocol writeStructBeginWithName: @"Login_by_email_result"];
 
   if (__success_isset) {
     if (__success != nil) {
@@ -278,7 +335,7 @@
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"Ping_result("];
+  NSMutableString * ms = [NSMutableString stringWithString: @"Login_by_email_result("];
   [ms appendString: @"success:"];
   [ms appendFormat: @"\"%@\"", __success];
   [ms appendString: @")"];
@@ -287,41 +344,27 @@
 
 @end
 
-@interface login_by_mail_args : NSObject <NSCoding> {
-  int64_t __client_id;
-  NSString * __client_secret;
-  NSString * __mail;
+@interface login_by_username_args : NSObject <NSCoding> {
+  NSString * __username;
   NSString * __password;
 
-  BOOL __client_id_isset;
-  BOOL __client_secret_isset;
-  BOOL __mail_isset;
+  BOOL __username_isset;
   BOOL __password_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, getter=client_id, setter=setClient_id:) int64_t client_id;
-@property (nonatomic, retain, getter=client_secret, setter=setClient_secret:) NSString * client_secret;
-@property (nonatomic, retain, getter=mail, setter=setMail:) NSString * mail;
+@property (nonatomic, retain, getter=username, setter=setUsername:) NSString * username;
 @property (nonatomic, retain, getter=password, setter=setPassword:) NSString * password;
 #endif
 
-- (id) initWithClient_id: (int64_t) client_id client_secret: (NSString *) client_secret mail: (NSString *) mail password: (NSString *) password;
+- (id) initWithUsername: (NSString *) username password: (NSString *) password;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (int64_t) client_id;
-- (void) setClient_id: (int64_t) client_id;
-- (BOOL) client_idIsSet;
-
-- (NSString *) client_secret;
-- (void) setClient_secret: (NSString *) client_secret;
-- (BOOL) client_secretIsSet;
-
-- (NSString *) mail;
-- (void) setMail: (NSString *) mail;
-- (BOOL) mailIsSet;
+- (NSString *) username;
+- (void) setUsername: (NSString *) username;
+- (BOOL) usernameIsSet;
 
 - (NSString *) password;
 - (void) setPassword: (NSString *) password;
@@ -329,17 +372,13 @@
 
 @end
 
-@implementation login_by_mail_args
+@implementation login_by_username_args
 
-- (id) initWithClient_id: (int64_t) client_id client_secret: (NSString *) client_secret mail: (NSString *) mail password: (NSString *) password
+- (id) initWithUsername: (NSString *) username password: (NSString *) password
 {
   self = [super init];
-  __client_id = client_id;
-  __client_id_isset = YES;
-  __client_secret = [client_secret retain];
-  __client_secret_isset = YES;
-  __mail = [mail retain];
-  __mail_isset = YES;
+  __username = [username retain];
+  __username_isset = YES;
   __password = [password retain];
   __password_isset = YES;
   return self;
@@ -348,20 +387,10 @@
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"client_id"])
+  if ([decoder containsValueForKey: @"username"])
   {
-    __client_id = [decoder decodeInt64ForKey: @"client_id"];
-    __client_id_isset = YES;
-  }
-  if ([decoder containsValueForKey: @"client_secret"])
-  {
-    __client_secret = [[decoder decodeObjectForKey: @"client_secret"] retain];
-    __client_secret_isset = YES;
-  }
-  if ([decoder containsValueForKey: @"mail"])
-  {
-    __mail = [[decoder decodeObjectForKey: @"mail"] retain];
-    __mail_isset = YES;
+    __username = [[decoder decodeObjectForKey: @"username"] retain];
+    __username_isset = YES;
   }
   if ([decoder containsValueForKey: @"password"])
   {
@@ -373,17 +402,9 @@
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__client_id_isset)
+  if (__username_isset)
   {
-    [encoder encodeInt64: __client_id forKey: @"client_id"];
-  }
-  if (__client_secret_isset)
-  {
-    [encoder encodeObject: __client_secret forKey: @"client_secret"];
-  }
-  if (__mail_isset)
-  {
-    [encoder encodeObject: __mail forKey: @"mail"];
+    [encoder encodeObject: __username forKey: @"username"];
   }
   if (__password_isset)
   {
@@ -393,69 +414,30 @@
 
 - (void) dealloc
 {
-  [__client_secret release];
-  [__mail release];
+  [__username release];
   [__password release];
   [super dealloc];
 }
 
-- (int64_t) client_id {
-  return __client_id;
+- (NSString *) username {
+  return [[__username retain] autorelease];
 }
 
-- (void) setClient_id: (int64_t) client_id {
-  __client_id = client_id;
-  __client_id_isset = YES;
+- (void) setUsername: (NSString *) username {
+  [username retain];
+  [__username release];
+  __username = username;
+  __username_isset = YES;
 }
 
-- (BOOL) client_idIsSet {
-  return __client_id_isset;
+- (BOOL) usernameIsSet {
+  return __username_isset;
 }
 
-- (void) unsetClient_id {
-  __client_id_isset = NO;
-}
-
-- (NSString *) client_secret {
-  return [[__client_secret retain] autorelease];
-}
-
-- (void) setClient_secret: (NSString *) client_secret {
-  [client_secret retain];
-  [__client_secret release];
-  __client_secret = client_secret;
-  __client_secret_isset = YES;
-}
-
-- (BOOL) client_secretIsSet {
-  return __client_secret_isset;
-}
-
-- (void) unsetClient_secret {
-  [__client_secret release];
-  __client_secret = nil;
-  __client_secret_isset = NO;
-}
-
-- (NSString *) mail {
-  return [[__mail retain] autorelease];
-}
-
-- (void) setMail: (NSString *) mail {
-  [mail retain];
-  [__mail release];
-  __mail = mail;
-  __mail_isset = YES;
-}
-
-- (BOOL) mailIsSet {
-  return __mail_isset;
-}
-
-- (void) unsetMail {
-  [__mail release];
-  __mail = nil;
-  __mail_isset = NO;
+- (void) unsetUsername {
+  [__username release];
+  __username = nil;
+  __username_isset = NO;
 }
 
 - (NSString *) password {
@@ -495,30 +477,14 @@
     switch (fieldID)
     {
       case 1:
-        if (fieldType == TType_I64) {
-          int64_t fieldValue = [inProtocol readI64];
-          [self setClient_id: fieldValue];
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setUsername: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
       case 2:
-        if (fieldType == TType_STRING) {
-          NSString * fieldValue = [inProtocol readString];
-          [self setClient_secret: fieldValue];
-        } else { 
-          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
-        }
-        break;
-      case 3:
-        if (fieldType == TType_STRING) {
-          NSString * fieldValue = [inProtocol readString];
-          [self setMail: fieldValue];
-        } else { 
-          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
-        }
-        break;
-      case 4:
         if (fieldType == TType_STRING) {
           NSString * fieldValue = [inProtocol readString];
           [self setPassword: fieldValue];
@@ -536,29 +502,17 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"login_by_mail_args"];
-  if (__client_id_isset) {
-    [outProtocol writeFieldBeginWithName: @"client_id" type: TType_I64 fieldID: 1];
-    [outProtocol writeI64: __client_id];
-    [outProtocol writeFieldEnd];
-  }
-  if (__client_secret_isset) {
-    if (__client_secret != nil) {
-      [outProtocol writeFieldBeginWithName: @"client_secret" type: TType_STRING fieldID: 2];
-      [outProtocol writeString: __client_secret];
-      [outProtocol writeFieldEnd];
-    }
-  }
-  if (__mail_isset) {
-    if (__mail != nil) {
-      [outProtocol writeFieldBeginWithName: @"mail" type: TType_STRING fieldID: 3];
-      [outProtocol writeString: __mail];
+  [outProtocol writeStructBeginWithName: @"login_by_username_args"];
+  if (__username_isset) {
+    if (__username != nil) {
+      [outProtocol writeFieldBeginWithName: @"username" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __username];
       [outProtocol writeFieldEnd];
     }
   }
   if (__password_isset) {
     if (__password != nil) {
-      [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 4];
+      [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
       [outProtocol writeString: __password];
       [outProtocol writeFieldEnd];
     }
@@ -568,13 +522,9 @@
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"login_by_mail_args("];
-  [ms appendString: @"client_id:"];
-  [ms appendFormat: @"%qi", __client_id];
-  [ms appendString: @",client_secret:"];
-  [ms appendFormat: @"\"%@\"", __client_secret];
-  [ms appendString: @",mail:"];
-  [ms appendFormat: @"\"%@\"", __mail];
+  NSMutableString * ms = [NSMutableString stringWithString: @"login_by_username_args("];
+  [ms appendString: @"username:"];
+  [ms appendFormat: @"\"%@\"", __username];
   [ms appendString: @",password:"];
   [ms appendFormat: @"\"%@\"", __password];
   [ms appendString: @")"];
@@ -583,30 +533,30 @@
 
 @end
 
-@interface Login_by_mail_result : NSObject <NSCoding> {
-  AuthResponse * __success;
+@interface Login_by_username_result : NSObject <NSCoding> {
+  NSString * __success;
 
   BOOL __success_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=success, setter=setSuccess:) AuthResponse * success;
+@property (nonatomic, retain, getter=success, setter=setSuccess:) NSString * success;
 #endif
 
-- (id) initWithSuccess: (AuthResponse *) success;
+- (id) initWithSuccess: (NSString *) success;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (AuthResponse *) success;
-- (void) setSuccess: (AuthResponse *) success;
+- (NSString *) success;
+- (void) setSuccess: (NSString *) success;
 - (BOOL) successIsSet;
 
 @end
 
-@implementation Login_by_mail_result
+@implementation Login_by_username_result
 
-- (id) initWithSuccess: (AuthResponse *) success
+- (id) initWithSuccess: (NSString *) success
 {
   self = [super init];
   __success = [success retain];
@@ -639,11 +589,11 @@
   [super dealloc];
 }
 
-- (AuthResponse *) success {
+- (NSString *) success {
   return [[__success retain] autorelease];
 }
 
-- (void) setSuccess: (AuthResponse *) success {
+- (void) setSuccess: (NSString *) success {
   [success retain];
   [__success release];
   __success = success;
@@ -676,11 +626,9 @@
     switch (fieldID)
     {
       case 0:
-        if (fieldType == TType_STRUCT) {
-          AuthResponse *fieldValue = [[AuthResponse alloc] init];
-          [fieldValue read: inProtocol];
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
           [self setSuccess: fieldValue];
-          [fieldValue release];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -695,12 +643,12 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"Login_by_mail_result"];
+  [outProtocol writeStructBeginWithName: @"Login_by_username_result"];
 
   if (__success_isset) {
     if (__success != nil) {
-      [outProtocol writeFieldBeginWithName: @"success" type: TType_STRUCT fieldID: 0];
-      [__success write: outProtocol];
+      [outProtocol writeFieldBeginWithName: @"success" type: TType_STRING fieldID: 0];
+      [outProtocol writeString: __success];
       [outProtocol writeFieldEnd];
     }
   }
@@ -709,90 +657,130 @@
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"Login_by_mail_result("];
+  NSMutableString * ms = [NSMutableString stringWithString: @"Login_by_username_result("];
   [ms appendString: @"success:"];
-  [ms appendFormat: @"%@", __success];
+  [ms appendFormat: @"\"%@\"", __success];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
 
 @end
 
-@interface logout_args : NSObject <NSCoding> {
-  NSString * __access_token;
+@interface sign_up_email_args : NSObject <NSCoding> {
+  NSString * __email;
+  NSString * __password;
 
-  BOOL __access_token_isset;
+  BOOL __email_isset;
+  BOOL __password_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=access_token, setter=setAccess_token:) NSString * access_token;
+@property (nonatomic, retain, getter=email, setter=setEmail:) NSString * email;
+@property (nonatomic, retain, getter=password, setter=setPassword:) NSString * password;
 #endif
 
-- (id) initWithAccess_token: (NSString *) access_token;
+- (id) initWithEmail: (NSString *) email password: (NSString *) password;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (NSString *) access_token;
-- (void) setAccess_token: (NSString *) access_token;
-- (BOOL) access_tokenIsSet;
+- (NSString *) email;
+- (void) setEmail: (NSString *) email;
+- (BOOL) emailIsSet;
+
+- (NSString *) password;
+- (void) setPassword: (NSString *) password;
+- (BOOL) passwordIsSet;
 
 @end
 
-@implementation logout_args
+@implementation sign_up_email_args
 
-- (id) initWithAccess_token: (NSString *) access_token
+- (id) initWithEmail: (NSString *) email password: (NSString *) password
 {
   self = [super init];
-  __access_token = [access_token retain];
-  __access_token_isset = YES;
+  __email = [email retain];
+  __email_isset = YES;
+  __password = [password retain];
+  __password_isset = YES;
   return self;
 }
 
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"access_token"])
+  if ([decoder containsValueForKey: @"email"])
   {
-    __access_token = [[decoder decodeObjectForKey: @"access_token"] retain];
-    __access_token_isset = YES;
+    __email = [[decoder decodeObjectForKey: @"email"] retain];
+    __email_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"password"])
+  {
+    __password = [[decoder decodeObjectForKey: @"password"] retain];
+    __password_isset = YES;
   }
   return self;
 }
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__access_token_isset)
+  if (__email_isset)
   {
-    [encoder encodeObject: __access_token forKey: @"access_token"];
+    [encoder encodeObject: __email forKey: @"email"];
+  }
+  if (__password_isset)
+  {
+    [encoder encodeObject: __password forKey: @"password"];
   }
 }
 
 - (void) dealloc
 {
-  [__access_token release];
+  [__email release];
+  [__password release];
   [super dealloc];
 }
 
-- (NSString *) access_token {
-  return [[__access_token retain] autorelease];
+- (NSString *) email {
+  return [[__email retain] autorelease];
 }
 
-- (void) setAccess_token: (NSString *) access_token {
-  [access_token retain];
-  [__access_token release];
-  __access_token = access_token;
-  __access_token_isset = YES;
+- (void) setEmail: (NSString *) email {
+  [email retain];
+  [__email release];
+  __email = email;
+  __email_isset = YES;
 }
 
-- (BOOL) access_tokenIsSet {
-  return __access_token_isset;
+- (BOOL) emailIsSet {
+  return __email_isset;
 }
 
-- (void) unsetAccess_token {
-  [__access_token release];
-  __access_token = nil;
-  __access_token_isset = NO;
+- (void) unsetEmail {
+  [__email release];
+  __email = nil;
+  __email_isset = NO;
+}
+
+- (NSString *) password {
+  return [[__password retain] autorelease];
+}
+
+- (void) setPassword: (NSString *) password {
+  [password retain];
+  [__password release];
+  __password = password;
+  __password_isset = YES;
+}
+
+- (BOOL) passwordIsSet {
+  return __password_isset;
+}
+
+- (void) unsetPassword {
+  [__password release];
+  __password = nil;
+  __password_isset = NO;
 }
 
 - (void) read: (id <TProtocol>) inProtocol
@@ -813,7 +801,15 @@
       case 1:
         if (fieldType == TType_STRING) {
           NSString * fieldValue = [inProtocol readString];
-          [self setAccess_token: fieldValue];
+          [self setEmail: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setPassword: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -828,11 +824,18 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"logout_args"];
-  if (__access_token_isset) {
-    if (__access_token != nil) {
-      [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-      [outProtocol writeString: __access_token];
+  [outProtocol writeStructBeginWithName: @"sign_up_email_args"];
+  if (__email_isset) {
+    if (__email != nil) {
+      [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __email];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__password_isset) {
+    if (__password != nil) {
+      [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
+      [outProtocol writeString: __password];
       [outProtocol writeFieldEnd];
     }
   }
@@ -841,34 +844,87 @@
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"logout_args("];
-  [ms appendString: @"access_token:"];
-  [ms appendFormat: @"\"%@\"", __access_token];
+  NSMutableString * ms = [NSMutableString stringWithString: @"sign_up_email_args("];
+  [ms appendString: @"email:"];
+  [ms appendFormat: @"\"%@\"", __email];
+  [ms appendString: @",password:"];
+  [ms appendFormat: @"\"%@\"", __password];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
 
 @end
 
-@interface Logout_result : NSObject <NSCoding> {
+@interface Sign_up_email_result : NSObject <NSCoding> {
+  BOOL __success;
+
+  BOOL __success_isset;
 }
 
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=success, setter=setSuccess:) BOOL success;
+#endif
+
+- (id) initWithSuccess: (BOOL) success;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
+- (BOOL) success;
+- (void) setSuccess: (BOOL) success;
+- (BOOL) successIsSet;
+
 @end
 
-@implementation Logout_result
+@implementation Sign_up_email_result
+
+- (id) initWithSuccess: (BOOL) success
+{
+  self = [super init];
+  __success = success;
+  __success_isset = YES;
+  return self;
+}
 
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [decoder decodeBoolForKey: @"success"];
+    __success_isset = YES;
+  }
   return self;
 }
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
+  if (__success_isset)
+  {
+    [encoder encodeBool: __success forKey: @"success"];
+  }
+}
+
+- (void) dealloc
+{
+  [super dealloc];
+}
+
+- (BOOL) success {
+  return __success;
+}
+
+- (void) setSuccess: (BOOL) success {
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  __success_isset = NO;
 }
 
 - (void) read: (id <TProtocol>) inProtocol
@@ -886,6 +942,14 @@
     }
     switch (fieldID)
     {
+      case 0:
+        if (fieldType == TType_BOOL) {
+          BOOL fieldValue = [inProtocol readBool];
+          [self setSuccess: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
       default:
         [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         break;
@@ -896,14 +960,594 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"Logout_result"];
+  [outProtocol writeStructBeginWithName: @"Sign_up_email_result"];
 
+  if (__success_isset) {
+    [outProtocol writeFieldBeginWithName: @"success" type: TType_BOOL fieldID: 0];
+    [outProtocol writeBool: __success];
+    [outProtocol writeFieldEnd];
+  }
   [outProtocol writeFieldStop];
   [outProtocol writeStructEnd];
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"Logout_result("];
+  NSMutableString * ms = [NSMutableString stringWithString: @"Sign_up_email_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"%i", __success];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface sign_up_username_args : NSObject <NSCoding> {
+  NSString * __username;
+  NSString * __password;
+
+  BOOL __username_isset;
+  BOOL __password_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=username, setter=setUsername:) NSString * username;
+@property (nonatomic, retain, getter=password, setter=setPassword:) NSString * password;
+#endif
+
+- (id) initWithUsername: (NSString *) username password: (NSString *) password;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (NSString *) username;
+- (void) setUsername: (NSString *) username;
+- (BOOL) usernameIsSet;
+
+- (NSString *) password;
+- (void) setPassword: (NSString *) password;
+- (BOOL) passwordIsSet;
+
+@end
+
+@implementation sign_up_username_args
+
+- (id) initWithUsername: (NSString *) username password: (NSString *) password
+{
+  self = [super init];
+  __username = [username retain];
+  __username_isset = YES;
+  __password = [password retain];
+  __password_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"username"])
+  {
+    __username = [[decoder decodeObjectForKey: @"username"] retain];
+    __username_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"password"])
+  {
+    __password = [[decoder decodeObjectForKey: @"password"] retain];
+    __password_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__username_isset)
+  {
+    [encoder encodeObject: __username forKey: @"username"];
+  }
+  if (__password_isset)
+  {
+    [encoder encodeObject: __password forKey: @"password"];
+  }
+}
+
+- (void) dealloc
+{
+  [__username release];
+  [__password release];
+  [super dealloc];
+}
+
+- (NSString *) username {
+  return [[__username retain] autorelease];
+}
+
+- (void) setUsername: (NSString *) username {
+  [username retain];
+  [__username release];
+  __username = username;
+  __username_isset = YES;
+}
+
+- (BOOL) usernameIsSet {
+  return __username_isset;
+}
+
+- (void) unsetUsername {
+  [__username release];
+  __username = nil;
+  __username_isset = NO;
+}
+
+- (NSString *) password {
+  return [[__password retain] autorelease];
+}
+
+- (void) setPassword: (NSString *) password {
+  [password retain];
+  [__password release];
+  __password = password;
+  __password_isset = YES;
+}
+
+- (BOOL) passwordIsSet {
+  return __password_isset;
+}
+
+- (void) unsetPassword {
+  [__password release];
+  __password = nil;
+  __password_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setUsername: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setPassword: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"sign_up_username_args"];
+  if (__username_isset) {
+    if (__username != nil) {
+      [outProtocol writeFieldBeginWithName: @"username" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __username];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__password_isset) {
+    if (__password != nil) {
+      [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
+      [outProtocol writeString: __password];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"sign_up_username_args("];
+  [ms appendString: @"username:"];
+  [ms appendFormat: @"\"%@\"", __username];
+  [ms appendString: @",password:"];
+  [ms appendFormat: @"\"%@\"", __password];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface Sign_up_username_result : NSObject <NSCoding> {
+  BOOL __success;
+
+  BOOL __success_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=success, setter=setSuccess:) BOOL success;
+#endif
+
+- (id) initWithSuccess: (BOOL) success;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (BOOL) success;
+- (void) setSuccess: (BOOL) success;
+- (BOOL) successIsSet;
+
+@end
+
+@implementation Sign_up_username_result
+
+- (id) initWithSuccess: (BOOL) success
+{
+  self = [super init];
+  __success = success;
+  __success_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [decoder decodeBoolForKey: @"success"];
+    __success_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__success_isset)
+  {
+    [encoder encodeBool: __success forKey: @"success"];
+  }
+}
+
+- (void) dealloc
+{
+  [super dealloc];
+}
+
+- (BOOL) success {
+  return __success;
+}
+
+- (void) setSuccess: (BOOL) success {
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  __success_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 0:
+        if (fieldType == TType_BOOL) {
+          BOOL fieldValue = [inProtocol readBool];
+          [self setSuccess: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"Sign_up_username_result"];
+
+  if (__success_isset) {
+    [outProtocol writeFieldBeginWithName: @"success" type: TType_BOOL fieldID: 0];
+    [outProtocol writeBool: __success];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"Sign_up_username_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"%i", __success];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface sign_out_args : NSObject <NSCoding> {
+  NSString * __auth_token;
+
+  BOOL __auth_token_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=auth_token, setter=setAuth_token:) NSString * auth_token;
+#endif
+
+- (id) initWithAuth_token: (NSString *) auth_token;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (NSString *) auth_token;
+- (void) setAuth_token: (NSString *) auth_token;
+- (BOOL) auth_tokenIsSet;
+
+@end
+
+@implementation sign_out_args
+
+- (id) initWithAuth_token: (NSString *) auth_token
+{
+  self = [super init];
+  __auth_token = [auth_token retain];
+  __auth_token_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"auth_token"])
+  {
+    __auth_token = [[decoder decodeObjectForKey: @"auth_token"] retain];
+    __auth_token_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__auth_token_isset)
+  {
+    [encoder encodeObject: __auth_token forKey: @"auth_token"];
+  }
+}
+
+- (void) dealloc
+{
+  [__auth_token release];
+  [super dealloc];
+}
+
+- (NSString *) auth_token {
+  return [[__auth_token retain] autorelease];
+}
+
+- (void) setAuth_token: (NSString *) auth_token {
+  [auth_token retain];
+  [__auth_token release];
+  __auth_token = auth_token;
+  __auth_token_isset = YES;
+}
+
+- (BOOL) auth_tokenIsSet {
+  return __auth_token_isset;
+}
+
+- (void) unsetAuth_token {
+  [__auth_token release];
+  __auth_token = nil;
+  __auth_token_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setAuth_token: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"sign_out_args"];
+  if (__auth_token_isset) {
+    if (__auth_token != nil) {
+      [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __auth_token];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"sign_out_args("];
+  [ms appendString: @"auth_token:"];
+  [ms appendFormat: @"\"%@\"", __auth_token];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface Sign_out_result : NSObject <NSCoding> {
+  BOOL __success;
+
+  BOOL __success_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=success, setter=setSuccess:) BOOL success;
+#endif
+
+- (id) initWithSuccess: (BOOL) success;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (BOOL) success;
+- (void) setSuccess: (BOOL) success;
+- (BOOL) successIsSet;
+
+@end
+
+@implementation Sign_out_result
+
+- (id) initWithSuccess: (BOOL) success
+{
+  self = [super init];
+  __success = success;
+  __success_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [decoder decodeBoolForKey: @"success"];
+    __success_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__success_isset)
+  {
+    [encoder encodeBool: __success forKey: @"success"];
+  }
+}
+
+- (void) dealloc
+{
+  [super dealloc];
+}
+
+- (BOOL) success {
+  return __success;
+}
+
+- (void) setSuccess: (BOOL) success {
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  __success_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 0:
+        if (fieldType == TType_BOOL) {
+          BOOL fieldValue = [inProtocol readBool];
+          [self setSuccess: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"Sign_out_result"];
+
+  if (__success_isset) {
+    [outProtocol writeFieldBeginWithName: @"success" type: TType_BOOL fieldID: 0];
+    [outProtocol writeBool: __success];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"Sign_out_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"%i", __success];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
@@ -911,26 +1555,26 @@
 @end
 
 @interface user_get_args : NSObject <NSCoding> {
-  NSString * __access_token;
+  NSString * __auth_token;
   int64_t __gid;
 
-  BOOL __access_token_isset;
+  BOOL __auth_token_isset;
   BOOL __gid_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=access_token, setter=setAccess_token:) NSString * access_token;
+@property (nonatomic, retain, getter=auth_token, setter=setAuth_token:) NSString * auth_token;
 @property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
 #endif
 
-- (id) initWithAccess_token: (NSString *) access_token gid: (int64_t) gid;
+- (id) initWithAuth_token: (NSString *) auth_token gid: (int64_t) gid;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (NSString *) access_token;
-- (void) setAccess_token: (NSString *) access_token;
-- (BOOL) access_tokenIsSet;
+- (NSString *) auth_token;
+- (void) setAuth_token: (NSString *) auth_token;
+- (BOOL) auth_tokenIsSet;
 
 - (int64_t) gid;
 - (void) setGid: (int64_t) gid;
@@ -940,11 +1584,11 @@
 
 @implementation user_get_args
 
-- (id) initWithAccess_token: (NSString *) access_token gid: (int64_t) gid
+- (id) initWithAuth_token: (NSString *) auth_token gid: (int64_t) gid
 {
   self = [super init];
-  __access_token = [access_token retain];
-  __access_token_isset = YES;
+  __auth_token = [auth_token retain];
+  __auth_token_isset = YES;
   __gid = gid;
   __gid_isset = YES;
   return self;
@@ -953,10 +1597,10 @@
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"access_token"])
+  if ([decoder containsValueForKey: @"auth_token"])
   {
-    __access_token = [[decoder decodeObjectForKey: @"access_token"] retain];
-    __access_token_isset = YES;
+    __auth_token = [[decoder decodeObjectForKey: @"auth_token"] retain];
+    __auth_token_isset = YES;
   }
   if ([decoder containsValueForKey: @"gid"])
   {
@@ -968,9 +1612,9 @@
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__access_token_isset)
+  if (__auth_token_isset)
   {
-    [encoder encodeObject: __access_token forKey: @"access_token"];
+    [encoder encodeObject: __auth_token forKey: @"auth_token"];
   }
   if (__gid_isset)
   {
@@ -980,29 +1624,29 @@
 
 - (void) dealloc
 {
-  [__access_token release];
+  [__auth_token release];
   [super dealloc];
 }
 
-- (NSString *) access_token {
-  return [[__access_token retain] autorelease];
+- (NSString *) auth_token {
+  return [[__auth_token retain] autorelease];
 }
 
-- (void) setAccess_token: (NSString *) access_token {
-  [access_token retain];
-  [__access_token release];
-  __access_token = access_token;
-  __access_token_isset = YES;
+- (void) setAuth_token: (NSString *) auth_token {
+  [auth_token retain];
+  [__auth_token release];
+  __auth_token = auth_token;
+  __auth_token_isset = YES;
 }
 
-- (BOOL) access_tokenIsSet {
-  return __access_token_isset;
+- (BOOL) auth_tokenIsSet {
+  return __auth_token_isset;
 }
 
-- (void) unsetAccess_token {
-  [__access_token release];
-  __access_token = nil;
-  __access_token_isset = NO;
+- (void) unsetAuth_token {
+  [__auth_token release];
+  __auth_token = nil;
+  __auth_token_isset = NO;
 }
 
 - (int64_t) gid {
@@ -1040,7 +1684,7 @@
       case 1:
         if (fieldType == TType_STRING) {
           NSString * fieldValue = [inProtocol readString];
-          [self setAccess_token: fieldValue];
+          [self setAuth_token: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -1064,10 +1708,10 @@
 
 - (void) write: (id <TProtocol>) outProtocol {
   [outProtocol writeStructBeginWithName: @"user_get_args"];
-  if (__access_token_isset) {
-    if (__access_token != nil) {
-      [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-      [outProtocol writeString: __access_token];
+  if (__auth_token_isset) {
+    if (__auth_token != nil) {
+      [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __auth_token];
       [outProtocol writeFieldEnd];
     }
   }
@@ -1082,8 +1726,8 @@
 
 - (NSString *) description {
   NSMutableString * ms = [NSMutableString stringWithString: @"user_get_args("];
-  [ms appendString: @"access_token:"];
-  [ms appendFormat: @"\"%@\"", __access_token];
+  [ms appendString: @"auth_token:"];
+  [ms appendFormat: @"\"%@\"", __auth_token];
   [ms appendString: @",gid:"];
   [ms appendFormat: @"%qi", __gid];
   [ms appendString: @")"];
@@ -1228,26 +1872,26 @@
 @end
 
 @interface user_set_args : NSObject <NSCoding> {
-  NSString * __access_token;
+  NSString * __auth_token;
   User * __user;
 
-  BOOL __access_token_isset;
+  BOOL __auth_token_isset;
   BOOL __user_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=access_token, setter=setAccess_token:) NSString * access_token;
+@property (nonatomic, retain, getter=auth_token, setter=setAuth_token:) NSString * auth_token;
 @property (nonatomic, retain, getter=user, setter=setUser:) User * user;
 #endif
 
-- (id) initWithAccess_token: (NSString *) access_token user: (User *) user;
+- (id) initWithAuth_token: (NSString *) auth_token user: (User *) user;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (NSString *) access_token;
-- (void) setAccess_token: (NSString *) access_token;
-- (BOOL) access_tokenIsSet;
+- (NSString *) auth_token;
+- (void) setAuth_token: (NSString *) auth_token;
+- (BOOL) auth_tokenIsSet;
 
 - (User *) user;
 - (void) setUser: (User *) user;
@@ -1257,11 +1901,11 @@
 
 @implementation user_set_args
 
-- (id) initWithAccess_token: (NSString *) access_token user: (User *) user
+- (id) initWithAuth_token: (NSString *) auth_token user: (User *) user
 {
   self = [super init];
-  __access_token = [access_token retain];
-  __access_token_isset = YES;
+  __auth_token = [auth_token retain];
+  __auth_token_isset = YES;
   __user = [user retain];
   __user_isset = YES;
   return self;
@@ -1270,10 +1914,10 @@
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"access_token"])
+  if ([decoder containsValueForKey: @"auth_token"])
   {
-    __access_token = [[decoder decodeObjectForKey: @"access_token"] retain];
-    __access_token_isset = YES;
+    __auth_token = [[decoder decodeObjectForKey: @"auth_token"] retain];
+    __auth_token_isset = YES;
   }
   if ([decoder containsValueForKey: @"user"])
   {
@@ -1285,9 +1929,9 @@
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__access_token_isset)
+  if (__auth_token_isset)
   {
-    [encoder encodeObject: __access_token forKey: @"access_token"];
+    [encoder encodeObject: __auth_token forKey: @"auth_token"];
   }
   if (__user_isset)
   {
@@ -1297,30 +1941,30 @@
 
 - (void) dealloc
 {
-  [__access_token release];
+  [__auth_token release];
   [__user release];
   [super dealloc];
 }
 
-- (NSString *) access_token {
-  return [[__access_token retain] autorelease];
+- (NSString *) auth_token {
+  return [[__auth_token retain] autorelease];
 }
 
-- (void) setAccess_token: (NSString *) access_token {
-  [access_token retain];
-  [__access_token release];
-  __access_token = access_token;
-  __access_token_isset = YES;
+- (void) setAuth_token: (NSString *) auth_token {
+  [auth_token retain];
+  [__auth_token release];
+  __auth_token = auth_token;
+  __auth_token_isset = YES;
 }
 
-- (BOOL) access_tokenIsSet {
-  return __access_token_isset;
+- (BOOL) auth_tokenIsSet {
+  return __auth_token_isset;
 }
 
-- (void) unsetAccess_token {
-  [__access_token release];
-  __access_token = nil;
-  __access_token_isset = NO;
+- (void) unsetAuth_token {
+  [__auth_token release];
+  __auth_token = nil;
+  __auth_token_isset = NO;
 }
 
 - (User *) user {
@@ -1362,7 +2006,7 @@
       case 1:
         if (fieldType == TType_STRING) {
           NSString * fieldValue = [inProtocol readString];
-          [self setAccess_token: fieldValue];
+          [self setAuth_token: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -1388,10 +2032,10 @@
 
 - (void) write: (id <TProtocol>) outProtocol {
   [outProtocol writeStructBeginWithName: @"user_set_args"];
-  if (__access_token_isset) {
-    if (__access_token != nil) {
-      [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-      [outProtocol writeString: __access_token];
+  if (__auth_token_isset) {
+    if (__auth_token != nil) {
+      [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __auth_token];
       [outProtocol writeFieldEnd];
     }
   }
@@ -1408,8 +2052,8 @@
 
 - (NSString *) description {
   NSMutableString * ms = [NSMutableString stringWithString: @"user_set_args("];
-  [ms appendString: @"access_token:"];
-  [ms appendFormat: @"\"%@\"", __access_token];
+  [ms appendString: @"auth_token:"];
+  [ms appendFormat: @"\"%@\"", __auth_token];
   [ms appendString: @",user:"];
   [ms appendFormat: @"%@", __user];
   [ms appendString: @")"];
@@ -1499,65 +2143,17 @@
   [super dealloc];
 }
 
-- (void) send_ping: (NSString *) input
+- (void) send_login_by_email: (NSString *) email : (NSString *) password
 {
-  [outProtocol writeMessageBeginWithName: @"ping" type: TMessageType_CALL sequenceID: 0];
-  [outProtocol writeStructBeginWithName: @"ping_args"];
-  if (input != nil)  {
-    [outProtocol writeFieldBeginWithName: @"input" type: TType_STRING fieldID: 1];
-    [outProtocol writeString: input];
-    [outProtocol writeFieldEnd];
-  }
-  [outProtocol writeFieldStop];
-  [outProtocol writeStructEnd];
-  [outProtocol writeMessageEnd];
-  [[outProtocol transport] flush];
-}
-
-- (NSString *) recv_ping
-{
-  int msgType = 0;
-  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
-  if (msgType == TMessageType_EXCEPTION) {
-    TApplicationException * x = [TApplicationException read: inProtocol];
-    [inProtocol readMessageEnd];
-    @throw x;
-  }
-  Ping_result * result = [[[Ping_result alloc] init] autorelease];
-  [result read: inProtocol];
-  [inProtocol readMessageEnd];
-  if ([result successIsSet]) {
-    return [result success];
-  }
-  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
-                                           reason: @"ping failed: unknown result"];
-}
-
-- (NSString *) ping: (NSString *) input
-{
-  [self send_ping: input];
-  return [self recv_ping];
-}
-
-- (void) send_login_by_mail: (int64_t) client_id : (NSString *) client_secret : (NSString *) mail : (NSString *) password
-{
-  [outProtocol writeMessageBeginWithName: @"login_by_mail" type: TMessageType_CALL sequenceID: 0];
-  [outProtocol writeStructBeginWithName: @"login_by_mail_args"];
-  [outProtocol writeFieldBeginWithName: @"client_id" type: TType_I64 fieldID: 1];
-  [outProtocol writeI64: client_id];
-  [outProtocol writeFieldEnd];
-  if (client_secret != nil)  {
-    [outProtocol writeFieldBeginWithName: @"client_secret" type: TType_STRING fieldID: 2];
-    [outProtocol writeString: client_secret];
-    [outProtocol writeFieldEnd];
-  }
-  if (mail != nil)  {
-    [outProtocol writeFieldBeginWithName: @"mail" type: TType_STRING fieldID: 3];
-    [outProtocol writeString: mail];
+  [outProtocol writeMessageBeginWithName: @"login_by_email" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"login_by_email_args"];
+  if (email != nil)  {
+    [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: email];
     [outProtocol writeFieldEnd];
   }
   if (password != nil)  {
-    [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 4];
+    [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
     [outProtocol writeString: password];
     [outProtocol writeFieldEnd];
   }
@@ -1567,7 +2163,7 @@
   [[outProtocol transport] flush];
 }
 
-- (AuthResponse *) recv_login_by_mail
+- (NSString *) recv_login_by_email
 {
   int msgType = 0;
   [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
@@ -1576,29 +2172,34 @@
     [inProtocol readMessageEnd];
     @throw x;
   }
-  Login_by_mail_result * result = [[[Login_by_mail_result alloc] init] autorelease];
+  Login_by_email_result * result = [[[Login_by_email_result alloc] init] autorelease];
   [result read: inProtocol];
   [inProtocol readMessageEnd];
   if ([result successIsSet]) {
     return [result success];
   }
   @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
-                                           reason: @"login_by_mail failed: unknown result"];
+                                           reason: @"login_by_email failed: unknown result"];
 }
 
-- (AuthResponse *) login_by_mail: (int64_t) client_id : (NSString *) client_secret : (NSString *) mail : (NSString *) password
+- (NSString *) login_by_email: (NSString *) email : (NSString *) password
 {
-  [self send_login_by_mail: client_id : client_secret : mail : password];
-  return [self recv_login_by_mail];
+  [self send_login_by_email: email : password];
+  return [self recv_login_by_email];
 }
 
-- (void) send_logout: (NSString *) access_token
+- (void) send_login_by_username: (NSString *) username : (NSString *) password
 {
-  [outProtocol writeMessageBeginWithName: @"logout" type: TMessageType_CALL sequenceID: 0];
-  [outProtocol writeStructBeginWithName: @"logout_args"];
-  if (access_token != nil)  {
-    [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-    [outProtocol writeString: access_token];
+  [outProtocol writeMessageBeginWithName: @"login_by_username" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"login_by_username_args"];
+  if (username != nil)  {
+    [outProtocol writeFieldBeginWithName: @"username" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: username];
+    [outProtocol writeFieldEnd];
+  }
+  if (password != nil)  {
+    [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
+    [outProtocol writeString: password];
     [outProtocol writeFieldEnd];
   }
   [outProtocol writeFieldStop];
@@ -1607,7 +2208,7 @@
   [[outProtocol transport] flush];
 }
 
-- (void) recv_logout
+- (NSString *) recv_login_by_username
 {
   int msgType = 0;
   [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
@@ -1616,25 +2217,159 @@
     [inProtocol readMessageEnd];
     @throw x;
   }
-  Logout_result * result = [[[Logout_result alloc] init] autorelease];
+  Login_by_username_result * result = [[[Login_by_username_result alloc] init] autorelease];
   [result read: inProtocol];
   [inProtocol readMessageEnd];
-  return;
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"login_by_username failed: unknown result"];
 }
 
-- (void) logout: (NSString *) access_token
+- (NSString *) login_by_username: (NSString *) username : (NSString *) password
 {
-  [self send_logout: access_token];
-  [self recv_logout];
+  [self send_login_by_username: username : password];
+  return [self recv_login_by_username];
 }
 
-- (void) send_user_get: (NSString *) access_token : (int64_t) gid
+- (void) send_sign_up_email: (NSString *) email : (NSString *) password
+{
+  [outProtocol writeMessageBeginWithName: @"sign_up_email" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"sign_up_email_args"];
+  if (email != nil)  {
+    [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: email];
+    [outProtocol writeFieldEnd];
+  }
+  if (password != nil)  {
+    [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
+    [outProtocol writeString: password];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (BOOL) recv_sign_up_email
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  Sign_up_email_result * result = [[[Sign_up_email_result alloc] init] autorelease];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"sign_up_email failed: unknown result"];
+}
+
+- (BOOL) sign_up_email: (NSString *) email : (NSString *) password
+{
+  [self send_sign_up_email: email : password];
+  return [self recv_sign_up_email];
+}
+
+- (void) send_sign_up_username: (NSString *) username : (NSString *) password
+{
+  [outProtocol writeMessageBeginWithName: @"sign_up_username" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"sign_up_username_args"];
+  if (username != nil)  {
+    [outProtocol writeFieldBeginWithName: @"username" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: username];
+    [outProtocol writeFieldEnd];
+  }
+  if (password != nil)  {
+    [outProtocol writeFieldBeginWithName: @"password" type: TType_STRING fieldID: 2];
+    [outProtocol writeString: password];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (BOOL) recv_sign_up_username
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  Sign_up_username_result * result = [[[Sign_up_username_result alloc] init] autorelease];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"sign_up_username failed: unknown result"];
+}
+
+- (BOOL) sign_up_username: (NSString *) username : (NSString *) password
+{
+  [self send_sign_up_username: username : password];
+  return [self recv_sign_up_username];
+}
+
+- (void) send_sign_out: (NSString *) auth_token
+{
+  [outProtocol writeMessageBeginWithName: @"sign_out" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"sign_out_args"];
+  if (auth_token != nil)  {
+    [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: auth_token];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (BOOL) recv_sign_out
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  Sign_out_result * result = [[[Sign_out_result alloc] init] autorelease];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"sign_out failed: unknown result"];
+}
+
+- (BOOL) sign_out: (NSString *) auth_token
+{
+  [self send_sign_out: auth_token];
+  return [self recv_sign_out];
+}
+
+- (void) send_user_get: (NSString *) auth_token : (int64_t) gid
 {
   [outProtocol writeMessageBeginWithName: @"user_get" type: TMessageType_CALL sequenceID: 0];
   [outProtocol writeStructBeginWithName: @"user_get_args"];
-  if (access_token != nil)  {
-    [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-    [outProtocol writeString: access_token];
+  if (auth_token != nil)  {
+    [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: auth_token];
     [outProtocol writeFieldEnd];
   }
   [outProtocol writeFieldBeginWithName: @"gid" type: TType_I64 fieldID: 2];
@@ -1665,19 +2400,19 @@
                                            reason: @"user_get failed: unknown result"];
 }
 
-- (User *) user_get: (NSString *) access_token : (int64_t) gid
+- (User *) user_get: (NSString *) auth_token : (int64_t) gid
 {
-  [self send_user_get: access_token : gid];
+  [self send_user_get: auth_token : gid];
   return [self recv_user_get];
 }
 
-- (void) send_user_set: (NSString *) access_token : (User *) user
+- (void) send_user_set: (NSString *) auth_token : (User *) user
 {
   [outProtocol writeMessageBeginWithName: @"user_set" type: TMessageType_CALL sequenceID: 0];
   [outProtocol writeStructBeginWithName: @"user_set_args"];
-  if (access_token != nil)  {
-    [outProtocol writeFieldBeginWithName: @"access_token" type: TType_STRING fieldID: 1];
-    [outProtocol writeString: access_token];
+  if (auth_token != nil)  {
+    [outProtocol writeFieldBeginWithName: @"auth_token" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: auth_token];
     [outProtocol writeFieldEnd];
   }
   if (user != nil)  {
@@ -1706,9 +2441,9 @@
   return;
 }
 
-- (void) user_set: (NSString *) access_token : (User *) user
+- (void) user_set: (NSString *) auth_token : (User *) user
 {
-  [self send_user_set: access_token : user];
+  [self send_user_set: auth_token : user];
   [self recv_user_set];
 }
 
@@ -1725,28 +2460,44 @@
   mService = [service retain];
   mMethodMap = [[NSMutableDictionary dictionary] retain];
   {
-    SEL s = @selector(process_ping_withSequenceID:inProtocol:outProtocol:);
+    SEL s = @selector(process_login_by_email_withSequenceID:inProtocol:outProtocol:);
     NSMethodSignature * sig = [self methodSignatureForSelector: s];
     NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
     [invocation setSelector: s];
     [invocation retainArguments];
-    [mMethodMap setValue: invocation forKey: @"ping"];
+    [mMethodMap setValue: invocation forKey: @"login_by_email"];
   }
   {
-    SEL s = @selector(process_login_by_mail_withSequenceID:inProtocol:outProtocol:);
+    SEL s = @selector(process_login_by_username_withSequenceID:inProtocol:outProtocol:);
     NSMethodSignature * sig = [self methodSignatureForSelector: s];
     NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
     [invocation setSelector: s];
     [invocation retainArguments];
-    [mMethodMap setValue: invocation forKey: @"login_by_mail"];
+    [mMethodMap setValue: invocation forKey: @"login_by_username"];
   }
   {
-    SEL s = @selector(process_logout_withSequenceID:inProtocol:outProtocol:);
+    SEL s = @selector(process_sign_up_email_withSequenceID:inProtocol:outProtocol:);
     NSMethodSignature * sig = [self methodSignatureForSelector: s];
     NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
     [invocation setSelector: s];
     [invocation retainArguments];
-    [mMethodMap setValue: invocation forKey: @"logout"];
+    [mMethodMap setValue: invocation forKey: @"sign_up_email"];
+  }
+  {
+    SEL s = @selector(process_sign_up_username_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"sign_up_username"];
+  }
+  {
+    SEL s = @selector(process_sign_out_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"sign_out"];
   }
   {
     SEL s = @selector(process_user_get_withSequenceID:inProtocol:outProtocol:);
@@ -1805,14 +2556,14 @@
   return YES;
 }
 
-- (void) process_ping_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+- (void) process_login_by_email_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
 {
-  ping_args * args = [[ping_args alloc] init];
+  login_by_email_args * args = [[login_by_email_args alloc] init];
   [args read: inProtocol];
   [inProtocol readMessageEnd];
-  Ping_result * result = [[Ping_result alloc] init];
-  [result setSuccess: [mService ping: [args input]]];
-  [outProtocol writeMessageBeginWithName: @"ping"
+  Login_by_email_result * result = [[Login_by_email_result alloc] init];
+  [result setSuccess: [mService login_by_email: [args email]: [args password]]];
+  [outProtocol writeMessageBeginWithName: @"login_by_email"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
   [result write: outProtocol];
@@ -1822,14 +2573,14 @@
   [args release];
 }
 
-- (void) process_login_by_mail_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+- (void) process_login_by_username_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
 {
-  login_by_mail_args * args = [[login_by_mail_args alloc] init];
+  login_by_username_args * args = [[login_by_username_args alloc] init];
   [args read: inProtocol];
   [inProtocol readMessageEnd];
-  Login_by_mail_result * result = [[Login_by_mail_result alloc] init];
-  [result setSuccess: [mService login_by_mail: [args client_id]: [args client_secret]: [args mail]: [args password]]];
-  [outProtocol writeMessageBeginWithName: @"login_by_mail"
+  Login_by_username_result * result = [[Login_by_username_result alloc] init];
+  [result setSuccess: [mService login_by_username: [args username]: [args password]]];
+  [outProtocol writeMessageBeginWithName: @"login_by_username"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
   [result write: outProtocol];
@@ -1839,14 +2590,48 @@
   [args release];
 }
 
-- (void) process_logout_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+- (void) process_sign_up_email_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
 {
-  logout_args * args = [[logout_args alloc] init];
+  sign_up_email_args * args = [[sign_up_email_args alloc] init];
   [args read: inProtocol];
   [inProtocol readMessageEnd];
-  Logout_result * result = [[Logout_result alloc] init];
-  [mService logout: [args access_token]];
-  [outProtocol writeMessageBeginWithName: @"logout"
+  Sign_up_email_result * result = [[Sign_up_email_result alloc] init];
+  [result setSuccess: [mService sign_up_email: [args email]: [args password]]];
+  [outProtocol writeMessageBeginWithName: @"sign_up_email"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release];
+  [args release];
+}
+
+- (void) process_sign_up_username_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  sign_up_username_args * args = [[sign_up_username_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  Sign_up_username_result * result = [[Sign_up_username_result alloc] init];
+  [result setSuccess: [mService sign_up_username: [args username]: [args password]]];
+  [outProtocol writeMessageBeginWithName: @"sign_up_username"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release];
+  [args release];
+}
+
+- (void) process_sign_out_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  sign_out_args * args = [[sign_out_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  Sign_out_result * result = [[Sign_out_result alloc] init];
+  [result setSuccess: [mService sign_out: [args auth_token]]];
+  [outProtocol writeMessageBeginWithName: @"sign_out"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
   [result write: outProtocol];
@@ -1862,7 +2647,7 @@
   [args read: inProtocol];
   [inProtocol readMessageEnd];
   User_get_result * result = [[User_get_result alloc] init];
-  [result setSuccess: [mService user_get: [args access_token]: [args gid]]];
+  [result setSuccess: [mService user_get: [args auth_token]: [args gid]]];
   [outProtocol writeMessageBeginWithName: @"user_get"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
@@ -1879,7 +2664,7 @@
   [args read: inProtocol];
   [inProtocol readMessageEnd];
   User_set_result * result = [[User_set_result alloc] init];
-  [mService user_set: [args access_token]: [args user]];
+  [mService user_set: [args auth_token]: [args user]];
   [outProtocol writeMessageBeginWithName: @"user_set"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];

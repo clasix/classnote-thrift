@@ -32,29 +32,29 @@ enum WeekDay {
 typedef int64_t timestamp;
 
 @interface AuthResponse : NSObject <NSCoding> {
-  NSString * __access_token;
+  NSString * __auth_token;
   timestamp __expire_in;
   int64_t __user_id;
 
-  BOOL __access_token_isset;
+  BOOL __auth_token_isset;
   BOOL __expire_in_isset;
   BOOL __user_id_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=access_token, setter=setAccess_token:) NSString * access_token;
+@property (nonatomic, retain, getter=auth_token, setter=setAuth_token:) NSString * auth_token;
 @property (nonatomic, getter=expire_in, setter=setExpire_in:) timestamp expire_in;
 @property (nonatomic, getter=user_id, setter=setUser_id:) int64_t user_id;
 #endif
 
-- (id) initWithAccess_token: (NSString *) access_token expire_in: (timestamp) expire_in user_id: (int64_t) user_id;
+- (id) initWithAuth_token: (NSString *) auth_token expire_in: (timestamp) expire_in user_id: (int64_t) user_id;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (NSString *) access_token;
-- (void) setAccess_token: (NSString *) access_token;
-- (BOOL) access_tokenIsSet;
+- (NSString *) auth_token;
+- (void) setAuth_token: (NSString *) auth_token;
+- (BOOL) auth_tokenIsSet;
 
 - (timestamp) expire_in;
 - (void) setExpire_in: (timestamp) expire_in;

@@ -5,22 +5,12 @@ AuthUser base class.
 
 import time, hashlib, datetime
 from functools import partial
-from flask import session, abort, current_app, redirect, url_for
 
 DEFAULT_HASH_ALGORITHM = hashlib.sha1
 
 DEFAULT_USER_TIMEOUT = 3600
 
-SESSION_USER_KEY = 'auth_user'
-SESSION_LOGIN_KEY = 'auth_login'
-
-def _default_not_authorized(*args, **kwargs):
-    return abort(401)
-
-def _redirect_to_login(login_url_name):
-    return redirect(url_for(login_url_name))
-
-class Auth(object):
+class Auth():
     """
     Extension initialization object containing settings for the extension.
     
@@ -43,20 +33,11 @@ class Auth(object):
     """
 
     def __init__(self, app=None, login_url_name=None):
-        if login_url_name is None:
-            self.not_logged_in_callback = _default_not_authorized
-        else:
-            self.not_logged_in_callback = partial(_redirect_to_login,
-                                                  login_url_name)
-        self.not_permitted_callback = _default_not_authorized
         self.hash_algorithm = DEFAULT_HASH_ALGORITHM
         self.user_timeout = DEFAULT_USER_TIMEOUT
         self.load_role = lambda _: None
-        if app is not None:
-            self.init_app(app)
 
-    def init_app(self, app):
-        app.auth = self
+auth = Auth()
         
 class AuthUser(object):
     """
@@ -94,7 +75,6 @@ class AuthUser(object):
         succesful.
         """
         if self.password == encrypt(password, self.salt):
-            login(self)
             return True
         return False
 
@@ -107,22 +87,6 @@ class AuthUser(object):
     def __getstate__(self):
         return self.__dict__
 
-    @classmethod
-    def load_current_user(cls, apply_timeout=True):
-        """
-        Load current user based on the result of get_current_user_data().
-        """
-        data = get_current_user_data(apply_timeout)
-        if not data:
-            return None
-        user = cls()
-        user.__dict__ = data
-        return user
-
-    def is_logged_in(self):
-        user_data = get_current_user_data()
-        return user_data is not None and user_data.get('username') == self.username
-
 def encrypt(password, salt=None, hash_algorithm=None):
     """Encrypts a password based on the hashing algorithm."""
     to_encrypt = password
@@ -130,59 +94,4 @@ def encrypt(password, salt=None, hash_algorithm=None):
         to_encrypt += salt
     if hash_algorithm is not None:
         return hash_algorithm(to_encrypt).hexdigest()
-    return current_app.auth.hash_algorithm(to_encrypt).hexdigest()
-
-def login(user):
-    """
-    Logs the user in. Note that NO AUTHENTICATION is done by this function. If
-    you want to authenticate a user, use the AuthUser.authenticate() method.
-    """
-    session[SESSION_USER_KEY] = user.__getstate__()
-    session[SESSION_LOGIN_KEY] = datetime.datetime.utcnow()
-
-def logout():
-    """Logs the currently logged in user out and returns the user data."""
-    session.pop(SESSION_LOGIN_KEY, None)
-    return session.pop(SESSION_USER_KEY, None)
-    
-def get_current_user_data(apply_timeout=True):
-    """ 
-    Returns the data of the current user (user.__dict__) if there is a
-    current user and he didn't time out yet. If timeout should be ignored,
-    provide apply_timeout=False.  
-    """
-    user_data = session.get(SESSION_USER_KEY, None)
-    if user_data is None:
-        return None 
-    if not apply_timeout:
-        return user_data
-    login_datetime = session[SESSION_LOGIN_KEY]
-    now = datetime.datetime.utcnow()
-    user_timeout = current_app.auth.user_timeout
-    if user_timeout > 0 and now - login_datetime > \
-       datetime.timedelta(seconds=user_timeout):
-        logout()
-        return None
-    return user_data
-
-def not_logged_in(callback, *args, **kwargs):
-    """
-    Executes not logged in callback. Not for external use.
-    """
-    if callback is None:
-        return current_app.auth.not_logged_in_callback(*args, **kwargs)
-    else:
-        return callback(*args, **kwargs)
-
-def login_required(callback=None):
-    """
-    Decorator for views that require login. Callback can be specified to
-    override the default callback on the auth object.
-    """
-    def wrap(func):
-        def decorator(*args, **kwargs):
-            if get_current_user_data() is None:
-                return not_logged_in(callback, *args, **kwargs)
-            return func(*args, **kwargs)
-        return decorator
-    return wrap
+    return auth.hash_algorithm(to_encrypt).hexdigest()
