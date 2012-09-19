@@ -17,7 +17,7 @@ from sqlalchemy import Table, Column, MetaData, ForeignKey
 from sqlalchemy import BigInteger, Boolean, String, Date, DateTime, Float, Integer
 from sqlalchemy import PickleType, Unicode, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import mapper, sessionmaker, relation, synonym
+from sqlalchemy.orm import mapper, sessionmaker, relation, synonym, relationship
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import asc
 from auth import AuthUser
@@ -55,6 +55,26 @@ class User(SQLModel, AuthUser):
 
     def __repr__(self):
         return '<User id="%s">' % self.id
+
+class AuthToken(SQLModel):
+    """
+    """
+
+    __tablename__ = 'authtokens'
+    id = Column(Integer, primary_key=True, nullable=False)
+
+    user_id = Column(Integer, ForeignKey('users.id'))
+    auth_token = Column(String(20), unique=True)
+    user = relationship(User, primaryjoin=user_id == User.id)
+
+    def __init__(self, *args, **kwargs):
+        super(AuthToken, self).__init__(*args, **kwargs)
+
+    def __getstate__(self):
+        return self.__dict__
+
+    def __repr__(self):
+        return '<AuthToken auth_token="%s">' % self.auth_token
 
 def db_factory(settings):
     """
