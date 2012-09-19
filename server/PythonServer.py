@@ -31,6 +31,12 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
+config = {'dev_model': True, 'sqlite_path': 'thrift.db'}
+import model
+db = model.db_factory(config)
+from ctrl import Ctrl
+ctrl = Ctrl(db)
+
 class ClassNoteHandler:
   def __init__(self):
     self.log = {}
