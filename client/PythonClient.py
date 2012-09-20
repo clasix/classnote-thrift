@@ -29,10 +29,10 @@ try:
   # Connect!
   transport.open()
 
-  res = client.sign_up_username('test1@gmail.com', '12345')
+  res = client.sign_up_email('test2@gmail.com', '12345')
   print res
   if res:
-    auth_token = client.login_by_username('test1@gmail.com', '12345')
+    auth_token = client.login_by_email('test2@gmail.com', '12345')
     print 'auth_token is %s' % auth_token
     res = client.sign_out(auth_token)
     print 'Sign out is %s' % res

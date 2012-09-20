@@ -27,7 +27,9 @@ class Ctrl(object):
                     auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
-                return token.id
+                print token.id
+                return token.auth_token
+        print 'User not found with email: %s' % email
         return None
 
     def login_by_username(self, username, password):
