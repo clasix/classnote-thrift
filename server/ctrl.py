@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import uuid
 from model import User, AuthToken
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -22,9 +21,7 @@ class Ctrl(object):
             user = None
         if user is not None:
             if user.authenticate(password):
-                auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
-                while (self.db.query(AuthToken).filter(AuthToken.auth_token==auth_token).first()):
-                    auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
+                auth_token = AuthToken.uuid_token(db)
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
                 print token.id
@@ -39,9 +36,7 @@ class Ctrl(object):
             user = None
         if user is not None:
             if user.authenticate(password):
-                auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
-                while (self.db.query(AuthToken).filter(AuthToken.auth_token==auth_token).first()):
-                    auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
+                auth_token = AuthToken.uuid_token(db)
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
                 return token.auth_token

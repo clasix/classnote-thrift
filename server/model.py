@@ -11,6 +11,7 @@ import logging
 import os
 import sys
 import datetime
+import uuid
 
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, MetaData, ForeignKey
@@ -56,6 +57,64 @@ class User(SQLModel, AuthUser):
     def __repr__(self):
         return '<User id="%s">' % self.id
 
+class Class(SQLModel):
+    """
+    """
+
+    __tablename__ = 'classes'
+    id = Column(Integer, primary_key=True, nullable=False)
+
+    school = Column(String(80))
+    dept = Column(String(80))
+    year = Column(Integer)
+
+class Course(SQLModel):
+    """
+    """
+
+    __tablename__ = 'courses'
+    id = Column(Integer, primary_key=True, nullable=False)
+
+    name = Column(String(80))
+    tearcher = Column(String(80))
+    book = Column(String(80))
+    for_class = Column(Integer) # if -1, means every class can choose
+    for_semester = Column(Integer) # if -1, meas every semester can choose
+
+class LessonInfo(SQLModel):
+    """
+    """
+
+    __tablename__ = 'lessoninfos'
+    id = Column(Integer, primary_key=True, nullable=False)
+    course_id = Column(Integer, ForeginKey('courses.id'))
+    classroom = Column(String(80))
+    weekday = Column(Integer)
+    start = Column(Integer)
+    duration = Column(Integer)
+    course = relationship(Course, primaryjoin=course_id == Course.id)
+
+class LessonTable(SQLModel):
+    """
+    """
+    __tablename__ = 'lessontables'
+    id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeginKey('users.id')) # class_id, the sharedTable for a class
+    semester = Column(Integer)
+    user = relationship(User, primaryjoin=user_id == User.id)
+
+class LessonTableItem(SQLModel):
+    """
+    """
+    __tablename__ = 'lessontableitems'
+    id = Column(Integer, primary_key=True, nullable=False)
+
+    table_id = Column(Integer, ForeignKey('lessontables.id'))
+    lession_info_id = Column(Integer, ForeignKey('lessoninfos.id'))
+    table = relationship(LessonTable, primaryjoin=table_id == LessonTable.id)
+    lesson_info = relationship(LessonInfo, primaryjoin=lesson_info_id == LessonInfo.id)
+
+
 class AuthToken(SQLModel):
     """
     """
@@ -75,6 +134,13 @@ class AuthToken(SQLModel):
 
     def __repr__(self):
         return '<AuthToken auth_token="%s">' % self.auth_token
+
+    @classmethod
+    def uuid_token(db):
+        auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
+        while (db.query(AuthToken).filter(AuthToken.auth_token==auth_token).first()):
+            auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
+        return auth_token
 
 def db_factory(settings):
     """
