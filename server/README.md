@@ -46,8 +46,7 @@
 #LessonTableItem(课表项) 
 由课表和LessonInfo的关联组成，将LessonInfo添加(选)进课表，即产生关联
 当用户添加课程表的时候，如果已有相同的课程表，如何保证唯一性 ???
-但是，当合并后，一个学生改了课节信息，另外一个学生的课节信息也会变化，是否是用户想要的效果？
-hash = hash(course_id, weekday, start, duration)
+但是，当合并后，一个学生改了课节信息，另外一个学生的课节信息也会变化，是否是用户想要的效果？hash = hash(course_id, weekday, start, duration), 
     {
         id,
         table_id, # --> LessonTable.id
