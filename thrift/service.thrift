@@ -11,12 +11,12 @@ service ClassNote {
         2: string password
     )
 
-    bool sign_up_email(
+    type.AuthResponse sign_up_email(
         1: string email,
         2: string password
     )
 
-    bool sign_up_username(
+    type.AuthResponse sign_up_username(
         1: string username,
         2: string password
     )
@@ -25,30 +25,32 @@ service ClassNote {
         1: string auth_token
     )
 
-/*
-    void sign_up (
-        1: string mail,
-        2: string password
-    )
-
-    type.AuthResponse sign_in (
-        1: string mail,
-        2: string password
-    )
-
-    void logout(
-        1: string   auth_token
-    )
-*/
-
     # User
     type.User user_get(
         1: string       auth_token,
-        2: i64          gid
+        2: i64          user_id
     )
 
-    void user_set(
-        1: string   auth_token,
-        2: type.User    user
+    list<type.LessonTable> lessontable_get(
+        1: string       auth_token,
+        2: i64          user_id
+    )
+
+    boolean lessontable_set(
+        1:string        auth_token,
+        2:i64           user_id,
+        3:list<type.LessonTable>    lesson_tables
+    )
+
+    list<type.Course> courses_get_by_class(
+        1:Class         class
+    )
+
+    boolean course_add(
+        1: Course   course
+    )
+
+    boolean course_set(
+        1: Course course
     )
 }

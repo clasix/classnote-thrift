@@ -18,27 +18,9 @@ db = model.db_factory(config)
 from ctrl import Ctrl
 ctrl = Ctrl(db)
 
-class ClassNoteHandler:
-  def __init__(self):
-    self.log = {}
-
-  def login_by_mail(self, client_id, client_secret, mail, password):
-    pass
-
-  def logout(self, access_token):
-    pass
-
-  def ping(self, input):
-    return "ping input: %s" % (input)
-
-  def user_get(self, access_token, gid):
-    pass
-
-  def user_set(self, access_token, user):
-    pass
-
-#handler = ClassNoteHandler()
-processor = ClassNote.Processor(ctrl)
+from handler import ClassNoteHandler
+handler = ClassNoteHandler(ctrl)
+processor = ClassNote.Processor(handler)
 transport = TSocket.TServerSocket(port=9090)
 tfactory = TTransport.TBufferedTransportFactory()
 pfactory = TBinaryProtocol.TBinaryProtocolFactory()
