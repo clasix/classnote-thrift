@@ -24,8 +24,7 @@ class Ctrl(object):
                 auth_token = AuthToken.uuid_token(db)
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
-                print token.id
-                return token.auth_token
+                return token
         print 'User not found with email: %s' % email
         return None
 
@@ -39,7 +38,7 @@ class Ctrl(object):
                 auth_token = AuthToken.uuid_token(db)
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
-                return token.auth_token
+                return token
         return None
 
 
@@ -67,3 +66,12 @@ class Ctrl(object):
             self.db.delete(token)
             return True
         return False #already sign out
+
+    def add_obj(self, obj):
+        self.db.add(obj)
+
+    // how to filter by cls and an object of the cls?
+    def has_Class(self, a_class):
+        try:
+           the_class = self.db.query(Class).filter(Class.schoole == a_class.school, Class.dept == a_class.dept, Class.major = a_class.major, Class.year = a_Class.year) 
+
