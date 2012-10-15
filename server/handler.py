@@ -5,20 +5,20 @@
 import sys
 sys.path.append('../gen-py')
 import model
-import type.ttypes import *
+from type.ttypes import *
 
 class ClassNoteHandler:
     def __init__(self, ctrl):
         self.log = {}
         self.ctrl = ctrl
 
-    def login_by_mail(self, email, password):
+    def login_by_email(self, email, password):
         token = self.ctrl.login_by_email(email, password)
         if token is not None:
             return AuthResponse(auth_token = token.auth_token, expire_in = None, user_id = token.user_id) 
         return None
 
-    def login_by_username(self, username, password)
+    def login_by_username(self, username, password):
         token = self.ctrl.login_by_username(username, password)
         if token is not None:
             return AuthResponse(auth_token = token.auth_token, expire_in = None, user_id = token.user_id) 
@@ -44,8 +44,7 @@ class ClassNoteHandler:
 
     def course_add(self, course):
         if course.for_class is not None:
-
-        model_course = model.Course(name = course.name, tearcher = course.teacher, book = course.book)
+            model_course = model.Course(name = course.name, tearcher = course.teacher, book = course.book)
         pass
 
     def course_set(self, course):

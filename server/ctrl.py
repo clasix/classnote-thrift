@@ -3,8 +3,6 @@
 from model import User, AuthToken
 from sqlalchemy.orm.exc import NoResultFound
 
-AUTH_TOKEN_LENGTH = 20
-
 class Ctrl(object):
     """
     Use to control the auth model
@@ -21,7 +19,7 @@ class Ctrl(object):
             user = None
         if user is not None:
             if user.authenticate(password):
-                auth_token = AuthToken.uuid_token(db)
+                auth_token = AuthToken.uuid_token(self.db)
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
                 return token
@@ -35,7 +33,7 @@ class Ctrl(object):
             user = None
         if user is not None:
             if user.authenticate(password):
-                auth_token = AuthToken.uuid_token(db)
+                auth_token = AuthToken.uuid_token(self.db)
                 token = AuthToken(user_id=user.id, auth_token=auth_token)
                 self.db.add(token)
                 return token
@@ -69,9 +67,3 @@ class Ctrl(object):
 
     def add_obj(self, obj):
         self.db.add(obj)
-
-    // how to filter by cls and an object of the cls?
-    def has_Class(self, a_class):
-        try:
-           the_class = self.db.query(Class).filter(Class.schoole == a_class.school, Class.dept == a_class.dept, Class.major = a_class.major, Class.year = a_Class.year) 
-

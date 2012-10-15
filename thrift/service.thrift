@@ -1,22 +1,22 @@
 include "type.thrift"
 
 service ClassNote {
-    string login_by_email(
+    type.AuthResponse login_by_email(
         1: string email,
         2: string password
     ) 
 
-    string login_by_username(
+    type.AuthResponse login_by_username(
         1: string username,
         2: string password
     )
 
-    type.AuthResponse sign_up_email(
+    bool sign_up_email(
         1: string email,
         2: string password
     )
 
-    type.AuthResponse sign_up_username(
+    bool sign_up_username(
         1: string username,
         2: string password
     )
@@ -36,21 +36,21 @@ service ClassNote {
         2: i64          user_id
     )
 
-    boolean lessontable_set(
+    bool lessontable_set(
         1:string        auth_token,
         2:i64           user_id,
         3:list<type.LessonTable>    lesson_tables
     )
 
     list<type.Course> courses_get_by_class(
-        1:Class         class
+        1: type.Class         a_class
     )
 
-    boolean course_add(
-        1: Course   course
+    bool course_add(
+        1: type.Course   course
     )
 
-    boolean course_set(
-        1: Course course
+    bool course_set(
+        1: type.Course course
     )
 }

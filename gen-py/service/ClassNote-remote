@@ -23,13 +23,17 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print 'Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] function [arg1 [arg2...]]'
   print ''
   print 'Functions:'
-  print '  string login_by_email(string email, string password)'
-  print '  string login_by_username(string username, string password)'
+  print '  AuthResponse login_by_email(string email, string password)'
+  print '  AuthResponse login_by_username(string username, string password)'
   print '  bool sign_up_email(string email, string password)'
   print '  bool sign_up_username(string username, string password)'
   print '  bool sign_out(string auth_token)'
-  print '  User user_get(string auth_token, i64 gid)'
-  print '  void user_set(string auth_token, User user)'
+  print '  User user_get(string auth_token, i64 user_id)'
+  print '   lessontable_get(string auth_token, i64 user_id)'
+  print '  bool lessontable_set(string auth_token, i64 user_id,  lesson_tables)'
+  print '   courses_get_by_class(Class a_class)'
+  print '  bool course_add(Course course)'
+  print '  bool course_set(Course course)'
   print ''
   sys.exit(0)
 
@@ -117,11 +121,35 @@ elif cmd == 'user_get':
     sys.exit(1)
   pp.pprint(client.user_get(args[0],eval(args[1]),))
 
-elif cmd == 'user_set':
+elif cmd == 'lessontable_get':
   if len(args) != 2:
-    print 'user_set requires 2 args'
+    print 'lessontable_get requires 2 args'
     sys.exit(1)
-  pp.pprint(client.user_set(args[0],eval(args[1]),))
+  pp.pprint(client.lessontable_get(args[0],eval(args[1]),))
+
+elif cmd == 'lessontable_set':
+  if len(args) != 3:
+    print 'lessontable_set requires 3 args'
+    sys.exit(1)
+  pp.pprint(client.lessontable_set(args[0],eval(args[1]),eval(args[2]),))
+
+elif cmd == 'courses_get_by_class':
+  if len(args) != 1:
+    print 'courses_get_by_class requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.courses_get_by_class(eval(args[0]),))
+
+elif cmd == 'course_add':
+  if len(args) != 1:
+    print 'course_add requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.course_add(eval(args[0]),))
+
+elif cmd == 'course_set':
+  if len(args) != 1:
+    print 'course_set requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.course_set(eval(args[0]),))
 
 else:
   print 'Unrecognized method %s' % cmd

@@ -25,6 +25,8 @@ from auth import AuthUser
 
 SQLModel = declarative_base()
 
+AUTH_TOKEN_LENGTH = 20
+
 class User(SQLModel, AuthUser):
     """
     """
@@ -87,7 +89,7 @@ class LessonInfo(SQLModel):
 
     __tablename__ = 'lessoninfos'
     id = Column(Integer, primary_key=True, nullable=False)
-    course_id = Column(Integer, ForeginKey('courses.id'))
+    course_id = Column(Integer, ForeignKey('courses.id'))
     classroom = Column(String(80))
     weekday = Column(Integer)
     start = Column(Integer)
@@ -99,7 +101,7 @@ class LessonTable(SQLModel):
     """
     __tablename__ = 'lessontables'
     id = Column(Integer, primary_key=True, nullable=False)
-    user_id = Column(Integer, ForeginKey('users.id')) # class_id, the sharedTable for a class
+    user_id = Column(Integer, ForeignKey('users.id')) # class_id, the sharedTable for a class
     semester = Column(Integer)
     user = relationship(User, primaryjoin=user_id == User.id)
 
@@ -110,7 +112,7 @@ class LessonTableItem(SQLModel):
     id = Column(Integer, primary_key=True, nullable=False)
 
     table_id = Column(Integer, ForeignKey('lessontables.id'))
-    lession_info_id = Column(Integer, ForeignKey('lessoninfos.id'))
+    lesson_info_id = Column(Integer, ForeignKey('lessoninfos.id'))
     table = relationship(LessonTable, primaryjoin=table_id == LessonTable.id)
     lesson_info = relationship(LessonInfo, primaryjoin=lesson_info_id == LessonInfo.id)
 
@@ -136,7 +138,7 @@ class AuthToken(SQLModel):
         return '<AuthToken auth_token="%s">' % self.auth_token
 
     @classmethod
-    def uuid_token(db):
+    def uuid_token(cls, db):
         auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]
         while (db.query(AuthToken).filter(AuthToken.auth_token==auth_token).first()):
             auth_token = uuid.uuid4().hex[:AUTH_TOKEN_LENGTH]

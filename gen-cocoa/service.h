@@ -15,13 +15,17 @@
 #import "type.h"
 
 @protocol ClassNote <NSObject>
-- (NSString *) login_by_email: (NSString *) email : (NSString *) password;  // throws TException
-- (NSString *) login_by_username: (NSString *) username : (NSString *) password;  // throws TException
+- (AuthResponse *) login_by_email: (NSString *) email : (NSString *) password;  // throws TException
+- (AuthResponse *) login_by_username: (NSString *) username : (NSString *) password;  // throws TException
 - (BOOL) sign_up_email: (NSString *) email : (NSString *) password;  // throws TException
 - (BOOL) sign_up_username: (NSString *) username : (NSString *) password;  // throws TException
 - (BOOL) sign_out: (NSString *) auth_token;  // throws TException
-- (User *) user_get: (NSString *) auth_token : (int64_t) gid;  // throws TException
-- (void) user_set: (NSString *) auth_token : (User *) user;  // throws TException
+- (User *) user_get: (NSString *) auth_token : (int64_t) user_id;  // throws TException
+- (NSArray *) lessontable_get: (NSString *) auth_token : (int64_t) user_id;  // throws TException
+- (BOOL) lessontable_set: (NSString *) auth_token : (int64_t) user_id : (NSArray *) lesson_tables;  // throws TException
+- (NSArray *) courses_get_by_class: (Class *) a_class;  // throws TException
+- (BOOL) course_add: (Course *) course;  // throws TException
+- (BOOL) course_set: (Course *) course;  // throws TException
 @end
 
 @interface ClassNoteClient : NSObject <ClassNote> {

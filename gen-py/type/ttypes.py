@@ -243,25 +243,144 @@ class User:
   def __ne__(self, other):
     return not (self == other)
 
-class Lesson:
+class Class:
+  """
+  Attributes:
+   - gid
+   - school
+   - dept
+   - major
+   - year
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'gid', None, None, ), # 1
+    (2, TType.STRING, 'school', None, None, ), # 2
+    (3, TType.STRING, 'dept', None, None, ), # 3
+    (4, TType.STRING, 'major', None, None, ), # 4
+    (5, TType.I16, 'year', None, None, ), # 5
+  )
+
+  def __init__(self, gid=None, school=None, dept=None, major=None, year=None,):
+    self.gid = gid
+    self.school = school
+    self.dept = dept
+    self.major = major
+    self.year = year
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.gid = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.school = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.dept = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.major = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.I16:
+          self.year = iprot.readI16();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('Class')
+    if self.gid is not None:
+      oprot.writeFieldBegin('gid', TType.I64, 1)
+      oprot.writeI64(self.gid)
+      oprot.writeFieldEnd()
+    if self.school is not None:
+      oprot.writeFieldBegin('school', TType.STRING, 2)
+      oprot.writeString(self.school)
+      oprot.writeFieldEnd()
+    if self.dept is not None:
+      oprot.writeFieldBegin('dept', TType.STRING, 3)
+      oprot.writeString(self.dept)
+      oprot.writeFieldEnd()
+    if self.major is not None:
+      oprot.writeFieldBegin('major', TType.STRING, 4)
+      oprot.writeString(self.major)
+      oprot.writeFieldEnd()
+    if self.year is not None:
+      oprot.writeFieldBegin('year', TType.I16, 5)
+      oprot.writeI16(self.year)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.gid is None:
+      raise TProtocol.TProtocolException(message='Required field gid is unset!')
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class Course:
   """
   Attributes:
    - gid
    - name
-   - room
+   - tearcher
+   - book
+   - for_class
+   - for_semster
   """
 
   thrift_spec = (
     None, # 0
     (1, TType.I64, 'gid', None, None, ), # 1
     (2, TType.STRING, 'name', None, None, ), # 2
-    (3, TType.STRING, 'room', None, None, ), # 3
+    (3, TType.STRING, 'tearcher', None, None, ), # 3
+    (4, TType.STRING, 'book', None, None, ), # 4
+    (5, TType.STRUCT, 'for_class', (Class, Class.thrift_spec), None, ), # 5
+    (6, TType.I16, 'for_semster', None, None, ), # 6
   )
 
-  def __init__(self, gid=None, name=None, room=None,):
+  def __init__(self, gid=None, name=None, tearcher=None, book=None, for_class=None, for_semster=None,):
     self.gid = gid
     self.name = name
-    self.room = room
+    self.tearcher = tearcher
+    self.book = book
+    self.for_class = for_class
+    self.for_semster = for_semster
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -284,7 +403,23 @@ class Lesson:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRING:
-          self.room = iprot.readString();
+          self.tearcher = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.book = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRUCT:
+          self.for_class = Class()
+          self.for_class.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.I16:
+          self.for_semster = iprot.readI16();
         else:
           iprot.skip(ftype)
       else:
@@ -296,7 +431,7 @@ class Lesson:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('Lesson')
+    oprot.writeStructBegin('Course')
     if self.gid is not None:
       oprot.writeFieldBegin('gid', TType.I64, 1)
       oprot.writeI64(self.gid)
@@ -305,9 +440,21 @@ class Lesson:
       oprot.writeFieldBegin('name', TType.STRING, 2)
       oprot.writeString(self.name)
       oprot.writeFieldEnd()
-    if self.room is not None:
-      oprot.writeFieldBegin('room', TType.STRING, 3)
-      oprot.writeString(self.room)
+    if self.tearcher is not None:
+      oprot.writeFieldBegin('tearcher', TType.STRING, 3)
+      oprot.writeString(self.tearcher)
+      oprot.writeFieldEnd()
+    if self.book is not None:
+      oprot.writeFieldBegin('book', TType.STRING, 4)
+      oprot.writeString(self.book)
+      oprot.writeFieldEnd()
+    if self.for_class is not None:
+      oprot.writeFieldBegin('for_class', TType.STRUCT, 5)
+      self.for_class.write(oprot)
+      oprot.writeFieldEnd()
+    if self.for_semster is not None:
+      oprot.writeFieldBegin('for_semster', TType.I16, 6)
+      oprot.writeI16(self.for_semster)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -331,10 +478,12 @@ class Lesson:
   def __ne__(self, other):
     return not (self == other)
 
-class Class:
+class LessonInfo:
   """
   Attributes:
-   - lesson
+   - gid
+   - course
+   - room
    - weekday
    - start
    - duration
@@ -342,14 +491,18 @@ class Class:
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRUCT, 'lesson', (Lesson, Lesson.thrift_spec), None, ), # 1
-    (2, TType.I32, 'weekday', None, None, ), # 2
-    (3, TType.I16, 'start', None, None, ), # 3
-    (4, TType.I16, 'duration', None, None, ), # 4
+    (1, TType.I64, 'gid', None, None, ), # 1
+    (2, TType.STRUCT, 'course', (Course, Course.thrift_spec), None, ), # 2
+    (3, TType.STRING, 'room', None, None, ), # 3
+    (4, TType.I16, 'weekday', None, None, ), # 4
+    (5, TType.I16, 'start', None, None, ), # 5
+    (6, TType.I16, 'duration', None, None, ), # 6
   )
 
-  def __init__(self, lesson=None, weekday=None, start=None, duration=None,):
-    self.lesson = lesson
+  def __init__(self, gid=None, course=None, room=None, weekday=None, start=None, duration=None,):
+    self.gid = gid
+    self.course = course
+    self.room = room
     self.weekday = weekday
     self.start = start
     self.duration = duration
@@ -364,22 +517,32 @@ class Class:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRUCT:
-          self.lesson = Lesson()
-          self.lesson.read(iprot)
+        if ftype == TType.I64:
+          self.gid = iprot.readI64();
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.weekday = iprot.readI32();
+        if ftype == TType.STRUCT:
+          self.course = Course()
+          self.course.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 3:
+        if ftype == TType.STRING:
+          self.room = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I16:
+          self.weekday = iprot.readI16();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
         if ftype == TType.I16:
           self.start = iprot.readI16();
         else:
           iprot.skip(ftype)
-      elif fid == 4:
+      elif fid == 6:
         if ftype == TType.I16:
           self.duration = iprot.readI16();
         else:
@@ -393,35 +556,146 @@ class Class:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('Class')
-    if self.lesson is not None:
-      oprot.writeFieldBegin('lesson', TType.STRUCT, 1)
-      self.lesson.write(oprot)
+    oprot.writeStructBegin('LessonInfo')
+    if self.gid is not None:
+      oprot.writeFieldBegin('gid', TType.I64, 1)
+      oprot.writeI64(self.gid)
+      oprot.writeFieldEnd()
+    if self.course is not None:
+      oprot.writeFieldBegin('course', TType.STRUCT, 2)
+      self.course.write(oprot)
+      oprot.writeFieldEnd()
+    if self.room is not None:
+      oprot.writeFieldBegin('room', TType.STRING, 3)
+      oprot.writeString(self.room)
       oprot.writeFieldEnd()
     if self.weekday is not None:
-      oprot.writeFieldBegin('weekday', TType.I32, 2)
-      oprot.writeI32(self.weekday)
+      oprot.writeFieldBegin('weekday', TType.I16, 4)
+      oprot.writeI16(self.weekday)
       oprot.writeFieldEnd()
     if self.start is not None:
-      oprot.writeFieldBegin('start', TType.I16, 3)
+      oprot.writeFieldBegin('start', TType.I16, 5)
       oprot.writeI16(self.start)
       oprot.writeFieldEnd()
     if self.duration is not None:
-      oprot.writeFieldBegin('duration', TType.I16, 4)
+      oprot.writeFieldBegin('duration', TType.I16, 6)
       oprot.writeI16(self.duration)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
   def validate(self):
-    if self.lesson is None:
-      raise TProtocol.TProtocolException(message='Required field lesson is unset!')
-    if self.weekday is None:
-      raise TProtocol.TProtocolException(message='Required field weekday is unset!')
-    if self.start is None:
-      raise TProtocol.TProtocolException(message='Required field start is unset!')
-    if self.duration is None:
-      raise TProtocol.TProtocolException(message='Required field duration is unset!')
+    if self.gid is None:
+      raise TProtocol.TProtocolException(message='Required field gid is unset!')
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class LessonTable:
+  """
+  Attributes:
+   - gid
+   - user_id
+   - semester
+   - lessoninfos
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'gid', None, None, ), # 1
+    (2, TType.I64, 'user_id', None, None, ), # 2
+    (3, TType.I16, 'semester', None, None, ), # 3
+    (4, TType.LIST, 'lessoninfos', (TType.STRUCT,(LessonInfo, LessonInfo.thrift_spec)), None, ), # 4
+  )
+
+  def __init__(self, gid=None, user_id=None, semester=None, lessoninfos=None,):
+    self.gid = gid
+    self.user_id = user_id
+    self.semester = semester
+    self.lessoninfos = lessoninfos
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.gid = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.user_id = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I16:
+          self.semester = iprot.readI16();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.LIST:
+          self.lessoninfos = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = LessonInfo()
+            _elem5.read(iprot)
+            self.lessoninfos.append(_elem5)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('LessonTable')
+    if self.gid is not None:
+      oprot.writeFieldBegin('gid', TType.I64, 1)
+      oprot.writeI64(self.gid)
+      oprot.writeFieldEnd()
+    if self.user_id is not None:
+      oprot.writeFieldBegin('user_id', TType.I64, 2)
+      oprot.writeI64(self.user_id)
+      oprot.writeFieldEnd()
+    if self.semester is not None:
+      oprot.writeFieldBegin('semester', TType.I16, 3)
+      oprot.writeI16(self.semester)
+      oprot.writeFieldEnd()
+    if self.lessoninfos is not None:
+      oprot.writeFieldBegin('lessoninfos', TType.LIST, 4)
+      oprot.writeListBegin(TType.STRUCT, len(self.lessoninfos))
+      for iter6 in self.lessoninfos:
+        iter6.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.gid is None:
+      raise TProtocol.TProtocolException(message='Required field gid is unset!')
+    if self.user_id is None:
+      raise TProtocol.TProtocolException(message='Required field user_id is unset!')
     return
 
 

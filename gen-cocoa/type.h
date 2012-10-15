@@ -29,6 +29,10 @@ enum WeekDay {
   WeekDay_Saturday = 6
 };
 
+typedef int32_t ID;
+
+typedef NSString * Guid;
+
 typedef int64_t timestamp;
 
 @interface AuthResponse : NSObject <NSCoding> {
@@ -101,23 +105,81 @@ typedef int64_t timestamp;
 
 @end
 
-@interface Lesson : NSObject <NSCoding> {
+@interface Class : NSObject <NSCoding> {
+  int64_t __gid;
+  NSString * __school;
+  NSString * __dept;
+  NSString * __major;
+  int16_t __year;
+
+  BOOL __gid_isset;
+  BOOL __school_isset;
+  BOOL __dept_isset;
+  BOOL __major_isset;
+  BOOL __year_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
+@property (nonatomic, retain, getter=school, setter=setSchool:) NSString * school;
+@property (nonatomic, retain, getter=dept, setter=setDept:) NSString * dept;
+@property (nonatomic, retain, getter=major, setter=setMajor:) NSString * major;
+@property (nonatomic, getter=year, setter=setYear:) int16_t year;
+#endif
+
+- (id) initWithGid: (int64_t) gid school: (NSString *) school dept: (NSString *) dept major: (NSString *) major year: (int16_t) year;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (int64_t) gid;
+- (void) setGid: (int64_t) gid;
+- (BOOL) gidIsSet;
+
+- (NSString *) school;
+- (void) setSchool: (NSString *) school;
+- (BOOL) schoolIsSet;
+
+- (NSString *) dept;
+- (void) setDept: (NSString *) dept;
+- (BOOL) deptIsSet;
+
+- (NSString *) major;
+- (void) setMajor: (NSString *) major;
+- (BOOL) majorIsSet;
+
+- (int16_t) year;
+- (void) setYear: (int16_t) year;
+- (BOOL) yearIsSet;
+
+@end
+
+@interface Course : NSObject <NSCoding> {
   int64_t __gid;
   NSString * __name;
-  NSString * __room;
+  NSString * __tearcher;
+  NSString * __book;
+  Class * __for_class;
+  int16_t __for_semster;
 
   BOOL __gid_isset;
   BOOL __name_isset;
-  BOOL __room_isset;
+  BOOL __tearcher_isset;
+  BOOL __book_isset;
+  BOOL __for_class_isset;
+  BOOL __for_semster_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 @property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
 @property (nonatomic, retain, getter=name, setter=setName:) NSString * name;
-@property (nonatomic, retain, getter=room, setter=setRoom:) NSString * room;
+@property (nonatomic, retain, getter=tearcher, setter=setTearcher:) NSString * tearcher;
+@property (nonatomic, retain, getter=book, setter=setBook:) NSString * book;
+@property (nonatomic, retain, getter=for_class, setter=setFor_class:) Class * for_class;
+@property (nonatomic, getter=for_semster, setter=setFor_semster:) int16_t for_semster;
 #endif
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name room: (NSString *) room;
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Class *) for_class for_semster: (int16_t) for_semster;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -130,42 +192,68 @@ typedef int64_t timestamp;
 - (void) setName: (NSString *) name;
 - (BOOL) nameIsSet;
 
-- (NSString *) room;
-- (void) setRoom: (NSString *) room;
-- (BOOL) roomIsSet;
+- (NSString *) tearcher;
+- (void) setTearcher: (NSString *) tearcher;
+- (BOOL) tearcherIsSet;
+
+- (NSString *) book;
+- (void) setBook: (NSString *) book;
+- (BOOL) bookIsSet;
+
+- (Class *) for_class;
+- (void) setFor_class: (Class *) for_class;
+- (BOOL) for_classIsSet;
+
+- (int16_t) for_semster;
+- (void) setFor_semster: (int16_t) for_semster;
+- (BOOL) for_semsterIsSet;
 
 @end
 
-@interface Class : NSObject <NSCoding> {
-  Lesson * __lesson;
-  int __weekday;
+@interface LessonInfo : NSObject <NSCoding> {
+  int64_t __gid;
+  Course * __course;
+  NSString * __room;
+  int16_t __weekday;
   int16_t __start;
   int16_t __duration;
 
-  BOOL __lesson_isset;
+  BOOL __gid_isset;
+  BOOL __course_isset;
+  BOOL __room_isset;
   BOOL __weekday_isset;
   BOOL __start_isset;
   BOOL __duration_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=lesson, setter=setLesson:) Lesson * lesson;
-@property (nonatomic, getter=weekday, setter=setWeekday:) int weekday;
+@property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
+@property (nonatomic, retain, getter=course, setter=setCourse:) Course * course;
+@property (nonatomic, retain, getter=room, setter=setRoom:) NSString * room;
+@property (nonatomic, getter=weekday, setter=setWeekday:) int16_t weekday;
 @property (nonatomic, getter=start, setter=setStart:) int16_t start;
 @property (nonatomic, getter=duration, setter=setDuration:) int16_t duration;
 #endif
 
-- (id) initWithLesson: (Lesson *) lesson weekday: (int) weekday start: (int16_t) start duration: (int16_t) duration;
+- (id) initWithGid: (int64_t) gid course: (Course *) course room: (NSString *) room weekday: (int16_t) weekday start: (int16_t) start duration: (int16_t) duration;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (Lesson *) lesson;
-- (void) setLesson: (Lesson *) lesson;
-- (BOOL) lessonIsSet;
+- (int64_t) gid;
+- (void) setGid: (int64_t) gid;
+- (BOOL) gidIsSet;
 
-- (int) weekday;
-- (void) setWeekday: (int) weekday;
+- (Course *) course;
+- (void) setCourse: (Course *) course;
+- (BOOL) courseIsSet;
+
+- (NSString *) room;
+- (void) setRoom: (NSString *) room;
+- (BOOL) roomIsSet;
+
+- (int16_t) weekday;
+- (void) setWeekday: (int16_t) weekday;
 - (BOOL) weekdayIsSet;
 
 - (int16_t) start;
@@ -175,6 +263,48 @@ typedef int64_t timestamp;
 - (int16_t) duration;
 - (void) setDuration: (int16_t) duration;
 - (BOOL) durationIsSet;
+
+@end
+
+@interface LessonTable : NSObject <NSCoding> {
+  int64_t __gid;
+  int64_t __user_id;
+  int16_t __semester;
+  NSArray * __lessoninfos;
+
+  BOOL __gid_isset;
+  BOOL __user_id_isset;
+  BOOL __semester_isset;
+  BOOL __lessoninfos_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
+@property (nonatomic, getter=user_id, setter=setUser_id:) int64_t user_id;
+@property (nonatomic, getter=semester, setter=setSemester:) int16_t semester;
+@property (nonatomic, retain, getter=lessoninfos, setter=setLessoninfos:) NSArray * lessoninfos;
+#endif
+
+- (id) initWithGid: (int64_t) gid user_id: (int64_t) user_id semester: (int16_t) semester lessoninfos: (NSArray *) lessoninfos;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (int64_t) gid;
+- (void) setGid: (int64_t) gid;
+- (BOOL) gidIsSet;
+
+- (int64_t) user_id;
+- (void) setUser_id: (int64_t) user_id;
+- (BOOL) user_idIsSet;
+
+- (int16_t) semester;
+- (void) setSemester: (int16_t) semester;
+- (BOOL) semesterIsSet;
+
+- (NSArray *) lessoninfos;
+- (void) setLessoninfos: (NSArray *) lessoninfos;
+- (BOOL) lessoninfosIsSet;
 
 @end
 

@@ -64,6 +64,6 @@ struct LessonInfo {
 struct LessonTable {
     1: required i64     gid,
     2: required i64     user_id,
-    3: optinal  i16     semester,
-    4: optinal  list<LessonInfo> lessoninfos
+    3: optional  i16     semester,
+    4: optional  list<LessonInfo> lessoninfos
 }
