@@ -2,3 +2,4 @@
 *.db
 *.swp
 server/build/*
+*.DS_Store

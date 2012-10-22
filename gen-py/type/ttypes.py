@@ -243,7 +243,7 @@ class User:
   def __ne__(self, other):
     return not (self == other)
 
-class Class:
+class Clazz:
   """
   Attributes:
    - gid
@@ -312,7 +312,7 @@ class Class:
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('Class')
+    oprot.writeStructBegin('Clazz')
     if self.gid is not None:
       oprot.writeFieldBegin('gid', TType.I64, 1)
       oprot.writeI64(self.gid)
@@ -370,7 +370,7 @@ class Course:
     (2, TType.STRING, 'name', None, None, ), # 2
     (3, TType.STRING, 'tearcher', None, None, ), # 3
     (4, TType.STRING, 'book', None, None, ), # 4
-    (5, TType.STRUCT, 'for_class', (Class, Class.thrift_spec), None, ), # 5
+    (5, TType.STRUCT, 'for_class', (Clazz, Clazz.thrift_spec), None, ), # 5
     (6, TType.I16, 'for_semster', None, None, ), # 6
   )
 
@@ -413,7 +413,7 @@ class Course:
           iprot.skip(ftype)
       elif fid == 5:
         if ftype == TType.STRUCT:
-          self.for_class = Class()
+          self.for_class = Clazz()
           self.for_class.read(iprot)
         else:
           iprot.skip(ftype)

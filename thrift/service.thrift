@@ -43,7 +43,7 @@ service ClassNote {
     )
 
     list<type.Course> courses_get_by_class(
-        1: type.Class         a_class
+        1: type.Clazz         clazz
     )
 
     bool course_add(

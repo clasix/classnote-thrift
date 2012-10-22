@@ -409,7 +409,7 @@
 
 @end
 
-@implementation Class
+@implementation Clazz
 
 - (id) initWithGid: (int64_t) gid school: (NSString *) school dept: (NSString *) dept major: (NSString *) major year: (int16_t) year
 {
@@ -652,7 +652,7 @@
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"Class"];
+  [outProtocol writeStructBeginWithName: @"Clazz"];
   if (__gid_isset) {
     [outProtocol writeFieldBeginWithName: @"gid" type: TType_I64 fieldID: 1];
     [outProtocol writeI64: __gid];
@@ -689,7 +689,7 @@
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"Class("];
+  NSMutableString * ms = [NSMutableString stringWithString: @"Clazz("];
   [ms appendString: @"gid:"];
   [ms appendFormat: @"%qi", __gid];
   [ms appendString: @",school:"];
@@ -708,7 +708,7 @@
 
 @implementation Course
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Class *) for_class for_semster: (int16_t) for_semster
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Clazz *) for_class for_semster: (int16_t) for_semster
 {
   self = [super init];
   __gid = gid;
@@ -879,11 +879,11 @@
   __book_isset = NO;
 }
 
-- (Class *) for_class {
+- (Clazz *) for_class {
   return [[__for_class retain] autorelease];
 }
 
-- (void) setFor_class: (Class *) for_class {
+- (void) setFor_class: (Clazz *) for_class {
   [for_class retain];
   [__for_class release];
   __for_class = for_class;
@@ -966,7 +966,7 @@
         break;
       case 5:
         if (fieldType == TType_STRUCT) {
-          Class *fieldValue = [[Class alloc] init];
+          Clazz *fieldValue = [[Clazz alloc] init];
           [fieldValue read: inProtocol];
           [self setFor_class: fieldValue];
           [fieldValue release];

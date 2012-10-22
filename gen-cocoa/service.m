@@ -2596,80 +2596,80 @@
 @end
 
 @interface courses_get_by_class_args : NSObject <NSCoding> {
-  Class * __a_class;
+  Clazz * __clazz;
 
-  BOOL __a_class_isset;
+  BOOL __clazz_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=a_class, setter=setA_class:) Class * a_class;
+@property (nonatomic, retain, getter=clazz, setter=setClazz:) Clazz * clazz;
 #endif
 
-- (id) initWithA_class: (Class *) a_class;
+- (id) initWithClazz: (Clazz *) clazz;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
-- (Class *) a_class;
-- (void) setA_class: (Class *) a_class;
-- (BOOL) a_classIsSet;
+- (Clazz *) clazz;
+- (void) setClazz: (Clazz *) clazz;
+- (BOOL) clazzIsSet;
 
 @end
 
 @implementation courses_get_by_class_args
 
-- (id) initWithA_class: (Class *) a_class
+- (id) initWithClazz: (Clazz *) clazz
 {
   self = [super init];
-  __a_class = [a_class retain];
-  __a_class_isset = YES;
+  __clazz = [clazz retain];
+  __clazz_isset = YES;
   return self;
 }
 
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"a_class"])
+  if ([decoder containsValueForKey: @"clazz"])
   {
-    __a_class = [[decoder decodeObjectForKey: @"a_class"] retain];
-    __a_class_isset = YES;
+    __clazz = [[decoder decodeObjectForKey: @"clazz"] retain];
+    __clazz_isset = YES;
   }
   return self;
 }
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__a_class_isset)
+  if (__clazz_isset)
   {
-    [encoder encodeObject: __a_class forKey: @"a_class"];
+    [encoder encodeObject: __clazz forKey: @"clazz"];
   }
 }
 
 - (void) dealloc
 {
-  [__a_class release];
+  [__clazz release];
   [super dealloc];
 }
 
-- (Class *) a_class {
-  return [[__a_class retain] autorelease];
+- (Clazz *) clazz {
+  return [[__clazz retain] autorelease];
 }
 
-- (void) setA_class: (Class *) a_class {
-  [a_class retain];
-  [__a_class release];
-  __a_class = a_class;
-  __a_class_isset = YES;
+- (void) setClazz: (Clazz *) clazz {
+  [clazz retain];
+  [__clazz release];
+  __clazz = clazz;
+  __clazz_isset = YES;
 }
 
-- (BOOL) a_classIsSet {
-  return __a_class_isset;
+- (BOOL) clazzIsSet {
+  return __clazz_isset;
 }
 
-- (void) unsetA_class {
-  [__a_class release];
-  __a_class = nil;
-  __a_class_isset = NO;
+- (void) unsetClazz {
+  [__clazz release];
+  __clazz = nil;
+  __clazz_isset = NO;
 }
 
 - (void) read: (id <TProtocol>) inProtocol
@@ -2689,9 +2689,9 @@
     {
       case 1:
         if (fieldType == TType_STRUCT) {
-          Class *fieldValue = [[Class alloc] init];
+          Clazz *fieldValue = [[Clazz alloc] init];
           [fieldValue read: inProtocol];
-          [self setA_class: fieldValue];
+          [self setClazz: fieldValue];
           [fieldValue release];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
@@ -2708,10 +2708,10 @@
 
 - (void) write: (id <TProtocol>) outProtocol {
   [outProtocol writeStructBeginWithName: @"courses_get_by_class_args"];
-  if (__a_class_isset) {
-    if (__a_class != nil) {
-      [outProtocol writeFieldBeginWithName: @"a_class" type: TType_STRUCT fieldID: 1];
-      [__a_class write: outProtocol];
+  if (__clazz_isset) {
+    if (__clazz != nil) {
+      [outProtocol writeFieldBeginWithName: @"clazz" type: TType_STRUCT fieldID: 1];
+      [__clazz write: outProtocol];
       [outProtocol writeFieldEnd];
     }
   }
@@ -2721,8 +2721,8 @@
 
 - (NSString *) description {
   NSMutableString * ms = [NSMutableString stringWithString: @"courses_get_by_class_args("];
-  [ms appendString: @"a_class:"];
-  [ms appendFormat: @"%@", __a_class];
+  [ms appendString: @"clazz:"];
+  [ms appendFormat: @"%@", __clazz];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
@@ -3785,13 +3785,13 @@
   return [self recv_lessontable_set];
 }
 
-- (void) send_courses_get_by_class: (Class *) a_class
+- (void) send_courses_get_by_class: (Clazz *) clazz
 {
   [outProtocol writeMessageBeginWithName: @"courses_get_by_class" type: TMessageType_CALL sequenceID: 0];
   [outProtocol writeStructBeginWithName: @"courses_get_by_class_args"];
-  if (a_class != nil)  {
-    [outProtocol writeFieldBeginWithName: @"a_class" type: TType_STRUCT fieldID: 1];
-    [a_class write: outProtocol];
+  if (clazz != nil)  {
+    [outProtocol writeFieldBeginWithName: @"clazz" type: TType_STRUCT fieldID: 1];
+    [clazz write: outProtocol];
     [outProtocol writeFieldEnd];
   }
   [outProtocol writeFieldStop];
@@ -3819,9 +3819,9 @@
                                            reason: @"courses_get_by_class failed: unknown result"];
 }
 
-- (NSArray *) courses_get_by_class: (Class *) a_class
+- (NSArray *) courses_get_by_class: (Clazz *) clazz
 {
-  [self send_courses_get_by_class: a_class];
+  [self send_courses_get_by_class: clazz];
   return [self recv_courses_get_by_class];
 }
 
@@ -4188,7 +4188,7 @@
   [args read: inProtocol];
   [inProtocol readMessageEnd];
   Courses_get_by_class_result * result = [[Courses_get_by_class_result alloc] init];
-  [result setSuccess: [mService courses_get_by_class: [args a_class]]];
+  [result setSuccess: [mService courses_get_by_class: [args clazz]]];
   [outProtocol writeMessageBeginWithName: @"courses_get_by_class"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];

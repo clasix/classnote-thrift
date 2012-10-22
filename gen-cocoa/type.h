@@ -105,7 +105,7 @@ typedef int64_t timestamp;
 
 @end
 
-@interface Class : NSObject <NSCoding> {
+@interface Clazz : NSObject <NSCoding> {
   int64_t __gid;
   NSString * __school;
   NSString * __dept;
@@ -159,7 +159,7 @@ typedef int64_t timestamp;
   NSString * __name;
   NSString * __tearcher;
   NSString * __book;
-  Class * __for_class;
+  Clazz * __for_class;
   int16_t __for_semster;
 
   BOOL __gid_isset;
@@ -175,11 +175,11 @@ typedef int64_t timestamp;
 @property (nonatomic, retain, getter=name, setter=setName:) NSString * name;
 @property (nonatomic, retain, getter=tearcher, setter=setTearcher:) NSString * tearcher;
 @property (nonatomic, retain, getter=book, setter=setBook:) NSString * book;
-@property (nonatomic, retain, getter=for_class, setter=setFor_class:) Class * for_class;
+@property (nonatomic, retain, getter=for_class, setter=setFor_class:) Clazz * for_class;
 @property (nonatomic, getter=for_semster, setter=setFor_semster:) int16_t for_semster;
 #endif
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Class *) for_class for_semster: (int16_t) for_semster;
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Clazz *) for_class for_semster: (int16_t) for_semster;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -200,8 +200,8 @@ typedef int64_t timestamp;
 - (void) setBook: (NSString *) book;
 - (BOOL) bookIsSet;
 
-- (Class *) for_class;
-- (void) setFor_class: (Class *) for_class;
+- (Clazz *) for_class;
+- (void) setFor_class: (Clazz *) for_class;
 - (BOOL) for_classIsSet;
 
 - (int16_t) for_semster;

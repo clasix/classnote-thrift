@@ -82,10 +82,10 @@ class Iface:
     """
     pass
 
-  def courses_get_by_class(self, a_class):
+  def courses_get_by_class(self, clazz):
     """
     Parameters:
-     - a_class
+     - clazz
     """
     pass
 
@@ -367,18 +367,18 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "lessontable_set failed: unknown result");
 
-  def courses_get_by_class(self, a_class):
+  def courses_get_by_class(self, clazz):
     """
     Parameters:
-     - a_class
+     - clazz
     """
-    self.send_courses_get_by_class(a_class)
+    self.send_courses_get_by_class(clazz)
     return self.recv_courses_get_by_class()
 
-  def send_courses_get_by_class(self, a_class):
+  def send_courses_get_by_class(self, clazz):
     self._oprot.writeMessageBegin('courses_get_by_class', TMessageType.CALL, self._seqid)
     args = courses_get_by_class_args()
-    args.a_class = a_class
+    args.clazz = clazz
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
@@ -582,7 +582,7 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = courses_get_by_class_result()
-    result.success = self._handler.courses_get_by_class(args.a_class)
+    result.success = self._handler.courses_get_by_class(args.clazz)
     oprot.writeMessageBegin("courses_get_by_class", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -1685,16 +1685,16 @@ class lessontable_set_result:
 class courses_get_by_class_args:
   """
   Attributes:
-   - a_class
+   - clazz
   """
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRUCT, 'a_class', (type.ttypes.Class, type.ttypes.Class.thrift_spec), None, ), # 1
+    (1, TType.STRUCT, 'clazz', (type.ttypes.Clazz, type.ttypes.Clazz.thrift_spec), None, ), # 1
   )
 
-  def __init__(self, a_class=None,):
-    self.a_class = a_class
+  def __init__(self, clazz=None,):
+    self.clazz = clazz
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -1707,8 +1707,8 @@ class courses_get_by_class_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.a_class = type.ttypes.Class()
-          self.a_class.read(iprot)
+          self.clazz = type.ttypes.Clazz()
+          self.clazz.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -1721,9 +1721,9 @@ class courses_get_by_class_args:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('courses_get_by_class_args')
-    if self.a_class is not None:
-      oprot.writeFieldBegin('a_class', TType.STRUCT, 1)
-      self.a_class.write(oprot)
+    if self.clazz is not None:
+      oprot.writeFieldBegin('clazz', TType.STRUCT, 1)
+      self.clazz.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

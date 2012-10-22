@@ -23,7 +23,7 @@
 - (User *) user_get: (NSString *) auth_token : (int64_t) user_id;  // throws TException
 - (NSArray *) lessontable_get: (NSString *) auth_token : (int64_t) user_id;  // throws TException
 - (BOOL) lessontable_set: (NSString *) auth_token : (int64_t) user_id : (NSArray *) lesson_tables;  // throws TException
-- (NSArray *) courses_get_by_class: (Class *) a_class;  // throws TException
+- (NSArray *) courses_get_by_class: (Clazz *) clazz;  // throws TException
 - (BOOL) course_add: (Course *) course;  // throws TException
 - (BOOL) course_set: (Course *) course;  // throws TException
 @end

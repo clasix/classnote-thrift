@@ -31,7 +31,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '  User user_get(string auth_token, i64 user_id)'
   print '   lessontable_get(string auth_token, i64 user_id)'
   print '  bool lessontable_set(string auth_token, i64 user_id,  lesson_tables)'
-  print '   courses_get_by_class(Class a_class)'
+  print '   courses_get_by_class(Clazz clazz)'
   print '  bool course_add(Course course)'
   print '  bool course_set(Course course)'
   print ''

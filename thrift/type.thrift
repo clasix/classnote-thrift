@@ -35,7 +35,7 @@ struct User {
     3: required UserGender  gender
 }
 
-struct Class {
+struct Clazz {
     1: required i64     gid,
     2: optional string  school,
     3: optional string  dept,
@@ -48,7 +48,7 @@ struct Course {
     2: required string  name,
     3: optional string  tearcher,
     4: optional string  book,
-    5: optional Class   for_class,
+    5: optional Clazz   for_class,
     6: optional i16     for_semster
 }
 
