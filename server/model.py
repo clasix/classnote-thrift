@@ -59,6 +59,25 @@ class User(SQLModel, AuthUser):
     def __repr__(self):
         return '<User id="%s">' % self.id
 
+class Dept(SQLModel):
+    """
+    """
+
+    __tablename__ = 'depts'
+    id = Column(Integer, primary_key=True, nullable=False)
+
+    province = Column(String(80))
+    school = Column(String(80))
+    dept = Column(String(80))
+
+    def __init__(self, province, school, dept):
+        self.province = province
+        self.school = school
+        self.dept = dept
+
+    def __repr__(self):
+        return '<Dept("%s", "%s", "%s", "%s")>' % (self.id, self.province, self.school, self.dept)
+
 class Class(SQLModel):
     """
     """
@@ -66,8 +85,7 @@ class Class(SQLModel):
     __tablename__ = 'classes'
     id = Column(Integer, primary_key=True, nullable=False)
 
-    school = Column(String(80))
-    dept = Column(String(80))
+    dept_id = Column(Integer, ForeignKey('depts.id'))
     year = Column(Integer)
 
 class Course(SQLModel):
@@ -155,6 +173,7 @@ def db_factory(settings):
     if settings['dev_mode']:
         sqlite_path = 'sqlite:///%s' % os.path.abspath(settings['sqlite_path'])
         engine = create_engine(sqlite_path, echo=True)
+        engine.raw_connection().connection.text_factory = str
     else: # use postgresql in production
         raise NotImplementedError
     SQLModel.metadata.create_all(engine)

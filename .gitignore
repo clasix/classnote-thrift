@@ -2,4 +2,5 @@
 *.db
 *.swp
 server/build/*
+exclude/*
 *.DS_Store

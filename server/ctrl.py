@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from model import User, AuthToken
+from model import *
 from sqlalchemy.orm.exc import NoResultFound
 
 class Ctrl(object):
@@ -64,6 +64,13 @@ class Ctrl(object):
             self.db.delete(token)
             return True
         return False #already sign out
+
+    def dept_provinces(self):
+        try:
+            provinces = self.db.query(Dept.province).group_by(Dept.province).all()
+        except NoResultFound:
+            provinces = []
+        return provinces
 
     def add_obj(self, obj):
         self.db.add(obj)
