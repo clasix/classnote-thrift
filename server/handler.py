@@ -16,13 +16,13 @@ class ClassNoteHandler:
         token = self.ctrl.login_by_email(email, password)
         if token is not None:
             return AuthResponse(auth_token = token.auth_token, expire_in = None, user_id = token.user_id) 
-        return None
+        return AuthResponse(auth_token = None, expire_in = None, user_id = None)
 
     def login_by_username(self, username, password):
         token = self.ctrl.login_by_username(username, password)
         if token is not None:
             return AuthResponse(auth_token = token.auth_token, expire_in = None, user_id = token.user_id) 
-        return None
+        return  AuthResponse(auth_token = None, expire_in = None, user_id = None)
 
     def sign_up_email(self, email, password):
         return self.ctrl.sign_up_email(email, password)
