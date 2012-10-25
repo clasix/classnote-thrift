@@ -21,7 +21,7 @@ ctrl = Ctrl(db)
 from handler import ClassNoteHandler
 handler = ClassNoteHandler(ctrl)
 processor = ClassNote.Processor(handler)
-transport = TSocket.TServerSocket(port=9090)
+transport = TSocket.TServerSocket(host='0.0.0.0', port=8080)
 tfactory = TTransport.TBufferedTransportFactory()
 pfactory = TBinaryProtocol.TBinaryProtocolFactory()
 
