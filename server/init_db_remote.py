@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from model import Dept
+import sys
 
-config = {'dev_mode':True, 'sqlite_path': 'init.db'}
+config = {'dev_mode': False, 'mysql_user': sys.argv[1], 'mysql_passwd': sys.argv[2]}
 import model
 
 db = model.db_factory(config)

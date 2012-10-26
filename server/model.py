@@ -69,14 +69,16 @@ class Dept(SQLModel):
     province = Column(String(80))
     school = Column(String(80))
     dept = Column(String(80))
+    code = Column(String(40))
 
-    def __init__(self, province, school, dept):
+    def __init__(self, province, school, dept, code):
         self.province = province
         self.school = school
         self.dept = dept
+        self.code = code
 
     def __repr__(self):
-        return '<Dept("%s", "%s", "%s", "%s")>' % (self.id, self.province, self.school, self.dept)
+        return '<Dept("%s", "%s", "%s", "%s", "%s")>' % (self.id, self.province, self.school, self.dept, self.code)
 
 class Class(SQLModel):
     """
