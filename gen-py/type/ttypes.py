@@ -361,7 +361,7 @@ class Course:
    - tearcher
    - book
    - for_class
-   - for_semster
+   - for_semester
   """
 
   thrift_spec = (
@@ -371,16 +371,16 @@ class Course:
     (3, TType.STRING, 'tearcher', None, None, ), # 3
     (4, TType.STRING, 'book', None, None, ), # 4
     (5, TType.STRUCT, 'for_class', (Clazz, Clazz.thrift_spec), None, ), # 5
-    (6, TType.I16, 'for_semster', None, None, ), # 6
+    (6, TType.I16, 'for_semester', None, None, ), # 6
   )
 
-  def __init__(self, gid=None, name=None, tearcher=None, book=None, for_class=None, for_semster=None,):
+  def __init__(self, gid=None, name=None, tearcher=None, book=None, for_class=None, for_semester=None,):
     self.gid = gid
     self.name = name
     self.tearcher = tearcher
     self.book = book
     self.for_class = for_class
-    self.for_semster = for_semster
+    self.for_semester = for_semester
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -419,7 +419,7 @@ class Course:
           iprot.skip(ftype)
       elif fid == 6:
         if ftype == TType.I16:
-          self.for_semster = iprot.readI16();
+          self.for_semester = iprot.readI16();
         else:
           iprot.skip(ftype)
       else:
@@ -452,9 +452,9 @@ class Course:
       oprot.writeFieldBegin('for_class', TType.STRUCT, 5)
       self.for_class.write(oprot)
       oprot.writeFieldEnd()
-    if self.for_semster is not None:
-      oprot.writeFieldBegin('for_semster', TType.I16, 6)
-      oprot.writeI16(self.for_semster)
+    if self.for_semester is not None:
+      oprot.writeFieldBegin('for_semester', TType.I16, 6)
+      oprot.writeI16(self.for_semester)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

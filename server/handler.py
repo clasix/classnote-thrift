@@ -33,6 +33,23 @@ class ClassNoteHandler:
     def sign_out(self, auth_token):
         return self.ctrl.sign_out(auth_token)
 
+    def get_lessontables(self, auth_token):
+        lesson_tables = self.ctrl.get_lessontables(auth_token)
+        lesson_t = []
+        for table in lesson_tables:
+            lesson_infos = self.ctrl.get_lessoninfos(table.id)
+            infos = []
+            for info in lesson_infos:
+                #TODO for_class and for_semester
+                course = Course(gid=info.course.id, name=info.course.name, tearcher=info.course.tearcher, book=info.course.book)
+                infos.append(LessonInfo(gid=info.id, course=course, room=info.classroom, weekday=info.weekday, start=info.start, duration=info.duration))
+            lesson_t.append(LessonTable(gid=table.id, user_id=table.user_id, semester=table.semester, lessoninfos=infos))
+        return lesson_t
+
+    def create_lessontable(self, auth_token):
+        return self.ctrl.create_lessontable(auth_token)
+
+
     def user_get(self, auth_token, user_id):
         pass
 

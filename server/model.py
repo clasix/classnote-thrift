@@ -174,8 +174,9 @@ def db_factory(settings):
         sqlite_path = 'sqlite:///%s' % os.path.abspath(settings['sqlite_path'])
         engine = create_engine(sqlite_path, echo=True)
         engine.raw_connection().connection.text_factory = str
-    else: # use postgresql in production
-        raise NotImplementedError
+    else: # use mysql in production
+        mysql_path = 'mysql://%s:%s@localhost:3306/classnote'%(settings['mysql_user'], settings['mysql_passwd'])
+        engine = create_engine(mysql_path, encoding='utf8')
     SQLModel.metadata.create_all(engine)
     Session = sessionmaker(bind=engine, autocommit=True)
     session = Session()

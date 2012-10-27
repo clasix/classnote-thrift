@@ -63,7 +63,50 @@ class Ctrl(object):
         if token is not None:
             self.db.delete(token)
             return True
-        return False #already sign out
+        #already sign out
+        return True
+
+    def get_user_id(self, auth_token):
+        try:
+            token = self.db.query(AuthToken).filter(AuthToken.auth_token==auth_token).one()
+        except NoResultFound:
+            token = None
+        if token is not None:
+            return token.user_id
+        return None
+
+    def get_lessontables(self, auth_token):
+        user_id = self.get_user_id(auth_token)
+        if user_id is not None:
+            try:
+                lesson_tables = self.db.query(LessonTable).filter(LessonTable.user_id==user_id).all()
+            except NoResultFound:
+                lesson_tables = []
+        else:
+            #TODO Permission Error
+            lesson_tables = []
+        return lesson_tables
+
+    def create_lessontable(self, auth_token):
+        user_id = self.get_user_id(auth_token)
+        print user_id
+        if user_id is not None:
+            lesson_table = LessonTable(user_id=user_id)
+            self.db.add(lesson_table)
+            return True
+        else:
+            return False
+
+    def get_lessoninfos(self, lesson_table_id):
+        try:
+            lesson_table_items = self.db.query(LessonTableItem).filter(LessonTableItem.table_id==lesson_table_id).all()
+        except NoResultFound:
+            lesson_table_items = []
+        lesson_infos = []
+        for item in lesson_table_items:
+            #TODO will item.lesson_info be null?
+            lesson_infos.append(item.lesson_info)
+        return lesson_infos
 
     def dept_provinces(self):
         try:

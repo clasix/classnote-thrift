@@ -49,7 +49,7 @@ struct Course {
     3: optional string  tearcher,
     4: optional string  book,
     5: optional Clazz   for_class,
-    6: optional i16     for_semster
+    6: optional i16     for_semester
 }
 
 struct LessonInfo {
