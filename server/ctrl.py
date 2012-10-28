@@ -140,8 +140,72 @@ class Ctrl(object):
 
     def user_sync_by_userid(self, user_id):
         try:
-            user_sync = self.db.query(UserSyncStore).filter(UserSyncStore.user_id==user_id).one()
+            user_sync = self.db.query(UserSyncStore).filter(UserSyncStore.user_id==user_id).first()
         except NoResultFound:
             user_sync = UserSyncStore(user_id, 0)
             self.db.add(user_sync)
         return user_sync
+
+    def school_sync_by_schoolcode(self, school_code):
+        try:
+            school_sync = self.db.query(SchoolSyncStore).filter(SchoolSyncStore.school_code==school_code).first()
+        except NoResultFound:
+            school_sync = SchoolSyncStore(school_code, 0)
+            self.db.add(school_sync)
+        return school_sync
+
+    def plus_updateCount_school(self, school_code):
+        self.db.begin()
+        state = self.school_sync_by_schoolcode(school_code)
+        state.updateCount = state.updateCount + 1
+        self.db.commit()
+        return state.updateCount
+
+    def plus_updateCount_user(self, user_id):
+        self.db.begin()
+        state = self.user_sync_by_userid(user_id)
+        state.updateCount = state.updateCount + 1
+        self.db.commit()
+        return state.updateCount
+
+    def sync_chunk_lessontableitems(self, table_id, afterUSN, maxEntries):
+        try:
+            sync_lessontableitems = self.db.query(LessonTableItem).filter(LessonTableItem.table_id==table_id, LessonTableItem.updateSeqNum>afterUSN).order_by(LessonTableItem.updateSeqNum.asc()).limit(maxEntries)
+        except NoResultFound:
+            sync_lessontableitems = []
+        return sync_lessontableitems
+
+    def sync_chunk_courses(self, school_code, afterUSN, maxEntries):
+        try:
+            sync_courses = self.db.query(Course).filter(Course.school_code==school_code, Course.updateSeqNum>afterUSN).order_by(Course.updateSeqNum.asc()).limit(maxEntries)
+        except NoResultFound:
+            sync_courses = []
+        return sync_courses
+
+    def lesson_table_for_user(self, user_id):
+        try:
+            lessonTables = self.db.query(LessonTable).filter(LessonTable.user_id==user_id).all()
+        except NoResultFound:
+            lessonTables = []
+        return lessonTables
+
+    def createCourse(self, course):
+        course = Course(name=course.name, tearcher=course.tearcher, book=course.book, school_code=course.school_code, dept_code=course.dept_code, semester=course.semester, year=course.year, updateSeqNum=self.plus_updateCount_school(course.school_code))
+        self.db.add(course)
+        self.db.commit()
+        return course
+
+    def updateCourse(self, course):
+        self.db.begin()
+        course = self.db.query(Course).filter(Course.id == course.gid).first()
+        course.updateSeqNum = self.plus_updateCount_school(course.school_code)
+        self.db.commit()
+        return course.updateSeqNum
+
+    def expungeCourse(self, guid):
+        self.db.begin()
+        course = self.db.query(Course).filter(Course.id == guid).first()
+        updateSeqNum = self.plus_updateCount_school(course.school_code)
+        self.db.delete(course)
+        self.db.commit()
+        return updateSeqNum

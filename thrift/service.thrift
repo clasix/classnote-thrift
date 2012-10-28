@@ -6,14 +6,14 @@ struct SyncState {
     3: required i32     updateCount,
 }
 
-# missing lessontableitem
 struct SyncChunk {
     1: required type.timestamp currentTime,
     2: optional i32 chunkHighUSN,
     3: optional i32 updateCount,
     4: optional list<type.Course> courses,
     5: optional list<type.LessonInfo> lessonInfos,
-    6: optional list<type.LessonTable> lessonTables
+    6: optional list<type.LessonTable> lessonTables,
+    7: optional list<type.LessonTableItem> lessonTableItems
 }
 
 /**

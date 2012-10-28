@@ -53,7 +53,8 @@ struct Course {
     5: optional string  school_code,
     6: optional string  dept_code,
     7: optional i16     semester,
-    8: optional i16     year
+    8: optional i16     year,
+    9: optional i32     updateSequenceNum
 }
 
 struct LessonInfo {
@@ -62,12 +63,22 @@ struct LessonInfo {
     3: optional string  room,
     4: optional i16     weekday,
     5: optional i16     start,
-    6: optional i16     duration
+    6: optional i16     duration,
+    7: optional i32     updateSequenceNum
 }
 
 struct LessonTable {
     1: required i64     gid,
     2: required i64     user_id,
     3: optional  i16     semester,
-    4: optional  list<LessonInfo> lessoninfos
+    4: optional i32     updateSequenceNum,
+    5: optional  list<LessonInfo> lessoninfos
 }
+
+struct LessonTableItem {
+    1: required i64     gid,
+    2: optional i64     table_id,
+    3: optional i64     lesson_info_id,
+    4: optional i32     updateSequenceNum
+}
+
