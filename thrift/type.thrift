@@ -33,6 +33,8 @@ struct User {
     1: required i64     gid,
     2: required string  name,
     3: required UserGender  gender
+    4: optional string  dept_code,
+    5: optional i16     year
 }
 
 struct Clazz {
@@ -48,8 +50,10 @@ struct Course {
     2: required string  name,
     3: optional string  tearcher,
     4: optional string  book,
-    5: optional Clazz   for_class,
-    6: optional i16     for_semester
+    5: optional string  school_code,
+    6: optional string  dept_code,
+    7: optional i16     semester,
+    8: optional i16     year
 }
 
 struct LessonInfo {

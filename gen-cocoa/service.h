@@ -14,6 +14,132 @@
 
 #import "type.h"
 
+@interface SyncState : NSObject <NSCoding> {
+  timestamp __currentTime;
+  timestamp __fullSyncBefore;
+  int32_t __updateCount;
+
+  BOOL __currentTime_isset;
+  BOOL __fullSyncBefore_isset;
+  BOOL __updateCount_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=currentTime, setter=setCurrentTime:) timestamp currentTime;
+@property (nonatomic, getter=fullSyncBefore, setter=setFullSyncBefore:) timestamp fullSyncBefore;
+@property (nonatomic, getter=updateCount, setter=setUpdateCount:) int32_t updateCount;
+#endif
+
+- (id) initWithCurrentTime: (timestamp) currentTime fullSyncBefore: (timestamp) fullSyncBefore updateCount: (int32_t) updateCount;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (timestamp) currentTime;
+- (void) setCurrentTime: (timestamp) currentTime;
+- (BOOL) currentTimeIsSet;
+
+- (timestamp) fullSyncBefore;
+- (void) setFullSyncBefore: (timestamp) fullSyncBefore;
+- (BOOL) fullSyncBeforeIsSet;
+
+- (int32_t) updateCount;
+- (void) setUpdateCount: (int32_t) updateCount;
+- (BOOL) updateCountIsSet;
+
+@end
+
+@interface SyncChunk : NSObject <NSCoding> {
+  timestamp __currentTime;
+  int32_t __chunkHighUSN;
+  int32_t __updateCount;
+  NSArray * __courses;
+  NSArray * __lessonInfos;
+  NSArray * __lessonTables;
+
+  BOOL __currentTime_isset;
+  BOOL __chunkHighUSN_isset;
+  BOOL __updateCount_isset;
+  BOOL __courses_isset;
+  BOOL __lessonInfos_isset;
+  BOOL __lessonTables_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=currentTime, setter=setCurrentTime:) timestamp currentTime;
+@property (nonatomic, getter=chunkHighUSN, setter=setChunkHighUSN:) int32_t chunkHighUSN;
+@property (nonatomic, getter=updateCount, setter=setUpdateCount:) int32_t updateCount;
+@property (nonatomic, retain, getter=courses, setter=setCourses:) NSArray * courses;
+@property (nonatomic, retain, getter=lessonInfos, setter=setLessonInfos:) NSArray * lessonInfos;
+@property (nonatomic, retain, getter=lessonTables, setter=setLessonTables:) NSArray * lessonTables;
+#endif
+
+- (id) initWithCurrentTime: (timestamp) currentTime chunkHighUSN: (int32_t) chunkHighUSN updateCount: (int32_t) updateCount courses: (NSArray *) courses lessonInfos: (NSArray *) lessonInfos lessonTables: (NSArray *) lessonTables;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (timestamp) currentTime;
+- (void) setCurrentTime: (timestamp) currentTime;
+- (BOOL) currentTimeIsSet;
+
+- (int32_t) chunkHighUSN;
+- (void) setChunkHighUSN: (int32_t) chunkHighUSN;
+- (BOOL) chunkHighUSNIsSet;
+
+- (int32_t) updateCount;
+- (void) setUpdateCount: (int32_t) updateCount;
+- (BOOL) updateCountIsSet;
+
+- (NSArray *) courses;
+- (void) setCourses: (NSArray *) courses;
+- (BOOL) coursesIsSet;
+
+- (NSArray *) lessonInfos;
+- (void) setLessonInfos: (NSArray *) lessonInfos;
+- (BOOL) lessonInfosIsSet;
+
+- (NSArray *) lessonTables;
+- (void) setLessonTables: (NSArray *) lessonTables;
+- (BOOL) lessonTablesIsSet;
+
+@end
+
+@interface SyncChunkFilter : NSObject <NSCoding> {
+  BOOL __includeCourses;
+  BOOL __includeLessonInfos;
+  BOOL __includeLessonTables;
+
+  BOOL __includeCourses_isset;
+  BOOL __includeLessonInfos_isset;
+  BOOL __includeLessonTables_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=includeCourses, setter=setIncludeCourses:) BOOL includeCourses;
+@property (nonatomic, getter=includeLessonInfos, setter=setIncludeLessonInfos:) BOOL includeLessonInfos;
+@property (nonatomic, getter=includeLessonTables, setter=setIncludeLessonTables:) BOOL includeLessonTables;
+#endif
+
+- (id) initWithIncludeCourses: (BOOL) includeCourses includeLessonInfos: (BOOL) includeLessonInfos includeLessonTables: (BOOL) includeLessonTables;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (BOOL) includeCourses;
+- (void) setIncludeCourses: (BOOL) includeCourses;
+- (BOOL) includeCoursesIsSet;
+
+- (BOOL) includeLessonInfos;
+- (void) setIncludeLessonInfos: (BOOL) includeLessonInfos;
+- (BOOL) includeLessonInfosIsSet;
+
+- (BOOL) includeLessonTables;
+- (void) setIncludeLessonTables: (BOOL) includeLessonTables;
+- (BOOL) includeLessonTablesIsSet;
+
+@end
+
 @protocol ClassNote <NSObject>
 - (AuthResponse *) login_by_email: (NSString *) email : (NSString *) password;  // throws TException
 - (BOOL) sign_up_email: (NSString *) email : (NSString *) password;  // throws TException
@@ -23,12 +149,17 @@
 - (NSArray *) dept_provinces: (NSString *) auth_token;  // throws TException
 - (NSArray *) dept_schools: (NSString *) auth_token : (NSString *) province;  // throws TException
 - (NSArray *) dept_departments: (NSString *) auth_token : (NSString *) province : (NSString *) school;  // throws TException
+- (NSString *) dept_code: (NSString *) auth_token : (NSString *) province : (NSString *) school : (NSString *) dept;  // throws TException
+- (SyncState *) getSyncState: (NSString *) auth_token;  // throws TException
+- (SyncChunk *) getSyncChunk: (NSString *) auth_token : (int32_t) afterUSN : (int32_t) maxEntries : (BOOL) fullSyncOnly;  // throws TException
+- (SyncChunk *) getFilteredSyncChunk: (NSString *) auth_token : (int32_t) afterUSN : (int32_t) maxEntries : (SyncChunkFilter *) filter;  // throws TException
+- (SyncState *) getSchoolLessonSyncState: (NSString *) auth_token : (NSString *) school_code;  // throws TException
+- (SyncChunk *) getSchoolLessonSyncChunk: (NSString *) auth_token : (NSString *) school_code : (int32_t) afterUSN : (int32_t) maxEntries : (BOOL) fullSyncOnly;  // throws TException
+- (Course *) createCourse: (NSString *) auth_token : (Course *) course;  // throws TException
+- (int32_t) updateCourse: (NSString *) auth_token : (Course *) course;  // throws TException
+- (int32_t) expungeCourse: (NSString *) auth_token : (Guid) guid;  // throws TException
 - (User *) user_get: (NSString *) auth_token : (int64_t) user_id;  // throws TException
-- (NSArray *) lessontable_get: (NSString *) auth_token : (int64_t) user_id;  // throws TException
 - (BOOL) lessontable_set: (NSString *) auth_token : (int64_t) user_id : (NSArray *) lesson_tables;  // throws TException
-- (NSArray *) courses_get_by_class: (Clazz *) clazz;  // throws TException
-- (BOOL) course_add: (Course *) course;  // throws TException
-- (BOOL) course_set: (Course *) course;  // throws TException
 - (AuthResponse *) login_by_username: (NSString *) username : (NSString *) password;  // throws TException
 - (BOOL) sign_up_username: (NSString *) username : (NSString *) password;  // throws TException
 @end

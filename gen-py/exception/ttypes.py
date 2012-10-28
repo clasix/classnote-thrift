@@ -19,15 +19,18 @@ except:
 class ExceptionCode:
   PERMISSION_DENIED = 101
   INNER_ERROR = 102
+  NOT_FOUND = 103
 
   _VALUES_TO_NAMES = {
     101: "PERMISSION_DENIED",
     102: "INNER_ERROR",
+    103: "NOT_FOUND",
   }
 
   _NAMES_TO_VALUES = {
     "PERMISSION_DENIED": 101,
     "INNER_ERROR": 102,
+    "NOT_FOUND": 103,
   }
 
 

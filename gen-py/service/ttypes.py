@@ -18,3 +18,329 @@ except:
   fastbinary = None
 
 
+
+class SyncState:
+  """
+  Attributes:
+   - currentTime
+   - fullSyncBefore
+   - updateCount
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'currentTime', None, None, ), # 1
+    (2, TType.I64, 'fullSyncBefore', None, None, ), # 2
+    (3, TType.I32, 'updateCount', None, None, ), # 3
+  )
+
+  def __init__(self, currentTime=None, fullSyncBefore=None, updateCount=None,):
+    self.currentTime = currentTime
+    self.fullSyncBefore = fullSyncBefore
+    self.updateCount = updateCount
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.currentTime = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.fullSyncBefore = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.updateCount = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('SyncState')
+    if self.currentTime is not None:
+      oprot.writeFieldBegin('currentTime', TType.I64, 1)
+      oprot.writeI64(self.currentTime)
+      oprot.writeFieldEnd()
+    if self.fullSyncBefore is not None:
+      oprot.writeFieldBegin('fullSyncBefore', TType.I64, 2)
+      oprot.writeI64(self.fullSyncBefore)
+      oprot.writeFieldEnd()
+    if self.updateCount is not None:
+      oprot.writeFieldBegin('updateCount', TType.I32, 3)
+      oprot.writeI32(self.updateCount)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.currentTime is None:
+      raise TProtocol.TProtocolException(message='Required field currentTime is unset!')
+    if self.fullSyncBefore is None:
+      raise TProtocol.TProtocolException(message='Required field fullSyncBefore is unset!')
+    if self.updateCount is None:
+      raise TProtocol.TProtocolException(message='Required field updateCount is unset!')
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class SyncChunk:
+  """
+  Attributes:
+   - currentTime
+   - chunkHighUSN
+   - updateCount
+   - courses
+   - lessonInfos
+   - lessonTables
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'currentTime', None, None, ), # 1
+    (2, TType.I32, 'chunkHighUSN', None, None, ), # 2
+    (3, TType.I32, 'updateCount', None, None, ), # 3
+    (4, TType.LIST, 'courses', (TType.STRUCT,(type.ttypes.Course, type.ttypes.Course.thrift_spec)), None, ), # 4
+    (5, TType.LIST, 'lessonInfos', (TType.STRUCT,(type.ttypes.LessonInfo, type.ttypes.LessonInfo.thrift_spec)), None, ), # 5
+    (6, TType.LIST, 'lessonTables', (TType.STRUCT,(type.ttypes.LessonTable, type.ttypes.LessonTable.thrift_spec)), None, ), # 6
+  )
+
+  def __init__(self, currentTime=None, chunkHighUSN=None, updateCount=None, courses=None, lessonInfos=None, lessonTables=None,):
+    self.currentTime = currentTime
+    self.chunkHighUSN = chunkHighUSN
+    self.updateCount = updateCount
+    self.courses = courses
+    self.lessonInfos = lessonInfos
+    self.lessonTables = lessonTables
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.currentTime = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          self.chunkHighUSN = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.updateCount = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.LIST:
+          self.courses = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = type.ttypes.Course()
+            _elem5.read(iprot)
+            self.courses.append(_elem5)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.LIST:
+          self.lessonInfos = []
+          (_etype9, _size6) = iprot.readListBegin()
+          for _i10 in xrange(_size6):
+            _elem11 = type.ttypes.LessonInfo()
+            _elem11.read(iprot)
+            self.lessonInfos.append(_elem11)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.LIST:
+          self.lessonTables = []
+          (_etype15, _size12) = iprot.readListBegin()
+          for _i16 in xrange(_size12):
+            _elem17 = type.ttypes.LessonTable()
+            _elem17.read(iprot)
+            self.lessonTables.append(_elem17)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('SyncChunk')
+    if self.currentTime is not None:
+      oprot.writeFieldBegin('currentTime', TType.I64, 1)
+      oprot.writeI64(self.currentTime)
+      oprot.writeFieldEnd()
+    if self.chunkHighUSN is not None:
+      oprot.writeFieldBegin('chunkHighUSN', TType.I32, 2)
+      oprot.writeI32(self.chunkHighUSN)
+      oprot.writeFieldEnd()
+    if self.updateCount is not None:
+      oprot.writeFieldBegin('updateCount', TType.I32, 3)
+      oprot.writeI32(self.updateCount)
+      oprot.writeFieldEnd()
+    if self.courses is not None:
+      oprot.writeFieldBegin('courses', TType.LIST, 4)
+      oprot.writeListBegin(TType.STRUCT, len(self.courses))
+      for iter18 in self.courses:
+        iter18.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.lessonInfos is not None:
+      oprot.writeFieldBegin('lessonInfos', TType.LIST, 5)
+      oprot.writeListBegin(TType.STRUCT, len(self.lessonInfos))
+      for iter19 in self.lessonInfos:
+        iter19.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.lessonTables is not None:
+      oprot.writeFieldBegin('lessonTables', TType.LIST, 6)
+      oprot.writeListBegin(TType.STRUCT, len(self.lessonTables))
+      for iter20 in self.lessonTables:
+        iter20.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.currentTime is None:
+      raise TProtocol.TProtocolException(message='Required field currentTime is unset!')
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class SyncChunkFilter:
+  """
+  this structure is used with the 'getFilteredSyncChunk' call to provide
+  fine-grained control over the data that's returned when a client needs to synchronize with the service.
+
+  Attributes:
+   - includeCourses
+   - includeLessonInfos
+   - includeLessonTables
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.BOOL, 'includeCourses', None, None, ), # 1
+    (2, TType.BOOL, 'includeLessonInfos', None, None, ), # 2
+    (3, TType.BOOL, 'includeLessonTables', None, None, ), # 3
+  )
+
+  def __init__(self, includeCourses=None, includeLessonInfos=None, includeLessonTables=None,):
+    self.includeCourses = includeCourses
+    self.includeLessonInfos = includeLessonInfos
+    self.includeLessonTables = includeLessonTables
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.BOOL:
+          self.includeCourses = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.BOOL:
+          self.includeLessonInfos = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.BOOL:
+          self.includeLessonTables = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('SyncChunkFilter')
+    if self.includeCourses is not None:
+      oprot.writeFieldBegin('includeCourses', TType.BOOL, 1)
+      oprot.writeBool(self.includeCourses)
+      oprot.writeFieldEnd()
+    if self.includeLessonInfos is not None:
+      oprot.writeFieldBegin('includeLessonInfos', TType.BOOL, 2)
+      oprot.writeBool(self.includeLessonInfos)
+      oprot.writeFieldEnd()
+    if self.includeLessonTables is not None:
+      oprot.writeFieldBegin('includeLessonTables', TType.BOOL, 3)
+      oprot.writeBool(self.includeLessonTables)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)

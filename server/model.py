@@ -15,7 +15,7 @@ import uuid
 
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, MetaData, ForeignKey
-from sqlalchemy import BigInteger, Boolean, String, Date, DateTime, Float, Integer
+from sqlalchemy import BigInteger, Boolean, String, Date, DateTime, Float, Integer, Enum
 from sqlalchemy import PickleType, Unicode, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper, sessionmaker, relation, synonym, relationship
@@ -39,6 +39,9 @@ class User(SQLModel, AuthUser):
     salt = Column(String(80))
     email = Column(String(80), unique=True)
     activate = Column(Boolean, default=False)
+    dept_code = Column(String(40))
+    year = Column(Integer)
+    gender = Column(Enum('unknown', 'male', 'female'), nullable=False)
     created = Column(DateTime(), default=datetime.datetime.utcnow)
 
     def __init__(self, *args, **kwargs):
@@ -100,8 +103,11 @@ class Course(SQLModel):
     name = Column(String(80))
     tearcher = Column(String(80))
     book = Column(String(80))
-    for_class = Column(Integer) # if -1, means every class can choose
-    for_semester = Column(Integer) # if -1, meas every semester can choose
+    school_code = Column(String)
+    dept_code = Column(String) # if "", means elective course
+    semester = Column(Integer) # if -1, meas every semester can choose
+    year = Column(Integer)
+    updateSeqNum = Column(Integer)
 
 class LessonInfo(SQLModel):
     """
@@ -115,6 +121,7 @@ class LessonInfo(SQLModel):
     start = Column(Integer)
     duration = Column(Integer)
     course = relationship(Course, primaryjoin=course_id == Course.id)
+    updateSeqNum = Column(Integer)
 
 class LessonTable(SQLModel):
     """
@@ -123,6 +130,7 @@ class LessonTable(SQLModel):
     id = Column(Integer, primary_key=True, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id')) # class_id, the sharedTable for a class
     semester = Column(Integer)
+    updateSeqNum = Column(Integer)
     user = relationship(User, primaryjoin=user_id == User.id)
 
 class LessonTableItem(SQLModel):
@@ -135,6 +143,25 @@ class LessonTableItem(SQLModel):
     lesson_info_id = Column(Integer, ForeignKey('lessoninfos.id'))
     table = relationship(LessonTable, primaryjoin=table_id == LessonTable.id)
     lesson_info = relationship(LessonInfo, primaryjoin=lesson_info_id == LessonInfo.id)
+    updateSeqNum = Column(Integer)
+
+class UserSyncStore(SQLModel):
+    """
+    """
+
+    __tablename__ = "usersyncstore"
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    updateCount = Column(Integer, nullable=False)
+    fullSyncBefore = Column(DateTime(), default=datetime.datetime.utcnow)
+
+class SchoolSyncStore(SQLModel):
+    """
+    """
+
+    __tablename__ = "schoolsyncstore"
+    school_code = Column(String, nullable=False)
+    updateCount = Column(Integer, nullable=False)
+    fullSyncBefore = Column(DateTime(), default=datetime.datetime.utcnow)
 
 
 class AuthToken(SQLModel):

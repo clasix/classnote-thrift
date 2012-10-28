@@ -30,7 +30,11 @@ transport = TSocket.TServerSocket(host='0.0.0.0', port=8080)
 tfactory = TTransport.TBufferedTransportFactory()
 pfactory = TBinaryProtocol.TBinaryProtocolFactory()
 
-server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
+# TServer.TSimpleServer
+# TServer.TThreadedServer
+# TServer.TThreadPoolServer
+# TServer.TForkingServer
+server = TServer.TForkingServer(processor, transport, tfactory, pfactory)
 
 # You could do one of these for a multithreaded server
 #server = TServer.TThreadedServer(processor, transport, tfactory, pfactory)

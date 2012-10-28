@@ -1,6 +1,7 @@
 enum ExceptionCode {
     PERMISSION_DENIED = 101,
-    INNER_ERROR = 102
+    INNER_ERROR = 102,
+    NOT_FOUND = 103
 }
 
 exception Exception {

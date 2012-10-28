@@ -89,7 +89,6 @@ class Ctrl(object):
 
     def create_lessontable(self, auth_token):
         user_id = self.get_user_id(auth_token)
-        print user_id
         if user_id is not None:
             lesson_table = LessonTable(user_id=user_id)
             self.db.add(lesson_table)
@@ -132,5 +131,17 @@ class Ctrl(object):
         departments = [i[0].encode("UTF-8") for i in departments]
         return departments
 
-    def add_obj(self, obj):
-        self.db.add(obj)
+    def dept_code(self, province, school, dept):
+        try:
+            dept_code = self.db.query(Dept.code).filter(Dept.province==province, Dept.school==school, Dept.dept=dept).one()
+        except NoResultFound:
+            dept_code = None
+        return dept_code
+
+    def user_sync_by_userid(self, user_id):
+        try:
+            user_sync = self.db.query(UserSyncStore).filter(UserSyncStore.user_id==user_id).one()
+        except NoResultFound:
+            user_sync = UserSyncStore(user_id, 0)
+            self.db.add(user_sync)
+        return user_sync

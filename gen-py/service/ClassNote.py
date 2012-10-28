@@ -79,15 +79,87 @@ class Iface:
     """
     pass
 
-  def user_get(self, auth_token, user_id):
+  def dept_code(self, auth_token, province, school, dept):
     """
     Parameters:
      - auth_token
-     - user_id
+     - province
+     - school
+     - dept
     """
     pass
 
-  def lessontable_get(self, auth_token, user_id):
+  def getSyncState(self, auth_token):
+    """
+    Parameters:
+     - auth_token
+    """
+    pass
+
+  def getSyncChunk(self, auth_token, afterUSN, maxEntries, fullSyncOnly):
+    """
+    Parameters:
+     - auth_token
+     - afterUSN
+     - maxEntries
+     - fullSyncOnly
+    """
+    pass
+
+  def getFilteredSyncChunk(self, auth_token, afterUSN, maxEntries, filter):
+    """
+    Parameters:
+     - auth_token
+     - afterUSN
+     - maxEntries
+     - filter
+    """
+    pass
+
+  def getSchoolLessonSyncState(self, auth_token, school_code):
+    """
+    Parameters:
+     - auth_token
+     - school_code
+    """
+    pass
+
+  def getSchoolLessonSyncChunk(self, auth_token, school_code, afterUSN, maxEntries, fullSyncOnly):
+    """
+    Parameters:
+     - auth_token
+     - school_code
+     - afterUSN
+     - maxEntries
+     - fullSyncOnly
+    """
+    pass
+
+  def createCourse(self, auth_token, course):
+    """
+    Parameters:
+     - auth_token
+     - course
+    """
+    pass
+
+  def updateCourse(self, auth_token, course):
+    """
+    Parameters:
+     - auth_token
+     - course
+    """
+    pass
+
+  def expungeCourse(self, auth_token, guid):
+    """
+    Parameters:
+     - auth_token
+     - guid
+    """
+    pass
+
+  def user_get(self, auth_token, user_id):
     """
     Parameters:
      - auth_token
@@ -101,27 +173,6 @@ class Iface:
      - auth_token
      - user_id
      - lesson_tables
-    """
-    pass
-
-  def courses_get_by_class(self, clazz):
-    """
-    Parameters:
-     - clazz
-    """
-    pass
-
-  def course_add(self, course):
-    """
-    Parameters:
-     - course
-    """
-    pass
-
-  def course_set(self, course):
-    """
-    Parameters:
-     - course
     """
     pass
 
@@ -399,6 +450,310 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "dept_departments failed: unknown result");
 
+  def dept_code(self, auth_token, province, school, dept):
+    """
+    Parameters:
+     - auth_token
+     - province
+     - school
+     - dept
+    """
+    self.send_dept_code(auth_token, province, school, dept)
+    return self.recv_dept_code()
+
+  def send_dept_code(self, auth_token, province, school, dept):
+    self._oprot.writeMessageBegin('dept_code', TMessageType.CALL, self._seqid)
+    args = dept_code_args()
+    args.auth_token = auth_token
+    args.province = province
+    args.school = school
+    args.dept = dept
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dept_code(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dept_code_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dept_code failed: unknown result");
+
+  def getSyncState(self, auth_token):
+    """
+    Parameters:
+     - auth_token
+    """
+    self.send_getSyncState(auth_token)
+    return self.recv_getSyncState()
+
+  def send_getSyncState(self, auth_token):
+    self._oprot.writeMessageBegin('getSyncState', TMessageType.CALL, self._seqid)
+    args = getSyncState_args()
+    args.auth_token = auth_token
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getSyncState(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getSyncState_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getSyncState failed: unknown result");
+
+  def getSyncChunk(self, auth_token, afterUSN, maxEntries, fullSyncOnly):
+    """
+    Parameters:
+     - auth_token
+     - afterUSN
+     - maxEntries
+     - fullSyncOnly
+    """
+    self.send_getSyncChunk(auth_token, afterUSN, maxEntries, fullSyncOnly)
+    return self.recv_getSyncChunk()
+
+  def send_getSyncChunk(self, auth_token, afterUSN, maxEntries, fullSyncOnly):
+    self._oprot.writeMessageBegin('getSyncChunk', TMessageType.CALL, self._seqid)
+    args = getSyncChunk_args()
+    args.auth_token = auth_token
+    args.afterUSN = afterUSN
+    args.maxEntries = maxEntries
+    args.fullSyncOnly = fullSyncOnly
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getSyncChunk(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getSyncChunk_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getSyncChunk failed: unknown result");
+
+  def getFilteredSyncChunk(self, auth_token, afterUSN, maxEntries, filter):
+    """
+    Parameters:
+     - auth_token
+     - afterUSN
+     - maxEntries
+     - filter
+    """
+    self.send_getFilteredSyncChunk(auth_token, afterUSN, maxEntries, filter)
+    return self.recv_getFilteredSyncChunk()
+
+  def send_getFilteredSyncChunk(self, auth_token, afterUSN, maxEntries, filter):
+    self._oprot.writeMessageBegin('getFilteredSyncChunk', TMessageType.CALL, self._seqid)
+    args = getFilteredSyncChunk_args()
+    args.auth_token = auth_token
+    args.afterUSN = afterUSN
+    args.maxEntries = maxEntries
+    args.filter = filter
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getFilteredSyncChunk(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getFilteredSyncChunk_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getFilteredSyncChunk failed: unknown result");
+
+  def getSchoolLessonSyncState(self, auth_token, school_code):
+    """
+    Parameters:
+     - auth_token
+     - school_code
+    """
+    self.send_getSchoolLessonSyncState(auth_token, school_code)
+    return self.recv_getSchoolLessonSyncState()
+
+  def send_getSchoolLessonSyncState(self, auth_token, school_code):
+    self._oprot.writeMessageBegin('getSchoolLessonSyncState', TMessageType.CALL, self._seqid)
+    args = getSchoolLessonSyncState_args()
+    args.auth_token = auth_token
+    args.school_code = school_code
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getSchoolLessonSyncState(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getSchoolLessonSyncState_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getSchoolLessonSyncState failed: unknown result");
+
+  def getSchoolLessonSyncChunk(self, auth_token, school_code, afterUSN, maxEntries, fullSyncOnly):
+    """
+    Parameters:
+     - auth_token
+     - school_code
+     - afterUSN
+     - maxEntries
+     - fullSyncOnly
+    """
+    self.send_getSchoolLessonSyncChunk(auth_token, school_code, afterUSN, maxEntries, fullSyncOnly)
+    return self.recv_getSchoolLessonSyncChunk()
+
+  def send_getSchoolLessonSyncChunk(self, auth_token, school_code, afterUSN, maxEntries, fullSyncOnly):
+    self._oprot.writeMessageBegin('getSchoolLessonSyncChunk', TMessageType.CALL, self._seqid)
+    args = getSchoolLessonSyncChunk_args()
+    args.auth_token = auth_token
+    args.school_code = school_code
+    args.afterUSN = afterUSN
+    args.maxEntries = maxEntries
+    args.fullSyncOnly = fullSyncOnly
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getSchoolLessonSyncChunk(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getSchoolLessonSyncChunk_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getSchoolLessonSyncChunk failed: unknown result");
+
+  def createCourse(self, auth_token, course):
+    """
+    Parameters:
+     - auth_token
+     - course
+    """
+    self.send_createCourse(auth_token, course)
+    return self.recv_createCourse()
+
+  def send_createCourse(self, auth_token, course):
+    self._oprot.writeMessageBegin('createCourse', TMessageType.CALL, self._seqid)
+    args = createCourse_args()
+    args.auth_token = auth_token
+    args.course = course
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_createCourse(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = createCourse_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "createCourse failed: unknown result");
+
+  def updateCourse(self, auth_token, course):
+    """
+    Parameters:
+     - auth_token
+     - course
+    """
+    self.send_updateCourse(auth_token, course)
+    return self.recv_updateCourse()
+
+  def send_updateCourse(self, auth_token, course):
+    self._oprot.writeMessageBegin('updateCourse', TMessageType.CALL, self._seqid)
+    args = updateCourse_args()
+    args.auth_token = auth_token
+    args.course = course
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_updateCourse(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = updateCourse_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "updateCourse failed: unknown result");
+
+  def expungeCourse(self, auth_token, guid):
+    """
+    Parameters:
+     - auth_token
+     - guid
+    """
+    self.send_expungeCourse(auth_token, guid)
+    return self.recv_expungeCourse()
+
+  def send_expungeCourse(self, auth_token, guid):
+    self._oprot.writeMessageBegin('expungeCourse', TMessageType.CALL, self._seqid)
+    args = expungeCourse_args()
+    args.auth_token = auth_token
+    args.guid = guid
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_expungeCourse(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = expungeCourse_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "expungeCourse failed: unknown result");
+
   def user_get(self, auth_token, user_id):
     """
     Parameters:
@@ -430,38 +785,6 @@ class Client(Iface):
     if result.success is not None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "user_get failed: unknown result");
-
-  def lessontable_get(self, auth_token, user_id):
-    """
-    Parameters:
-     - auth_token
-     - user_id
-    """
-    self.send_lessontable_get(auth_token, user_id)
-    return self.recv_lessontable_get()
-
-  def send_lessontable_get(self, auth_token, user_id):
-    self._oprot.writeMessageBegin('lessontable_get', TMessageType.CALL, self._seqid)
-    args = lessontable_get_args()
-    args.auth_token = auth_token
-    args.user_id = user_id
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_lessontable_get(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = lessontable_get_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "lessontable_get failed: unknown result");
 
   def lessontable_set(self, auth_token, user_id, lesson_tables):
     """
@@ -496,96 +819,6 @@ class Client(Iface):
     if result.success is not None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "lessontable_set failed: unknown result");
-
-  def courses_get_by_class(self, clazz):
-    """
-    Parameters:
-     - clazz
-    """
-    self.send_courses_get_by_class(clazz)
-    return self.recv_courses_get_by_class()
-
-  def send_courses_get_by_class(self, clazz):
-    self._oprot.writeMessageBegin('courses_get_by_class', TMessageType.CALL, self._seqid)
-    args = courses_get_by_class_args()
-    args.clazz = clazz
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_courses_get_by_class(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = courses_get_by_class_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "courses_get_by_class failed: unknown result");
-
-  def course_add(self, course):
-    """
-    Parameters:
-     - course
-    """
-    self.send_course_add(course)
-    return self.recv_course_add()
-
-  def send_course_add(self, course):
-    self._oprot.writeMessageBegin('course_add', TMessageType.CALL, self._seqid)
-    args = course_add_args()
-    args.course = course
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_course_add(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = course_add_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "course_add failed: unknown result");
-
-  def course_set(self, course):
-    """
-    Parameters:
-     - course
-    """
-    self.send_course_set(course)
-    return self.recv_course_set()
-
-  def send_course_set(self, course):
-    self._oprot.writeMessageBegin('course_set', TMessageType.CALL, self._seqid)
-    args = course_set_args()
-    args.course = course
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_course_set(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = course_set_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success is not None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "course_set failed: unknown result");
 
   def login_by_username(self, username, password):
     """
@@ -664,12 +897,17 @@ class Processor(Iface, TProcessor):
     self._processMap["dept_provinces"] = Processor.process_dept_provinces
     self._processMap["dept_schools"] = Processor.process_dept_schools
     self._processMap["dept_departments"] = Processor.process_dept_departments
+    self._processMap["dept_code"] = Processor.process_dept_code
+    self._processMap["getSyncState"] = Processor.process_getSyncState
+    self._processMap["getSyncChunk"] = Processor.process_getSyncChunk
+    self._processMap["getFilteredSyncChunk"] = Processor.process_getFilteredSyncChunk
+    self._processMap["getSchoolLessonSyncState"] = Processor.process_getSchoolLessonSyncState
+    self._processMap["getSchoolLessonSyncChunk"] = Processor.process_getSchoolLessonSyncChunk
+    self._processMap["createCourse"] = Processor.process_createCourse
+    self._processMap["updateCourse"] = Processor.process_updateCourse
+    self._processMap["expungeCourse"] = Processor.process_expungeCourse
     self._processMap["user_get"] = Processor.process_user_get
-    self._processMap["lessontable_get"] = Processor.process_lessontable_get
     self._processMap["lessontable_set"] = Processor.process_lessontable_set
-    self._processMap["courses_get_by_class"] = Processor.process_courses_get_by_class
-    self._processMap["course_add"] = Processor.process_course_add
-    self._processMap["course_set"] = Processor.process_course_set
     self._processMap["login_by_username"] = Processor.process_login_by_username
     self._processMap["sign_up_username"] = Processor.process_sign_up_username
 
@@ -776,6 +1014,105 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
+  def process_dept_code(self, seqid, iprot, oprot):
+    args = dept_code_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = dept_code_result()
+    result.success = self._handler.dept_code(args.auth_token, args.province, args.school, args.dept)
+    oprot.writeMessageBegin("dept_code", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_getSyncState(self, seqid, iprot, oprot):
+    args = getSyncState_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = getSyncState_result()
+    result.success = self._handler.getSyncState(args.auth_token)
+    oprot.writeMessageBegin("getSyncState", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_getSyncChunk(self, seqid, iprot, oprot):
+    args = getSyncChunk_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = getSyncChunk_result()
+    result.success = self._handler.getSyncChunk(args.auth_token, args.afterUSN, args.maxEntries, args.fullSyncOnly)
+    oprot.writeMessageBegin("getSyncChunk", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_getFilteredSyncChunk(self, seqid, iprot, oprot):
+    args = getFilteredSyncChunk_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = getFilteredSyncChunk_result()
+    result.success = self._handler.getFilteredSyncChunk(args.auth_token, args.afterUSN, args.maxEntries, args.filter)
+    oprot.writeMessageBegin("getFilteredSyncChunk", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_getSchoolLessonSyncState(self, seqid, iprot, oprot):
+    args = getSchoolLessonSyncState_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = getSchoolLessonSyncState_result()
+    result.success = self._handler.getSchoolLessonSyncState(args.auth_token, args.school_code)
+    oprot.writeMessageBegin("getSchoolLessonSyncState", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_getSchoolLessonSyncChunk(self, seqid, iprot, oprot):
+    args = getSchoolLessonSyncChunk_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = getSchoolLessonSyncChunk_result()
+    result.success = self._handler.getSchoolLessonSyncChunk(args.auth_token, args.school_code, args.afterUSN, args.maxEntries, args.fullSyncOnly)
+    oprot.writeMessageBegin("getSchoolLessonSyncChunk", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_createCourse(self, seqid, iprot, oprot):
+    args = createCourse_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = createCourse_result()
+    result.success = self._handler.createCourse(args.auth_token, args.course)
+    oprot.writeMessageBegin("createCourse", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_updateCourse(self, seqid, iprot, oprot):
+    args = updateCourse_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = updateCourse_result()
+    result.success = self._handler.updateCourse(args.auth_token, args.course)
+    oprot.writeMessageBegin("updateCourse", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_expungeCourse(self, seqid, iprot, oprot):
+    args = expungeCourse_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = expungeCourse_result()
+    result.success = self._handler.expungeCourse(args.auth_token, args.guid)
+    oprot.writeMessageBegin("expungeCourse", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
   def process_user_get(self, seqid, iprot, oprot):
     args = user_get_args()
     args.read(iprot)
@@ -787,17 +1124,6 @@ class Processor(Iface, TProcessor):
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
-  def process_lessontable_get(self, seqid, iprot, oprot):
-    args = lessontable_get_args()
-    args.read(iprot)
-    iprot.readMessageEnd()
-    result = lessontable_get_result()
-    result.success = self._handler.lessontable_get(args.auth_token, args.user_id)
-    oprot.writeMessageBegin("lessontable_get", TMessageType.REPLY, seqid)
-    result.write(oprot)
-    oprot.writeMessageEnd()
-    oprot.trans.flush()
-
   def process_lessontable_set(self, seqid, iprot, oprot):
     args = lessontable_set_args()
     args.read(iprot)
@@ -805,39 +1131,6 @@ class Processor(Iface, TProcessor):
     result = lessontable_set_result()
     result.success = self._handler.lessontable_set(args.auth_token, args.user_id, args.lesson_tables)
     oprot.writeMessageBegin("lessontable_set", TMessageType.REPLY, seqid)
-    result.write(oprot)
-    oprot.writeMessageEnd()
-    oprot.trans.flush()
-
-  def process_courses_get_by_class(self, seqid, iprot, oprot):
-    args = courses_get_by_class_args()
-    args.read(iprot)
-    iprot.readMessageEnd()
-    result = courses_get_by_class_result()
-    result.success = self._handler.courses_get_by_class(args.clazz)
-    oprot.writeMessageBegin("courses_get_by_class", TMessageType.REPLY, seqid)
-    result.write(oprot)
-    oprot.writeMessageEnd()
-    oprot.trans.flush()
-
-  def process_course_add(self, seqid, iprot, oprot):
-    args = course_add_args()
-    args.read(iprot)
-    iprot.readMessageEnd()
-    result = course_add_result()
-    result.success = self._handler.course_add(args.course)
-    oprot.writeMessageBegin("course_add", TMessageType.REPLY, seqid)
-    result.write(oprot)
-    oprot.writeMessageEnd()
-    oprot.trans.flush()
-
-  def process_course_set(self, seqid, iprot, oprot):
-    args = course_set_args()
-    args.read(iprot)
-    iprot.readMessageEnd()
-    result = course_set_result()
-    result.success = self._handler.course_set(args.course)
-    oprot.writeMessageBegin("course_set", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1334,11 +1627,11 @@ class get_lessontables_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype3, _size0) = iprot.readListBegin()
-          for _i4 in xrange(_size0):
-            _elem5 = type.ttypes.LessonTable()
-            _elem5.read(iprot)
-            self.success.append(_elem5)
+          (_etype24, _size21) = iprot.readListBegin()
+          for _i25 in xrange(_size21):
+            _elem26 = type.ttypes.LessonTable()
+            _elem26.read(iprot)
+            self.success.append(_elem26)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1355,8 +1648,8 @@ class get_lessontables_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter6 in self.success:
-        iter6.write(oprot)
+      for iter27 in self.success:
+        iter27.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1581,10 +1874,10 @@ class dept_provinces_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype10, _size7) = iprot.readListBegin()
-          for _i11 in xrange(_size7):
-            _elem12 = iprot.readString();
-            self.success.append(_elem12)
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = iprot.readString();
+            self.success.append(_elem33)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1601,8 +1894,8 @@ class dept_provinces_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter13 in self.success:
-        oprot.writeString(iter13)
+      for iter34 in self.success:
+        oprot.writeString(iter34)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1720,10 +2013,10 @@ class dept_schools_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype17, _size14) = iprot.readListBegin()
-          for _i18 in xrange(_size14):
-            _elem19 = iprot.readString();
-            self.success.append(_elem19)
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = iprot.readString();
+            self.success.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1740,8 +2033,8 @@ class dept_schools_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter20 in self.success:
-        oprot.writeString(iter20)
+      for iter41 in self.success:
+        oprot.writeString(iter41)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1871,10 +2164,10 @@ class dept_departments_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype24, _size21) = iprot.readListBegin()
-          for _i25 in xrange(_size21):
-            _elem26 = iprot.readString();
-            self.success.append(_elem26)
+          (_etype45, _size42) = iprot.readListBegin()
+          for _i46 in xrange(_size42):
+            _elem47 = iprot.readString();
+            self.success.append(_elem47)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1891,9 +2184,1293 @@ class dept_departments_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter27 in self.success:
-        oprot.writeString(iter27)
+      for iter48 in self.success:
+        oprot.writeString(iter48)
       oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_code_args:
+  """
+  Attributes:
+   - auth_token
+   - province
+   - school
+   - dept
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRING, 'province', None, None, ), # 2
+    (3, TType.STRING, 'school', None, None, ), # 3
+    (4, TType.STRING, 'dept', None, None, ), # 4
+  )
+
+  def __init__(self, auth_token=None, province=None, school=None, dept=None,):
+    self.auth_token = auth_token
+    self.province = province
+    self.school = school
+    self.dept = dept
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.province = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.school = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.dept = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_code_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.province is not None:
+      oprot.writeFieldBegin('province', TType.STRING, 2)
+      oprot.writeString(self.province)
+      oprot.writeFieldEnd()
+    if self.school is not None:
+      oprot.writeFieldBegin('school', TType.STRING, 3)
+      oprot.writeString(self.school)
+      oprot.writeFieldEnd()
+    if self.dept is not None:
+      oprot.writeFieldBegin('dept', TType.STRING, 4)
+      oprot.writeString(self.dept)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_code_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRING, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRING:
+          self.success = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_code_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRING, 0)
+      oprot.writeString(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSyncState_args:
+  """
+  Attributes:
+   - auth_token
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+  )
+
+  def __init__(self, auth_token=None,):
+    self.auth_token = auth_token
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSyncState_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSyncState_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (SyncState, SyncState.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = SyncState()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSyncState_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSyncChunk_args:
+  """
+  Attributes:
+   - auth_token
+   - afterUSN
+   - maxEntries
+   - fullSyncOnly
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.I32, 'afterUSN', None, None, ), # 2
+    (3, TType.I32, 'maxEntries', None, None, ), # 3
+    (4, TType.BOOL, 'fullSyncOnly', None, None, ), # 4
+  )
+
+  def __init__(self, auth_token=None, afterUSN=None, maxEntries=None, fullSyncOnly=None,):
+    self.auth_token = auth_token
+    self.afterUSN = afterUSN
+    self.maxEntries = maxEntries
+    self.fullSyncOnly = fullSyncOnly
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          self.afterUSN = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.maxEntries = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.BOOL:
+          self.fullSyncOnly = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSyncChunk_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.afterUSN is not None:
+      oprot.writeFieldBegin('afterUSN', TType.I32, 2)
+      oprot.writeI32(self.afterUSN)
+      oprot.writeFieldEnd()
+    if self.maxEntries is not None:
+      oprot.writeFieldBegin('maxEntries', TType.I32, 3)
+      oprot.writeI32(self.maxEntries)
+      oprot.writeFieldEnd()
+    if self.fullSyncOnly is not None:
+      oprot.writeFieldBegin('fullSyncOnly', TType.BOOL, 4)
+      oprot.writeBool(self.fullSyncOnly)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSyncChunk_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (SyncChunk, SyncChunk.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = SyncChunk()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSyncChunk_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getFilteredSyncChunk_args:
+  """
+  Attributes:
+   - auth_token
+   - afterUSN
+   - maxEntries
+   - filter
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.I32, 'afterUSN', None, None, ), # 2
+    (3, TType.I32, 'maxEntries', None, None, ), # 3
+    (4, TType.STRUCT, 'filter', (SyncChunkFilter, SyncChunkFilter.thrift_spec), None, ), # 4
+  )
+
+  def __init__(self, auth_token=None, afterUSN=None, maxEntries=None, filter=None,):
+    self.auth_token = auth_token
+    self.afterUSN = afterUSN
+    self.maxEntries = maxEntries
+    self.filter = filter
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          self.afterUSN = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.maxEntries = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRUCT:
+          self.filter = SyncChunkFilter()
+          self.filter.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getFilteredSyncChunk_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.afterUSN is not None:
+      oprot.writeFieldBegin('afterUSN', TType.I32, 2)
+      oprot.writeI32(self.afterUSN)
+      oprot.writeFieldEnd()
+    if self.maxEntries is not None:
+      oprot.writeFieldBegin('maxEntries', TType.I32, 3)
+      oprot.writeI32(self.maxEntries)
+      oprot.writeFieldEnd()
+    if self.filter is not None:
+      oprot.writeFieldBegin('filter', TType.STRUCT, 4)
+      self.filter.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getFilteredSyncChunk_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (SyncChunk, SyncChunk.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = SyncChunk()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getFilteredSyncChunk_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSchoolLessonSyncState_args:
+  """
+  Attributes:
+   - auth_token
+   - school_code
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRING, 'school_code', None, None, ), # 2
+  )
+
+  def __init__(self, auth_token=None, school_code=None,):
+    self.auth_token = auth_token
+    self.school_code = school_code
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.school_code = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSchoolLessonSyncState_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.school_code is not None:
+      oprot.writeFieldBegin('school_code', TType.STRING, 2)
+      oprot.writeString(self.school_code)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSchoolLessonSyncState_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (SyncState, SyncState.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = SyncState()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSchoolLessonSyncState_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSchoolLessonSyncChunk_args:
+  """
+  Attributes:
+   - auth_token
+   - school_code
+   - afterUSN
+   - maxEntries
+   - fullSyncOnly
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRING, 'school_code', None, None, ), # 2
+    (3, TType.I32, 'afterUSN', None, None, ), # 3
+    (4, TType.I32, 'maxEntries', None, None, ), # 4
+    (5, TType.BOOL, 'fullSyncOnly', None, None, ), # 5
+  )
+
+  def __init__(self, auth_token=None, school_code=None, afterUSN=None, maxEntries=None, fullSyncOnly=None,):
+    self.auth_token = auth_token
+    self.school_code = school_code
+    self.afterUSN = afterUSN
+    self.maxEntries = maxEntries
+    self.fullSyncOnly = fullSyncOnly
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.school_code = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.afterUSN = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I32:
+          self.maxEntries = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.BOOL:
+          self.fullSyncOnly = iprot.readBool();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSchoolLessonSyncChunk_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.school_code is not None:
+      oprot.writeFieldBegin('school_code', TType.STRING, 2)
+      oprot.writeString(self.school_code)
+      oprot.writeFieldEnd()
+    if self.afterUSN is not None:
+      oprot.writeFieldBegin('afterUSN', TType.I32, 3)
+      oprot.writeI32(self.afterUSN)
+      oprot.writeFieldEnd()
+    if self.maxEntries is not None:
+      oprot.writeFieldBegin('maxEntries', TType.I32, 4)
+      oprot.writeI32(self.maxEntries)
+      oprot.writeFieldEnd()
+    if self.fullSyncOnly is not None:
+      oprot.writeFieldBegin('fullSyncOnly', TType.BOOL, 5)
+      oprot.writeBool(self.fullSyncOnly)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class getSchoolLessonSyncChunk_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (SyncChunk, SyncChunk.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = SyncChunk()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('getSchoolLessonSyncChunk_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class createCourse_args:
+  """
+  Attributes:
+   - auth_token
+   - course
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRUCT, 'course', (type.ttypes.Course, type.ttypes.Course.thrift_spec), None, ), # 2
+  )
+
+  def __init__(self, auth_token=None, course=None,):
+    self.auth_token = auth_token
+    self.course = course
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.course = type.ttypes.Course()
+          self.course.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('createCourse_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.course is not None:
+      oprot.writeFieldBegin('course', TType.STRUCT, 2)
+      self.course.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class createCourse_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (type.ttypes.Course, type.ttypes.Course.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = type.ttypes.Course()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('createCourse_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class updateCourse_args:
+  """
+  Attributes:
+   - auth_token
+   - course
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRUCT, 'course', (type.ttypes.Course, type.ttypes.Course.thrift_spec), None, ), # 2
+  )
+
+  def __init__(self, auth_token=None, course=None,):
+    self.auth_token = auth_token
+    self.course = course
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.course = type.ttypes.Course()
+          self.course.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('updateCourse_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.course is not None:
+      oprot.writeFieldBegin('course', TType.STRUCT, 2)
+      self.course.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class updateCourse_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.I32, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.I32:
+          self.success = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('updateCourse_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.I32, 0)
+      oprot.writeI32(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class expungeCourse_args:
+  """
+  Attributes:
+   - auth_token
+   - guid
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRING, 'guid', None, None, ), # 2
+  )
+
+  def __init__(self, auth_token=None, guid=None,):
+    self.auth_token = auth_token
+    self.guid = guid
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.guid = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('expungeCourse_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.guid is not None:
+      oprot.writeFieldBegin('guid', TType.STRING, 2)
+      oprot.writeString(self.guid)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class expungeCourse_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.I32, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.I32:
+          self.success = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('expungeCourse_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.I32, 0)
+      oprot.writeI32(self.success)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -2045,146 +3622,6 @@ class user_get_result:
   def __ne__(self, other):
     return not (self == other)
 
-class lessontable_get_args:
-  """
-  Attributes:
-   - auth_token
-   - user_id
-  """
-
-  thrift_spec = (
-    None, # 0
-    (1, TType.STRING, 'auth_token', None, None, ), # 1
-    (2, TType.I64, 'user_id', None, None, ), # 2
-  )
-
-  def __init__(self, auth_token=None, user_id=None,):
-    self.auth_token = auth_token
-    self.user_id = user_id
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRING:
-          self.auth_token = iprot.readString();
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.I64:
-          self.user_id = iprot.readI64();
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('lessontable_get_args')
-    if self.auth_token is not None:
-      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
-      oprot.writeString(self.auth_token)
-      oprot.writeFieldEnd()
-    if self.user_id is not None:
-      oprot.writeFieldBegin('user_id', TType.I64, 2)
-      oprot.writeI64(self.user_id)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class lessontable_get_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = (
-    (0, TType.LIST, 'success', (TType.STRUCT,(type.ttypes.LessonTable, type.ttypes.LessonTable.thrift_spec)), None, ), # 0
-  )
-
-  def __init__(self, success=None,):
-    self.success = success
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.LIST:
-          self.success = []
-          (_etype31, _size28) = iprot.readListBegin()
-          for _i32 in xrange(_size28):
-            _elem33 = type.ttypes.LessonTable()
-            _elem33.read(iprot)
-            self.success.append(_elem33)
-          iprot.readListEnd()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('lessontable_get_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.LIST, 0)
-      oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter34 in self.success:
-        iter34.write(oprot)
-      oprot.writeListEnd()
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
 class lessontable_set_args:
   """
   Attributes:
@@ -2227,11 +3664,11 @@ class lessontable_set_args:
       elif fid == 3:
         if ftype == TType.LIST:
           self.lesson_tables = []
-          (_etype38, _size35) = iprot.readListBegin()
-          for _i39 in xrange(_size35):
-            _elem40 = type.ttypes.LessonTable()
-            _elem40.read(iprot)
-            self.lesson_tables.append(_elem40)
+          (_etype52, _size49) = iprot.readListBegin()
+          for _i53 in xrange(_size49):
+            _elem54 = type.ttypes.LessonTable()
+            _elem54.read(iprot)
+            self.lesson_tables.append(_elem54)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2256,8 +3693,8 @@ class lessontable_set_args:
     if self.lesson_tables is not None:
       oprot.writeFieldBegin('lesson_tables', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.lesson_tables))
-      for iter41 in self.lesson_tables:
-        iter41.write(oprot)
+      for iter55 in self.lesson_tables:
+        iter55.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2315,375 +3752,6 @@ class lessontable_set_result:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('lessontable_set_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.BOOL, 0)
-      oprot.writeBool(self.success)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class courses_get_by_class_args:
-  """
-  Attributes:
-   - clazz
-  """
-
-  thrift_spec = (
-    None, # 0
-    (1, TType.STRUCT, 'clazz', (type.ttypes.Clazz, type.ttypes.Clazz.thrift_spec), None, ), # 1
-  )
-
-  def __init__(self, clazz=None,):
-    self.clazz = clazz
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.clazz = type.ttypes.Clazz()
-          self.clazz.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('courses_get_by_class_args')
-    if self.clazz is not None:
-      oprot.writeFieldBegin('clazz', TType.STRUCT, 1)
-      self.clazz.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class courses_get_by_class_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = (
-    (0, TType.LIST, 'success', (TType.STRUCT,(type.ttypes.Course, type.ttypes.Course.thrift_spec)), None, ), # 0
-  )
-
-  def __init__(self, success=None,):
-    self.success = success
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.LIST:
-          self.success = []
-          (_etype45, _size42) = iprot.readListBegin()
-          for _i46 in xrange(_size42):
-            _elem47 = type.ttypes.Course()
-            _elem47.read(iprot)
-            self.success.append(_elem47)
-          iprot.readListEnd()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('courses_get_by_class_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.LIST, 0)
-      oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter48 in self.success:
-        iter48.write(oprot)
-      oprot.writeListEnd()
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class course_add_args:
-  """
-  Attributes:
-   - course
-  """
-
-  thrift_spec = (
-    None, # 0
-    (1, TType.STRUCT, 'course', (type.ttypes.Course, type.ttypes.Course.thrift_spec), None, ), # 1
-  )
-
-  def __init__(self, course=None,):
-    self.course = course
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.course = type.ttypes.Course()
-          self.course.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('course_add_args')
-    if self.course is not None:
-      oprot.writeFieldBegin('course', TType.STRUCT, 1)
-      self.course.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class course_add_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = (
-    (0, TType.BOOL, 'success', None, None, ), # 0
-  )
-
-  def __init__(self, success=None,):
-    self.success = success
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.BOOL:
-          self.success = iprot.readBool();
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('course_add_result')
-    if self.success is not None:
-      oprot.writeFieldBegin('success', TType.BOOL, 0)
-      oprot.writeBool(self.success)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class course_set_args:
-  """
-  Attributes:
-   - course
-  """
-
-  thrift_spec = (
-    None, # 0
-    (1, TType.STRUCT, 'course', (type.ttypes.Course, type.ttypes.Course.thrift_spec), None, ), # 1
-  )
-
-  def __init__(self, course=None,):
-    self.course = course
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.course = type.ttypes.Course()
-          self.course.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('course_set_args')
-    if self.course is not None:
-      oprot.writeFieldBegin('course', TType.STRUCT, 1)
-      self.course.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def validate(self):
-    return
-
-
-  def __repr__(self):
-    L = ['%s=%r' % (key, value)
-      for key, value in self.__dict__.iteritems()]
-    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-  def __eq__(self, other):
-    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
-class course_set_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = (
-    (0, TType.BOOL, 'success', None, None, ), # 0
-  )
-
-  def __init__(self, success=None,):
-    self.success = success
-
-  def read(self, iprot):
-    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
-      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.BOOL:
-          self.success = iprot.readBool();
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
-      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
-      return
-    oprot.writeStructBegin('course_set_result')
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.BOOL, 0)
       oprot.writeBool(self.success)

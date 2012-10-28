@@ -159,6 +159,8 @@ class User:
    - gid
    - name
    - gender
+   - dept_code
+   - year
   """
 
   thrift_spec = (
@@ -166,12 +168,16 @@ class User:
     (1, TType.I64, 'gid', None, None, ), # 1
     (2, TType.STRING, 'name', None, None, ), # 2
     (3, TType.I32, 'gender', None, None, ), # 3
+    (4, TType.STRING, 'dept_code', None, None, ), # 4
+    (5, TType.I16, 'year', None, None, ), # 5
   )
 
-  def __init__(self, gid=None, name=None, gender=None,):
+  def __init__(self, gid=None, name=None, gender=None, dept_code=None, year=None,):
     self.gid = gid
     self.name = name
     self.gender = gender
+    self.dept_code = dept_code
+    self.year = year
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -197,6 +203,16 @@ class User:
           self.gender = iprot.readI32();
         else:
           iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.dept_code = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.I16:
+          self.year = iprot.readI16();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -218,6 +234,14 @@ class User:
     if self.gender is not None:
       oprot.writeFieldBegin('gender', TType.I32, 3)
       oprot.writeI32(self.gender)
+      oprot.writeFieldEnd()
+    if self.dept_code is not None:
+      oprot.writeFieldBegin('dept_code', TType.STRING, 4)
+      oprot.writeString(self.dept_code)
+      oprot.writeFieldEnd()
+    if self.year is not None:
+      oprot.writeFieldBegin('year', TType.I16, 5)
+      oprot.writeI16(self.year)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -360,8 +384,10 @@ class Course:
    - name
    - tearcher
    - book
-   - for_class
-   - for_semester
+   - school_code
+   - dept_code
+   - semester
+   - year
   """
 
   thrift_spec = (
@@ -370,17 +396,21 @@ class Course:
     (2, TType.STRING, 'name', None, None, ), # 2
     (3, TType.STRING, 'tearcher', None, None, ), # 3
     (4, TType.STRING, 'book', None, None, ), # 4
-    (5, TType.STRUCT, 'for_class', (Clazz, Clazz.thrift_spec), None, ), # 5
-    (6, TType.I16, 'for_semester', None, None, ), # 6
+    (5, TType.STRING, 'school_code', None, None, ), # 5
+    (6, TType.STRING, 'dept_code', None, None, ), # 6
+    (7, TType.I16, 'semester', None, None, ), # 7
+    (8, TType.I16, 'year', None, None, ), # 8
   )
 
-  def __init__(self, gid=None, name=None, tearcher=None, book=None, for_class=None, for_semester=None,):
+  def __init__(self, gid=None, name=None, tearcher=None, book=None, school_code=None, dept_code=None, semester=None, year=None,):
     self.gid = gid
     self.name = name
     self.tearcher = tearcher
     self.book = book
-    self.for_class = for_class
-    self.for_semester = for_semester
+    self.school_code = school_code
+    self.dept_code = dept_code
+    self.semester = semester
+    self.year = year
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -412,14 +442,23 @@ class Course:
         else:
           iprot.skip(ftype)
       elif fid == 5:
-        if ftype == TType.STRUCT:
-          self.for_class = Clazz()
-          self.for_class.read(iprot)
+        if ftype == TType.STRING:
+          self.school_code = iprot.readString();
         else:
           iprot.skip(ftype)
       elif fid == 6:
+        if ftype == TType.STRING:
+          self.dept_code = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
         if ftype == TType.I16:
-          self.for_semester = iprot.readI16();
+          self.semester = iprot.readI16();
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.I16:
+          self.year = iprot.readI16();
         else:
           iprot.skip(ftype)
       else:
@@ -448,13 +487,21 @@ class Course:
       oprot.writeFieldBegin('book', TType.STRING, 4)
       oprot.writeString(self.book)
       oprot.writeFieldEnd()
-    if self.for_class is not None:
-      oprot.writeFieldBegin('for_class', TType.STRUCT, 5)
-      self.for_class.write(oprot)
+    if self.school_code is not None:
+      oprot.writeFieldBegin('school_code', TType.STRING, 5)
+      oprot.writeString(self.school_code)
       oprot.writeFieldEnd()
-    if self.for_semester is not None:
-      oprot.writeFieldBegin('for_semester', TType.I16, 6)
-      oprot.writeI16(self.for_semester)
+    if self.dept_code is not None:
+      oprot.writeFieldBegin('dept_code', TType.STRING, 6)
+      oprot.writeString(self.dept_code)
+      oprot.writeFieldEnd()
+    if self.semester is not None:
+      oprot.writeFieldBegin('semester', TType.I16, 7)
+      oprot.writeI16(self.semester)
+      oprot.writeFieldEnd()
+    if self.year is not None:
+      oprot.writeFieldBegin('year', TType.I16, 8)
+      oprot.writeI16(self.year)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

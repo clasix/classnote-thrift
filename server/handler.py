@@ -6,6 +6,7 @@ import sys
 sys.path.append('../gen-py')
 import model
 from type.ttypes import *
+from exception.ttypes import Exception, ExceptionCode as ecode
 
 class ClassNoteHandler:
     def __init__(self, ctrl):
@@ -58,19 +59,41 @@ class ClassNoteHandler:
     def dept_departments(self, auth_token, province, school):
         return self.ctrl.dept_departments(province, school)
 
+    def dept_code(self, auth_token, province, school, dept):
+        dept_code = self.ctrl.dept_code(province, school, dept)
+
+        if dept_code is None:
+            return Exception(ecode.NOT_FOUND)
+        return dept_code
+
+    def getSyncState(self, auth_token):
+        user_id = self.ctrl.get_user_id(auth_token)
+        if user_id is not None:
+            user_sync = self.ctrl.user_sync_by_userid(user_id)
+            return SyncState(datetime.datetime.utcnow, user_sync.fullSyncBefore, user_sync.updateCount) 
+        return Exception(ecode.PERMISSION_DENIED)
+
+    def getSyncChunk(self, auth_token, afterUSN, maxEntries, fullSyncOnly):
+        pass
+
+    def getFilterSyncChunk(self, auth_token, afterUSN, maxEntries, filter):
+        pass
+
+    def getSchoolLessonSyncState(self, auth_token, school_code):
+        pass
+
+    def getSchoolLessonSyncChunk(self, auth_token, school_code, afterUSN, maxEntries, fullSynOnly):
+        pass
+
+    def createCourse(self, auth_token, course):
+        pass
+
+    def updateCourse(self, auth_token, course):
+        pass
+    
+    def expungeCourse(self, auth_token, guid):
+        pass
+
     def user_get(self, auth_token, user_id):
         pass
 
-    def lessontable_get(self, auth_token, user_id):
-        pass
-
-    def lessontable_set(self, auth_token, user_id, lesson_tables):
-        pass
-
-    def course_add(self, course):
-        if course.for_class is not None:
-            model_course = model.Course(name = course.name, tearcher = course.teacher, book = course.book)
-        pass
-
-    def course_set(self, course):
-        pass

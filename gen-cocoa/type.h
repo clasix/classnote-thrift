@@ -74,19 +74,25 @@ typedef int64_t timestamp;
   int64_t __gid;
   NSString * __name;
   int __gender;
+  NSString * __dept_code;
+  int16_t __year;
 
   BOOL __gid_isset;
   BOOL __name_isset;
   BOOL __gender_isset;
+  BOOL __dept_code_isset;
+  BOOL __year_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 @property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
 @property (nonatomic, retain, getter=name, setter=setName:) NSString * name;
 @property (nonatomic, getter=gender, setter=setGender:) int gender;
+@property (nonatomic, retain, getter=dept_code, setter=setDept_code:) NSString * dept_code;
+@property (nonatomic, getter=year, setter=setYear:) int16_t year;
 #endif
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name gender: (int) gender;
+- (id) initWithGid: (int64_t) gid name: (NSString *) name gender: (int) gender dept_code: (NSString *) dept_code year: (int16_t) year;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -102,6 +108,14 @@ typedef int64_t timestamp;
 - (int) gender;
 - (void) setGender: (int) gender;
 - (BOOL) genderIsSet;
+
+- (NSString *) dept_code;
+- (void) setDept_code: (NSString *) dept_code;
+- (BOOL) dept_codeIsSet;
+
+- (int16_t) year;
+- (void) setYear: (int16_t) year;
+- (BOOL) yearIsSet;
 
 @end
 
@@ -159,15 +173,19 @@ typedef int64_t timestamp;
   NSString * __name;
   NSString * __tearcher;
   NSString * __book;
-  Clazz * __for_class;
-  int16_t __for_semester;
+  NSString * __school_code;
+  NSString * __dept_code;
+  int16_t __semester;
+  int16_t __year;
 
   BOOL __gid_isset;
   BOOL __name_isset;
   BOOL __tearcher_isset;
   BOOL __book_isset;
-  BOOL __for_class_isset;
-  BOOL __for_semester_isset;
+  BOOL __school_code_isset;
+  BOOL __dept_code_isset;
+  BOOL __semester_isset;
+  BOOL __year_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
@@ -175,11 +193,13 @@ typedef int64_t timestamp;
 @property (nonatomic, retain, getter=name, setter=setName:) NSString * name;
 @property (nonatomic, retain, getter=tearcher, setter=setTearcher:) NSString * tearcher;
 @property (nonatomic, retain, getter=book, setter=setBook:) NSString * book;
-@property (nonatomic, retain, getter=for_class, setter=setFor_class:) Clazz * for_class;
-@property (nonatomic, getter=for_semester, setter=setFor_semester:) int16_t for_semester;
+@property (nonatomic, retain, getter=school_code, setter=setSchool_code:) NSString * school_code;
+@property (nonatomic, retain, getter=dept_code, setter=setDept_code:) NSString * dept_code;
+@property (nonatomic, getter=semester, setter=setSemester:) int16_t semester;
+@property (nonatomic, getter=year, setter=setYear:) int16_t year;
 #endif
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Clazz *) for_class for_semester: (int16_t) for_semester;
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book school_code: (NSString *) school_code dept_code: (NSString *) dept_code semester: (int16_t) semester year: (int16_t) year;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -200,13 +220,21 @@ typedef int64_t timestamp;
 - (void) setBook: (NSString *) book;
 - (BOOL) bookIsSet;
 
-- (Clazz *) for_class;
-- (void) setFor_class: (Clazz *) for_class;
-- (BOOL) for_classIsSet;
+- (NSString *) school_code;
+- (void) setSchool_code: (NSString *) school_code;
+- (BOOL) school_codeIsSet;
 
-- (int16_t) for_semester;
-- (void) setFor_semester: (int16_t) for_semester;
-- (BOOL) for_semesterIsSet;
+- (NSString *) dept_code;
+- (void) setDept_code: (NSString *) dept_code;
+- (BOOL) dept_codeIsSet;
+
+- (int16_t) semester;
+- (void) setSemester: (int16_t) semester;
+- (BOOL) semesterIsSet;
+
+- (int16_t) year;
+- (void) setYear: (int16_t) year;
+- (BOOL) yearIsSet;
 
 @end
 

@@ -1,5 +1,31 @@
 include "type.thrift"
 
+struct SyncState {
+    1: required type.timestamp currentTime,
+    2: required type.timestamp fullSyncBefore,
+    3: required i32     updateCount,
+}
+
+# missing lessontableitem
+struct SyncChunk {
+    1: required type.timestamp currentTime,
+    2: optional i32 chunkHighUSN,
+    3: optional i32 updateCount,
+    4: optional list<type.Course> courses,
+    5: optional list<type.LessonInfo> lessonInfos,
+    6: optional list<type.LessonTable> lessonTables
+}
+
+/**
+ * this structure is used with the 'getFilteredSyncChunk' call to provide
+ * fine-grained control over the data that's returned when a client needs to synchronize with the service.
+ */
+struct SyncChunkFilter {
+    1: optional bool includeCourses,
+    2: optional bool includeLessonInfos,
+    3: optional bool includeLessonTables
+}
+
 service ClassNote {
     # Already used
 
@@ -40,13 +66,65 @@ service ClassNote {
         3: string   school
     )
 
-    # User
-    type.User user_get(
-        1: string       auth_token,
-        2: i64          user_id
+    string dept_code(
+        1: string   auth_token,
+        2: string   province,
+        3: string   school,
+        4: string   dept
     )
 
-    list<type.LessonTable> lessontable_get(
+    /*===== Synchronization functions for caching clients ====*/
+    SyncState getSyncState(
+        1: string auth_token
+    )
+
+    SyncChunk getSyncChunk(
+        1: string auth_token,
+        2: i32  afterUSN,
+        3: i32  maxEntries,
+        4: bool fullSyncOnly
+    )
+
+    SyncChunk getFilteredSyncChunk(
+        1: string auth_token,
+        2: i32  afterUSN,
+        3: i32  maxEntries,
+        4: SyncChunkFilter  filter
+    )
+
+    SyncState getSchoolLessonSyncState(
+        1: string auth_token,
+        2: string school_code
+    )
+
+    SyncChunk getSchoolLessonSyncChunk(
+        1: string auth_token,
+        2: string school_code,
+        3: i32  afterUSN,
+        4: i32  maxEntries,
+        5: bool fullSyncOnly
+    )
+
+    # return the newly created course, with server-side guid
+    type.Course createCourse(
+        1: string auth_token,
+        2: type.Course  course
+    )
+
+    # return USN
+    i32 updateCourse(
+        1: string auth_token,
+        2: type.Course  course
+    )
+
+    # return USN
+    i32 expungeCourse(
+        1: string   auth_token,
+        2: type.Guid    guid
+    )
+
+    # User
+    type.User user_get(
         1: string       auth_token,
         2: i64          user_id
     )
@@ -55,18 +133,6 @@ service ClassNote {
         1:string        auth_token,
         2:i64           user_id,
         3:list<type.LessonTable>    lesson_tables
-    )
-
-    list<type.Course> courses_get_by_class(
-        1: type.Clazz         clazz
-    )
-
-    bool course_add(
-        1: type.Course   course
-    )
-
-    bool course_set(
-        1: type.Course course
     )
 
     type.AuthResponse login_by_username(

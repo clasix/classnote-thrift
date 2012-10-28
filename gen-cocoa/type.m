@@ -214,7 +214,7 @@
 
 @implementation User
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name gender: (int) gender
+- (id) initWithGid: (int64_t) gid name: (NSString *) name gender: (int) gender dept_code: (NSString *) dept_code year: (int16_t) year
 {
   self = [super init];
   __gid = gid;
@@ -223,6 +223,10 @@
   __name_isset = YES;
   __gender = gender;
   __gender_isset = YES;
+  __dept_code = [dept_code retain];
+  __dept_code_isset = YES;
+  __year = year;
+  __year_isset = YES;
   return self;
 }
 
@@ -244,6 +248,16 @@
     __gender = [decoder decodeIntForKey: @"gender"];
     __gender_isset = YES;
   }
+  if ([decoder containsValueForKey: @"dept_code"])
+  {
+    __dept_code = [[decoder decodeObjectForKey: @"dept_code"] retain];
+    __dept_code_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"year"])
+  {
+    __year = [decoder decodeIntForKey: @"year"];
+    __year_isset = YES;
+  }
   return self;
 }
 
@@ -261,11 +275,20 @@
   {
     [encoder encodeInt: __gender forKey: @"gender"];
   }
+  if (__dept_code_isset)
+  {
+    [encoder encodeObject: __dept_code forKey: @"dept_code"];
+  }
+  if (__year_isset)
+  {
+    [encoder encodeInt: __year forKey: @"year"];
+  }
 }
 
 - (void) dealloc
 {
   [__name release];
+  [__dept_code release];
   [super dealloc];
 }
 
@@ -324,6 +347,44 @@
   __gender_isset = NO;
 }
 
+- (NSString *) dept_code {
+  return [[__dept_code retain] autorelease];
+}
+
+- (void) setDept_code: (NSString *) dept_code {
+  [dept_code retain];
+  [__dept_code release];
+  __dept_code = dept_code;
+  __dept_code_isset = YES;
+}
+
+- (BOOL) dept_codeIsSet {
+  return __dept_code_isset;
+}
+
+- (void) unsetDept_code {
+  [__dept_code release];
+  __dept_code = nil;
+  __dept_code_isset = NO;
+}
+
+- (int16_t) year {
+  return __year;
+}
+
+- (void) setYear: (int16_t) year {
+  __year = year;
+  __year_isset = YES;
+}
+
+- (BOOL) yearIsSet {
+  return __year_isset;
+}
+
+- (void) unsetYear {
+  __year_isset = NO;
+}
+
 - (void) read: (id <TProtocol>) inProtocol
 {
   NSString * fieldName;
@@ -363,6 +424,22 @@
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
+      case 4:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setDept_code: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 5:
+        if (fieldType == TType_I16) {
+          int16_t fieldValue = [inProtocol readI16];
+          [self setYear: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
       default:
         [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         break;
@@ -391,6 +468,18 @@
     [outProtocol writeI32: __gender];
     [outProtocol writeFieldEnd];
   }
+  if (__dept_code_isset) {
+    if (__dept_code != nil) {
+      [outProtocol writeFieldBeginWithName: @"dept_code" type: TType_STRING fieldID: 4];
+      [outProtocol writeString: __dept_code];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__year_isset) {
+    [outProtocol writeFieldBeginWithName: @"year" type: TType_I16 fieldID: 5];
+    [outProtocol writeI16: __year];
+    [outProtocol writeFieldEnd];
+  }
   [outProtocol writeFieldStop];
   [outProtocol writeStructEnd];
 }
@@ -403,6 +492,10 @@
   [ms appendFormat: @"\"%@\"", __name];
   [ms appendString: @",gender:"];
   [ms appendFormat: @"%i", __gender];
+  [ms appendString: @",dept_code:"];
+  [ms appendFormat: @"\"%@\"", __dept_code];
+  [ms appendString: @",year:"];
+  [ms appendFormat: @"%hi", __year];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
@@ -708,7 +801,7 @@
 
 @implementation Course
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book for_class: (Clazz *) for_class for_semester: (int16_t) for_semester
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book school_code: (NSString *) school_code dept_code: (NSString *) dept_code semester: (int16_t) semester year: (int16_t) year
 {
   self = [super init];
   __gid = gid;
@@ -719,10 +812,14 @@
   __tearcher_isset = YES;
   __book = [book retain];
   __book_isset = YES;
-  __for_class = [for_class retain];
-  __for_class_isset = YES;
-  __for_semester = for_semester;
-  __for_semester_isset = YES;
+  __school_code = [school_code retain];
+  __school_code_isset = YES;
+  __dept_code = [dept_code retain];
+  __dept_code_isset = YES;
+  __semester = semester;
+  __semester_isset = YES;
+  __year = year;
+  __year_isset = YES;
   return self;
 }
 
@@ -749,15 +846,25 @@
     __book = [[decoder decodeObjectForKey: @"book"] retain];
     __book_isset = YES;
   }
-  if ([decoder containsValueForKey: @"for_class"])
+  if ([decoder containsValueForKey: @"school_code"])
   {
-    __for_class = [[decoder decodeObjectForKey: @"for_class"] retain];
-    __for_class_isset = YES;
+    __school_code = [[decoder decodeObjectForKey: @"school_code"] retain];
+    __school_code_isset = YES;
   }
-  if ([decoder containsValueForKey: @"for_semester"])
+  if ([decoder containsValueForKey: @"dept_code"])
   {
-    __for_semester = [decoder decodeIntForKey: @"for_semester"];
-    __for_semester_isset = YES;
+    __dept_code = [[decoder decodeObjectForKey: @"dept_code"] retain];
+    __dept_code_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"semester"])
+  {
+    __semester = [decoder decodeIntForKey: @"semester"];
+    __semester_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"year"])
+  {
+    __year = [decoder decodeIntForKey: @"year"];
+    __year_isset = YES;
   }
   return self;
 }
@@ -780,13 +887,21 @@
   {
     [encoder encodeObject: __book forKey: @"book"];
   }
-  if (__for_class_isset)
+  if (__school_code_isset)
   {
-    [encoder encodeObject: __for_class forKey: @"for_class"];
+    [encoder encodeObject: __school_code forKey: @"school_code"];
   }
-  if (__for_semester_isset)
+  if (__dept_code_isset)
   {
-    [encoder encodeInt: __for_semester forKey: @"for_semester"];
+    [encoder encodeObject: __dept_code forKey: @"dept_code"];
+  }
+  if (__semester_isset)
+  {
+    [encoder encodeInt: __semester forKey: @"semester"];
+  }
+  if (__year_isset)
+  {
+    [encoder encodeInt: __year forKey: @"year"];
   }
 }
 
@@ -795,7 +910,8 @@
   [__name release];
   [__tearcher release];
   [__book release];
-  [__for_class release];
+  [__school_code release];
+  [__dept_code release];
   [super dealloc];
 }
 
@@ -879,42 +995,80 @@
   __book_isset = NO;
 }
 
-- (Clazz *) for_class {
-  return [[__for_class retain] autorelease];
+- (NSString *) school_code {
+  return [[__school_code retain] autorelease];
 }
 
-- (void) setFor_class: (Clazz *) for_class {
-  [for_class retain];
-  [__for_class release];
-  __for_class = for_class;
-  __for_class_isset = YES;
+- (void) setSchool_code: (NSString *) school_code {
+  [school_code retain];
+  [__school_code release];
+  __school_code = school_code;
+  __school_code_isset = YES;
 }
 
-- (BOOL) for_classIsSet {
-  return __for_class_isset;
+- (BOOL) school_codeIsSet {
+  return __school_code_isset;
 }
 
-- (void) unsetFor_class {
-  [__for_class release];
-  __for_class = nil;
-  __for_class_isset = NO;
+- (void) unsetSchool_code {
+  [__school_code release];
+  __school_code = nil;
+  __school_code_isset = NO;
 }
 
-- (int16_t) for_semester {
-  return __for_semester;
+- (NSString *) dept_code {
+  return [[__dept_code retain] autorelease];
 }
 
-- (void) setFor_semester: (int16_t) for_semester {
-  __for_semester = for_semester;
-  __for_semester_isset = YES;
+- (void) setDept_code: (NSString *) dept_code {
+  [dept_code retain];
+  [__dept_code release];
+  __dept_code = dept_code;
+  __dept_code_isset = YES;
 }
 
-- (BOOL) for_semesterIsSet {
-  return __for_semester_isset;
+- (BOOL) dept_codeIsSet {
+  return __dept_code_isset;
 }
 
-- (void) unsetFor_semester {
-  __for_semester_isset = NO;
+- (void) unsetDept_code {
+  [__dept_code release];
+  __dept_code = nil;
+  __dept_code_isset = NO;
+}
+
+- (int16_t) semester {
+  return __semester;
+}
+
+- (void) setSemester: (int16_t) semester {
+  __semester = semester;
+  __semester_isset = YES;
+}
+
+- (BOOL) semesterIsSet {
+  return __semester_isset;
+}
+
+- (void) unsetSemester {
+  __semester_isset = NO;
+}
+
+- (int16_t) year {
+  return __year;
+}
+
+- (void) setYear: (int16_t) year {
+  __year = year;
+  __year_isset = YES;
+}
+
+- (BOOL) yearIsSet {
+  return __year_isset;
+}
+
+- (void) unsetYear {
+  __year_isset = NO;
 }
 
 - (void) read: (id <TProtocol>) inProtocol
@@ -965,19 +1119,33 @@
         }
         break;
       case 5:
-        if (fieldType == TType_STRUCT) {
-          Clazz *fieldValue = [[Clazz alloc] init];
-          [fieldValue read: inProtocol];
-          [self setFor_class: fieldValue];
-          [fieldValue release];
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setSchool_code: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
       case 6:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setDept_code: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 7:
         if (fieldType == TType_I16) {
           int16_t fieldValue = [inProtocol readI16];
-          [self setFor_semester: fieldValue];
+          [self setSemester: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 8:
+        if (fieldType == TType_I16) {
+          int16_t fieldValue = [inProtocol readI16];
+          [self setYear: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -1019,16 +1187,28 @@
       [outProtocol writeFieldEnd];
     }
   }
-  if (__for_class_isset) {
-    if (__for_class != nil) {
-      [outProtocol writeFieldBeginWithName: @"for_class" type: TType_STRUCT fieldID: 5];
-      [__for_class write: outProtocol];
+  if (__school_code_isset) {
+    if (__school_code != nil) {
+      [outProtocol writeFieldBeginWithName: @"school_code" type: TType_STRING fieldID: 5];
+      [outProtocol writeString: __school_code];
       [outProtocol writeFieldEnd];
     }
   }
-  if (__for_semester_isset) {
-    [outProtocol writeFieldBeginWithName: @"for_semester" type: TType_I16 fieldID: 6];
-    [outProtocol writeI16: __for_semester];
+  if (__dept_code_isset) {
+    if (__dept_code != nil) {
+      [outProtocol writeFieldBeginWithName: @"dept_code" type: TType_STRING fieldID: 6];
+      [outProtocol writeString: __dept_code];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__semester_isset) {
+    [outProtocol writeFieldBeginWithName: @"semester" type: TType_I16 fieldID: 7];
+    [outProtocol writeI16: __semester];
+    [outProtocol writeFieldEnd];
+  }
+  if (__year_isset) {
+    [outProtocol writeFieldBeginWithName: @"year" type: TType_I16 fieldID: 8];
+    [outProtocol writeI16: __year];
     [outProtocol writeFieldEnd];
   }
   [outProtocol writeFieldStop];
@@ -1045,10 +1225,14 @@
   [ms appendFormat: @"\"%@\"", __tearcher];
   [ms appendString: @",book:"];
   [ms appendFormat: @"\"%@\"", __book];
-  [ms appendString: @",for_class:"];
-  [ms appendFormat: @"%@", __for_class];
-  [ms appendString: @",for_semester:"];
-  [ms appendFormat: @"%hi", __for_semester];
+  [ms appendString: @",school_code:"];
+  [ms appendFormat: @"\"%@\"", __school_code];
+  [ms appendString: @",dept_code:"];
+  [ms appendFormat: @"\"%@\"", __dept_code];
+  [ms appendString: @",semester:"];
+  [ms appendFormat: @"%hi", __semester];
+  [ms appendString: @",year:"];
+  [ms appendFormat: @"%hi", __year];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
