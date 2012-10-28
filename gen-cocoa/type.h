@@ -177,6 +177,7 @@ typedef int64_t timestamp;
   NSString * __dept_code;
   int16_t __semester;
   int16_t __year;
+  int32_t __updateSequenceNum;
 
   BOOL __gid_isset;
   BOOL __name_isset;
@@ -186,6 +187,7 @@ typedef int64_t timestamp;
   BOOL __dept_code_isset;
   BOOL __semester_isset;
   BOOL __year_isset;
+  BOOL __updateSequenceNum_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
@@ -197,9 +199,10 @@ typedef int64_t timestamp;
 @property (nonatomic, retain, getter=dept_code, setter=setDept_code:) NSString * dept_code;
 @property (nonatomic, getter=semester, setter=setSemester:) int16_t semester;
 @property (nonatomic, getter=year, setter=setYear:) int16_t year;
+@property (nonatomic, getter=updateSequenceNum, setter=setUpdateSequenceNum:) int32_t updateSequenceNum;
 #endif
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book school_code: (NSString *) school_code dept_code: (NSString *) dept_code semester: (int16_t) semester year: (int16_t) year;
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book school_code: (NSString *) school_code dept_code: (NSString *) dept_code semester: (int16_t) semester year: (int16_t) year updateSequenceNum: (int32_t) updateSequenceNum;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -236,6 +239,10 @@ typedef int64_t timestamp;
 - (void) setYear: (int16_t) year;
 - (BOOL) yearIsSet;
 
+- (int32_t) updateSequenceNum;
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum;
+- (BOOL) updateSequenceNumIsSet;
+
 @end
 
 @interface LessonInfo : NSObject <NSCoding> {
@@ -245,6 +252,7 @@ typedef int64_t timestamp;
   int16_t __weekday;
   int16_t __start;
   int16_t __duration;
+  int32_t __updateSequenceNum;
 
   BOOL __gid_isset;
   BOOL __course_isset;
@@ -252,6 +260,7 @@ typedef int64_t timestamp;
   BOOL __weekday_isset;
   BOOL __start_isset;
   BOOL __duration_isset;
+  BOOL __updateSequenceNum_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
@@ -261,9 +270,10 @@ typedef int64_t timestamp;
 @property (nonatomic, getter=weekday, setter=setWeekday:) int16_t weekday;
 @property (nonatomic, getter=start, setter=setStart:) int16_t start;
 @property (nonatomic, getter=duration, setter=setDuration:) int16_t duration;
+@property (nonatomic, getter=updateSequenceNum, setter=setUpdateSequenceNum:) int32_t updateSequenceNum;
 #endif
 
-- (id) initWithGid: (int64_t) gid course: (Course *) course room: (NSString *) room weekday: (int16_t) weekday start: (int16_t) start duration: (int16_t) duration;
+- (id) initWithGid: (int64_t) gid course: (Course *) course room: (NSString *) room weekday: (int16_t) weekday start: (int16_t) start duration: (int16_t) duration updateSequenceNum: (int32_t) updateSequenceNum;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -292,17 +302,23 @@ typedef int64_t timestamp;
 - (void) setDuration: (int16_t) duration;
 - (BOOL) durationIsSet;
 
+- (int32_t) updateSequenceNum;
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum;
+- (BOOL) updateSequenceNumIsSet;
+
 @end
 
 @interface LessonTable : NSObject <NSCoding> {
   int64_t __gid;
   int64_t __user_id;
   int16_t __semester;
+  int32_t __updateSequenceNum;
   NSArray * __lessoninfos;
 
   BOOL __gid_isset;
   BOOL __user_id_isset;
   BOOL __semester_isset;
+  BOOL __updateSequenceNum_isset;
   BOOL __lessoninfos_isset;
 }
 
@@ -310,10 +326,11 @@ typedef int64_t timestamp;
 @property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
 @property (nonatomic, getter=user_id, setter=setUser_id:) int64_t user_id;
 @property (nonatomic, getter=semester, setter=setSemester:) int16_t semester;
+@property (nonatomic, getter=updateSequenceNum, setter=setUpdateSequenceNum:) int32_t updateSequenceNum;
 @property (nonatomic, retain, getter=lessoninfos, setter=setLessoninfos:) NSArray * lessoninfos;
 #endif
 
-- (id) initWithGid: (int64_t) gid user_id: (int64_t) user_id semester: (int16_t) semester lessoninfos: (NSArray *) lessoninfos;
+- (id) initWithGid: (int64_t) gid user_id: (int64_t) user_id semester: (int16_t) semester updateSequenceNum: (int32_t) updateSequenceNum lessoninfos: (NSArray *) lessoninfos;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -330,9 +347,55 @@ typedef int64_t timestamp;
 - (void) setSemester: (int16_t) semester;
 - (BOOL) semesterIsSet;
 
+- (int32_t) updateSequenceNum;
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum;
+- (BOOL) updateSequenceNumIsSet;
+
 - (NSArray *) lessoninfos;
 - (void) setLessoninfos: (NSArray *) lessoninfos;
 - (BOOL) lessoninfosIsSet;
+
+@end
+
+@interface LessonTableItem : NSObject <NSCoding> {
+  int64_t __gid;
+  int64_t __table_id;
+  int64_t __lesson_info_id;
+  int32_t __updateSequenceNum;
+
+  BOOL __gid_isset;
+  BOOL __table_id_isset;
+  BOOL __lesson_info_id_isset;
+  BOOL __updateSequenceNum_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, getter=gid, setter=setGid:) int64_t gid;
+@property (nonatomic, getter=table_id, setter=setTable_id:) int64_t table_id;
+@property (nonatomic, getter=lesson_info_id, setter=setLesson_info_id:) int64_t lesson_info_id;
+@property (nonatomic, getter=updateSequenceNum, setter=setUpdateSequenceNum:) int32_t updateSequenceNum;
+#endif
+
+- (id) initWithGid: (int64_t) gid table_id: (int64_t) table_id lesson_info_id: (int64_t) lesson_info_id updateSequenceNum: (int32_t) updateSequenceNum;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+- (int64_t) gid;
+- (void) setGid: (int64_t) gid;
+- (BOOL) gidIsSet;
+
+- (int64_t) table_id;
+- (void) setTable_id: (int64_t) table_id;
+- (BOOL) table_idIsSet;
+
+- (int64_t) lesson_info_id;
+- (void) setLesson_info_id: (int64_t) lesson_info_id;
+- (BOOL) lesson_info_idIsSet;
+
+- (int32_t) updateSequenceNum;
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum;
+- (BOOL) updateSequenceNumIsSet;
 
 @end
 

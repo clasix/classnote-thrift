@@ -801,7 +801,7 @@
 
 @implementation Course
 
-- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book school_code: (NSString *) school_code dept_code: (NSString *) dept_code semester: (int16_t) semester year: (int16_t) year
+- (id) initWithGid: (int64_t) gid name: (NSString *) name tearcher: (NSString *) tearcher book: (NSString *) book school_code: (NSString *) school_code dept_code: (NSString *) dept_code semester: (int16_t) semester year: (int16_t) year updateSequenceNum: (int32_t) updateSequenceNum
 {
   self = [super init];
   __gid = gid;
@@ -820,6 +820,8 @@
   __semester_isset = YES;
   __year = year;
   __year_isset = YES;
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
   return self;
 }
 
@@ -866,6 +868,11 @@
     __year = [decoder decodeIntForKey: @"year"];
     __year_isset = YES;
   }
+  if ([decoder containsValueForKey: @"updateSequenceNum"])
+  {
+    __updateSequenceNum = [decoder decodeInt32ForKey: @"updateSequenceNum"];
+    __updateSequenceNum_isset = YES;
+  }
   return self;
 }
 
@@ -902,6 +909,10 @@
   if (__year_isset)
   {
     [encoder encodeInt: __year forKey: @"year"];
+  }
+  if (__updateSequenceNum_isset)
+  {
+    [encoder encodeInt32: __updateSequenceNum forKey: @"updateSequenceNum"];
   }
 }
 
@@ -1071,6 +1082,23 @@
   __year_isset = NO;
 }
 
+- (int32_t) updateSequenceNum {
+  return __updateSequenceNum;
+}
+
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum {
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
+}
+
+- (BOOL) updateSequenceNumIsSet {
+  return __updateSequenceNum_isset;
+}
+
+- (void) unsetUpdateSequenceNum {
+  __updateSequenceNum_isset = NO;
+}
+
 - (void) read: (id <TProtocol>) inProtocol
 {
   NSString * fieldName;
@@ -1150,6 +1178,14 @@
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
+      case 9:
+        if (fieldType == TType_I32) {
+          int32_t fieldValue = [inProtocol readI32];
+          [self setUpdateSequenceNum: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
       default:
         [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         break;
@@ -1211,6 +1247,11 @@
     [outProtocol writeI16: __year];
     [outProtocol writeFieldEnd];
   }
+  if (__updateSequenceNum_isset) {
+    [outProtocol writeFieldBeginWithName: @"updateSequenceNum" type: TType_I32 fieldID: 9];
+    [outProtocol writeI32: __updateSequenceNum];
+    [outProtocol writeFieldEnd];
+  }
   [outProtocol writeFieldStop];
   [outProtocol writeStructEnd];
 }
@@ -1233,6 +1274,8 @@
   [ms appendFormat: @"%hi", __semester];
   [ms appendString: @",year:"];
   [ms appendFormat: @"%hi", __year];
+  [ms appendString: @",updateSequenceNum:"];
+  [ms appendFormat: @"%i", __updateSequenceNum];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
@@ -1241,7 +1284,7 @@
 
 @implementation LessonInfo
 
-- (id) initWithGid: (int64_t) gid course: (Course *) course room: (NSString *) room weekday: (int16_t) weekday start: (int16_t) start duration: (int16_t) duration
+- (id) initWithGid: (int64_t) gid course: (Course *) course room: (NSString *) room weekday: (int16_t) weekday start: (int16_t) start duration: (int16_t) duration updateSequenceNum: (int32_t) updateSequenceNum
 {
   self = [super init];
   __gid = gid;
@@ -1256,6 +1299,8 @@
   __start_isset = YES;
   __duration = duration;
   __duration_isset = YES;
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
   return self;
 }
 
@@ -1292,6 +1337,11 @@
     __duration = [decoder decodeIntForKey: @"duration"];
     __duration_isset = YES;
   }
+  if ([decoder containsValueForKey: @"updateSequenceNum"])
+  {
+    __updateSequenceNum = [decoder decodeInt32ForKey: @"updateSequenceNum"];
+    __updateSequenceNum_isset = YES;
+  }
   return self;
 }
 
@@ -1320,6 +1370,10 @@
   if (__duration_isset)
   {
     [encoder encodeInt: __duration forKey: @"duration"];
+  }
+  if (__updateSequenceNum_isset)
+  {
+    [encoder encodeInt32: __updateSequenceNum forKey: @"updateSequenceNum"];
   }
 }
 
@@ -1440,6 +1494,23 @@
   __duration_isset = NO;
 }
 
+- (int32_t) updateSequenceNum {
+  return __updateSequenceNum;
+}
+
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum {
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
+}
+
+- (BOOL) updateSequenceNumIsSet {
+  return __updateSequenceNum_isset;
+}
+
+- (void) unsetUpdateSequenceNum {
+  __updateSequenceNum_isset = NO;
+}
+
 - (void) read: (id <TProtocol>) inProtocol
 {
   NSString * fieldName;
@@ -1505,6 +1576,14 @@
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
+      case 7:
+        if (fieldType == TType_I32) {
+          int32_t fieldValue = [inProtocol readI32];
+          [self setUpdateSequenceNum: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
       default:
         [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         break;
@@ -1550,6 +1629,11 @@
     [outProtocol writeI16: __duration];
     [outProtocol writeFieldEnd];
   }
+  if (__updateSequenceNum_isset) {
+    [outProtocol writeFieldBeginWithName: @"updateSequenceNum" type: TType_I32 fieldID: 7];
+    [outProtocol writeI32: __updateSequenceNum];
+    [outProtocol writeFieldEnd];
+  }
   [outProtocol writeFieldStop];
   [outProtocol writeStructEnd];
 }
@@ -1568,6 +1652,8 @@
   [ms appendFormat: @"%hi", __start];
   [ms appendString: @",duration:"];
   [ms appendFormat: @"%hi", __duration];
+  [ms appendString: @",updateSequenceNum:"];
+  [ms appendFormat: @"%i", __updateSequenceNum];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
@@ -1576,7 +1662,7 @@
 
 @implementation LessonTable
 
-- (id) initWithGid: (int64_t) gid user_id: (int64_t) user_id semester: (int16_t) semester lessoninfos: (NSArray *) lessoninfos
+- (id) initWithGid: (int64_t) gid user_id: (int64_t) user_id semester: (int16_t) semester updateSequenceNum: (int32_t) updateSequenceNum lessoninfos: (NSArray *) lessoninfos
 {
   self = [super init];
   __gid = gid;
@@ -1585,6 +1671,8 @@
   __user_id_isset = YES;
   __semester = semester;
   __semester_isset = YES;
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
   __lessoninfos = [lessoninfos retain];
   __lessoninfos_isset = YES;
   return self;
@@ -1608,6 +1696,11 @@
     __semester = [decoder decodeIntForKey: @"semester"];
     __semester_isset = YES;
   }
+  if ([decoder containsValueForKey: @"updateSequenceNum"])
+  {
+    __updateSequenceNum = [decoder decodeInt32ForKey: @"updateSequenceNum"];
+    __updateSequenceNum_isset = YES;
+  }
   if ([decoder containsValueForKey: @"lessoninfos"])
   {
     __lessoninfos = [[decoder decodeObjectForKey: @"lessoninfos"] retain];
@@ -1629,6 +1722,10 @@
   if (__semester_isset)
   {
     [encoder encodeInt: __semester forKey: @"semester"];
+  }
+  if (__updateSequenceNum_isset)
+  {
+    [encoder encodeInt32: __updateSequenceNum forKey: @"updateSequenceNum"];
   }
   if (__lessoninfos_isset)
   {
@@ -1693,6 +1790,23 @@
   __semester_isset = NO;
 }
 
+- (int32_t) updateSequenceNum {
+  return __updateSequenceNum;
+}
+
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum {
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
+}
+
+- (BOOL) updateSequenceNumIsSet {
+  return __updateSequenceNum_isset;
+}
+
+- (void) unsetUpdateSequenceNum {
+  __updateSequenceNum_isset = NO;
+}
+
 - (NSArray *) lessoninfos {
   return [[__lessoninfos retain] autorelease];
 }
@@ -1754,6 +1868,14 @@
         }
         break;
       case 4:
+        if (fieldType == TType_I32) {
+          int32_t fieldValue = [inProtocol readI32];
+          [self setUpdateSequenceNum: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 5:
         if (fieldType == TType_LIST) {
           int _size0;
           [inProtocol readListBeginReturningElementType: NULL size: &_size0];
@@ -1799,9 +1921,14 @@
     [outProtocol writeI16: __semester];
     [outProtocol writeFieldEnd];
   }
+  if (__updateSequenceNum_isset) {
+    [outProtocol writeFieldBeginWithName: @"updateSequenceNum" type: TType_I32 fieldID: 4];
+    [outProtocol writeI32: __updateSequenceNum];
+    [outProtocol writeFieldEnd];
+  }
   if (__lessoninfos_isset) {
     if (__lessoninfos != nil) {
-      [outProtocol writeFieldBeginWithName: @"lessoninfos" type: TType_LIST fieldID: 4];
+      [outProtocol writeFieldBeginWithName: @"lessoninfos" type: TType_LIST fieldID: 5];
       {
         [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__lessoninfos count]];
         int i4;
@@ -1826,8 +1953,243 @@
   [ms appendFormat: @"%qi", __user_id];
   [ms appendString: @",semester:"];
   [ms appendFormat: @"%hi", __semester];
+  [ms appendString: @",updateSequenceNum:"];
+  [ms appendFormat: @"%i", __updateSequenceNum];
   [ms appendString: @",lessoninfos:"];
   [ms appendFormat: @"%@", __lessoninfos];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@implementation LessonTableItem
+
+- (id) initWithGid: (int64_t) gid table_id: (int64_t) table_id lesson_info_id: (int64_t) lesson_info_id updateSequenceNum: (int32_t) updateSequenceNum
+{
+  self = [super init];
+  __gid = gid;
+  __gid_isset = YES;
+  __table_id = table_id;
+  __table_id_isset = YES;
+  __lesson_info_id = lesson_info_id;
+  __lesson_info_id_isset = YES;
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"gid"])
+  {
+    __gid = [decoder decodeInt64ForKey: @"gid"];
+    __gid_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"table_id"])
+  {
+    __table_id = [decoder decodeInt64ForKey: @"table_id"];
+    __table_id_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"lesson_info_id"])
+  {
+    __lesson_info_id = [decoder decodeInt64ForKey: @"lesson_info_id"];
+    __lesson_info_id_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"updateSequenceNum"])
+  {
+    __updateSequenceNum = [decoder decodeInt32ForKey: @"updateSequenceNum"];
+    __updateSequenceNum_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__gid_isset)
+  {
+    [encoder encodeInt64: __gid forKey: @"gid"];
+  }
+  if (__table_id_isset)
+  {
+    [encoder encodeInt64: __table_id forKey: @"table_id"];
+  }
+  if (__lesson_info_id_isset)
+  {
+    [encoder encodeInt64: __lesson_info_id forKey: @"lesson_info_id"];
+  }
+  if (__updateSequenceNum_isset)
+  {
+    [encoder encodeInt32: __updateSequenceNum forKey: @"updateSequenceNum"];
+  }
+}
+
+- (void) dealloc
+{
+  [super dealloc];
+}
+
+- (int64_t) gid {
+  return __gid;
+}
+
+- (void) setGid: (int64_t) gid {
+  __gid = gid;
+  __gid_isset = YES;
+}
+
+- (BOOL) gidIsSet {
+  return __gid_isset;
+}
+
+- (void) unsetGid {
+  __gid_isset = NO;
+}
+
+- (int64_t) table_id {
+  return __table_id;
+}
+
+- (void) setTable_id: (int64_t) table_id {
+  __table_id = table_id;
+  __table_id_isset = YES;
+}
+
+- (BOOL) table_idIsSet {
+  return __table_id_isset;
+}
+
+- (void) unsetTable_id {
+  __table_id_isset = NO;
+}
+
+- (int64_t) lesson_info_id {
+  return __lesson_info_id;
+}
+
+- (void) setLesson_info_id: (int64_t) lesson_info_id {
+  __lesson_info_id = lesson_info_id;
+  __lesson_info_id_isset = YES;
+}
+
+- (BOOL) lesson_info_idIsSet {
+  return __lesson_info_id_isset;
+}
+
+- (void) unsetLesson_info_id {
+  __lesson_info_id_isset = NO;
+}
+
+- (int32_t) updateSequenceNum {
+  return __updateSequenceNum;
+}
+
+- (void) setUpdateSequenceNum: (int32_t) updateSequenceNum {
+  __updateSequenceNum = updateSequenceNum;
+  __updateSequenceNum_isset = YES;
+}
+
+- (BOOL) updateSequenceNumIsSet {
+  return __updateSequenceNum_isset;
+}
+
+- (void) unsetUpdateSequenceNum {
+  __updateSequenceNum_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_I64) {
+          int64_t fieldValue = [inProtocol readI64];
+          [self setGid: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_I64) {
+          int64_t fieldValue = [inProtocol readI64];
+          [self setTable_id: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 3:
+        if (fieldType == TType_I64) {
+          int64_t fieldValue = [inProtocol readI64];
+          [self setLesson_info_id: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 4:
+        if (fieldType == TType_I32) {
+          int32_t fieldValue = [inProtocol readI32];
+          [self setUpdateSequenceNum: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"LessonTableItem"];
+  if (__gid_isset) {
+    [outProtocol writeFieldBeginWithName: @"gid" type: TType_I64 fieldID: 1];
+    [outProtocol writeI64: __gid];
+    [outProtocol writeFieldEnd];
+  }
+  if (__table_id_isset) {
+    [outProtocol writeFieldBeginWithName: @"table_id" type: TType_I64 fieldID: 2];
+    [outProtocol writeI64: __table_id];
+    [outProtocol writeFieldEnd];
+  }
+  if (__lesson_info_id_isset) {
+    [outProtocol writeFieldBeginWithName: @"lesson_info_id" type: TType_I64 fieldID: 3];
+    [outProtocol writeI64: __lesson_info_id];
+    [outProtocol writeFieldEnd];
+  }
+  if (__updateSequenceNum_isset) {
+    [outProtocol writeFieldBeginWithName: @"updateSequenceNum" type: TType_I32 fieldID: 4];
+    [outProtocol writeI32: __updateSequenceNum];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"LessonTableItem("];
+  [ms appendString: @"gid:"];
+  [ms appendFormat: @"%qi", __gid];
+  [ms appendString: @",table_id:"];
+  [ms appendFormat: @"%qi", __table_id];
+  [ms appendString: @",lesson_info_id:"];
+  [ms appendFormat: @"%qi", __lesson_info_id];
+  [ms appendString: @",updateSequenceNum:"];
+  [ms appendFormat: @"%i", __updateSequenceNum];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }

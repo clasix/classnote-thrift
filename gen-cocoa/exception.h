@@ -16,7 +16,8 @@
 enum ExceptionCode {
   ExceptionCode_PERMISSION_DENIED = 101,
   ExceptionCode_INNER_ERROR = 102,
-  ExceptionCode_NOT_FOUND = 103
+  ExceptionCode_NOT_FOUND = 103,
+  ExceptionCode_OP_FAILED = 104
 };
 
 @interface Exception : NSException <NSCoding> {

@@ -388,6 +388,7 @@ class Course:
    - dept_code
    - semester
    - year
+   - updateSequenceNum
   """
 
   thrift_spec = (
@@ -400,9 +401,10 @@ class Course:
     (6, TType.STRING, 'dept_code', None, None, ), # 6
     (7, TType.I16, 'semester', None, None, ), # 7
     (8, TType.I16, 'year', None, None, ), # 8
+    (9, TType.I32, 'updateSequenceNum', None, None, ), # 9
   )
 
-  def __init__(self, gid=None, name=None, tearcher=None, book=None, school_code=None, dept_code=None, semester=None, year=None,):
+  def __init__(self, gid=None, name=None, tearcher=None, book=None, school_code=None, dept_code=None, semester=None, year=None, updateSequenceNum=None,):
     self.gid = gid
     self.name = name
     self.tearcher = tearcher
@@ -411,6 +413,7 @@ class Course:
     self.dept_code = dept_code
     self.semester = semester
     self.year = year
+    self.updateSequenceNum = updateSequenceNum
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -461,6 +464,11 @@ class Course:
           self.year = iprot.readI16();
         else:
           iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.I32:
+          self.updateSequenceNum = iprot.readI32();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -503,6 +511,10 @@ class Course:
       oprot.writeFieldBegin('year', TType.I16, 8)
       oprot.writeI16(self.year)
       oprot.writeFieldEnd()
+    if self.updateSequenceNum is not None:
+      oprot.writeFieldBegin('updateSequenceNum', TType.I32, 9)
+      oprot.writeI32(self.updateSequenceNum)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -534,6 +546,7 @@ class LessonInfo:
    - weekday
    - start
    - duration
+   - updateSequenceNum
   """
 
   thrift_spec = (
@@ -544,15 +557,17 @@ class LessonInfo:
     (4, TType.I16, 'weekday', None, None, ), # 4
     (5, TType.I16, 'start', None, None, ), # 5
     (6, TType.I16, 'duration', None, None, ), # 6
+    (7, TType.I32, 'updateSequenceNum', None, None, ), # 7
   )
 
-  def __init__(self, gid=None, course=None, room=None, weekday=None, start=None, duration=None,):
+  def __init__(self, gid=None, course=None, room=None, weekday=None, start=None, duration=None, updateSequenceNum=None,):
     self.gid = gid
     self.course = course
     self.room = room
     self.weekday = weekday
     self.start = start
     self.duration = duration
+    self.updateSequenceNum = updateSequenceNum
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -594,6 +609,11 @@ class LessonInfo:
           self.duration = iprot.readI16();
         else:
           iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.I32:
+          self.updateSequenceNum = iprot.readI32();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -628,6 +648,10 @@ class LessonInfo:
       oprot.writeFieldBegin('duration', TType.I16, 6)
       oprot.writeI16(self.duration)
       oprot.writeFieldEnd()
+    if self.updateSequenceNum is not None:
+      oprot.writeFieldBegin('updateSequenceNum', TType.I32, 7)
+      oprot.writeI32(self.updateSequenceNum)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -654,6 +678,7 @@ class LessonTable:
    - gid
    - user_id
    - semester
+   - updateSequenceNum
    - lessoninfos
   """
 
@@ -662,13 +687,15 @@ class LessonTable:
     (1, TType.I64, 'gid', None, None, ), # 1
     (2, TType.I64, 'user_id', None, None, ), # 2
     (3, TType.I16, 'semester', None, None, ), # 3
-    (4, TType.LIST, 'lessoninfos', (TType.STRUCT,(LessonInfo, LessonInfo.thrift_spec)), None, ), # 4
+    (4, TType.I32, 'updateSequenceNum', None, None, ), # 4
+    (5, TType.LIST, 'lessoninfos', (TType.STRUCT,(LessonInfo, LessonInfo.thrift_spec)), None, ), # 5
   )
 
-  def __init__(self, gid=None, user_id=None, semester=None, lessoninfos=None,):
+  def __init__(self, gid=None, user_id=None, semester=None, updateSequenceNum=None, lessoninfos=None,):
     self.gid = gid
     self.user_id = user_id
     self.semester = semester
+    self.updateSequenceNum = updateSequenceNum
     self.lessoninfos = lessoninfos
 
   def read(self, iprot):
@@ -696,6 +723,11 @@ class LessonTable:
         else:
           iprot.skip(ftype)
       elif fid == 4:
+        if ftype == TType.I32:
+          self.updateSequenceNum = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
         if ftype == TType.LIST:
           self.lessoninfos = []
           (_etype3, _size0) = iprot.readListBegin()
@@ -728,8 +760,12 @@ class LessonTable:
       oprot.writeFieldBegin('semester', TType.I16, 3)
       oprot.writeI16(self.semester)
       oprot.writeFieldEnd()
+    if self.updateSequenceNum is not None:
+      oprot.writeFieldBegin('updateSequenceNum', TType.I32, 4)
+      oprot.writeI32(self.updateSequenceNum)
+      oprot.writeFieldEnd()
     if self.lessoninfos is not None:
-      oprot.writeFieldBegin('lessoninfos', TType.LIST, 4)
+      oprot.writeFieldBegin('lessoninfos', TType.LIST, 5)
       oprot.writeListBegin(TType.STRUCT, len(self.lessoninfos))
       for iter6 in self.lessoninfos:
         iter6.write(oprot)
@@ -743,6 +779,104 @@ class LessonTable:
       raise TProtocol.TProtocolException(message='Required field gid is unset!')
     if self.user_id is None:
       raise TProtocol.TProtocolException(message='Required field user_id is unset!')
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class LessonTableItem:
+  """
+  Attributes:
+   - gid
+   - table_id
+   - lesson_info_id
+   - updateSequenceNum
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.I64, 'gid', None, None, ), # 1
+    (2, TType.I64, 'table_id', None, None, ), # 2
+    (3, TType.I64, 'lesson_info_id', None, None, ), # 3
+    (4, TType.I32, 'updateSequenceNum', None, None, ), # 4
+  )
+
+  def __init__(self, gid=None, table_id=None, lesson_info_id=None, updateSequenceNum=None,):
+    self.gid = gid
+    self.table_id = table_id
+    self.lesson_info_id = lesson_info_id
+    self.updateSequenceNum = updateSequenceNum
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.gid = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.table_id = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I64:
+          self.lesson_info_id = iprot.readI64();
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I32:
+          self.updateSequenceNum = iprot.readI32();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('LessonTableItem')
+    if self.gid is not None:
+      oprot.writeFieldBegin('gid', TType.I64, 1)
+      oprot.writeI64(self.gid)
+      oprot.writeFieldEnd()
+    if self.table_id is not None:
+      oprot.writeFieldBegin('table_id', TType.I64, 2)
+      oprot.writeI64(self.table_id)
+      oprot.writeFieldEnd()
+    if self.lesson_info_id is not None:
+      oprot.writeFieldBegin('lesson_info_id', TType.I64, 3)
+      oprot.writeI64(self.lesson_info_id)
+      oprot.writeFieldEnd()
+    if self.updateSequenceNum is not None:
+      oprot.writeFieldBegin('updateSequenceNum', TType.I32, 4)
+      oprot.writeI32(self.updateSequenceNum)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    if self.gid is None:
+      raise TProtocol.TProtocolException(message='Required field gid is unset!')
     return
 
 

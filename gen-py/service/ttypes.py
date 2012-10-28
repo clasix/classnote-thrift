@@ -118,6 +118,7 @@ class SyncChunk:
    - courses
    - lessonInfos
    - lessonTables
+   - lessonTableItems
   """
 
   thrift_spec = (
@@ -128,15 +129,17 @@ class SyncChunk:
     (4, TType.LIST, 'courses', (TType.STRUCT,(type.ttypes.Course, type.ttypes.Course.thrift_spec)), None, ), # 4
     (5, TType.LIST, 'lessonInfos', (TType.STRUCT,(type.ttypes.LessonInfo, type.ttypes.LessonInfo.thrift_spec)), None, ), # 5
     (6, TType.LIST, 'lessonTables', (TType.STRUCT,(type.ttypes.LessonTable, type.ttypes.LessonTable.thrift_spec)), None, ), # 6
+    (7, TType.LIST, 'lessonTableItems', (TType.STRUCT,(type.ttypes.LessonTableItem, type.ttypes.LessonTableItem.thrift_spec)), None, ), # 7
   )
 
-  def __init__(self, currentTime=None, chunkHighUSN=None, updateCount=None, courses=None, lessonInfos=None, lessonTables=None,):
+  def __init__(self, currentTime=None, chunkHighUSN=None, updateCount=None, courses=None, lessonInfos=None, lessonTables=None, lessonTableItems=None,):
     self.currentTime = currentTime
     self.chunkHighUSN = chunkHighUSN
     self.updateCount = updateCount
     self.courses = courses
     self.lessonInfos = lessonInfos
     self.lessonTables = lessonTables
+    self.lessonTableItems = lessonTableItems
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -195,6 +198,17 @@ class SyncChunk:
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.LIST:
+          self.lessonTableItems = []
+          (_etype21, _size18) = iprot.readListBegin()
+          for _i22 in xrange(_size18):
+            _elem23 = type.ttypes.LessonTableItem()
+            _elem23.read(iprot)
+            self.lessonTableItems.append(_elem23)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -220,22 +234,29 @@ class SyncChunk:
     if self.courses is not None:
       oprot.writeFieldBegin('courses', TType.LIST, 4)
       oprot.writeListBegin(TType.STRUCT, len(self.courses))
-      for iter18 in self.courses:
-        iter18.write(oprot)
+      for iter24 in self.courses:
+        iter24.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.lessonInfos is not None:
       oprot.writeFieldBegin('lessonInfos', TType.LIST, 5)
       oprot.writeListBegin(TType.STRUCT, len(self.lessonInfos))
-      for iter19 in self.lessonInfos:
-        iter19.write(oprot)
+      for iter25 in self.lessonInfos:
+        iter25.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.lessonTables is not None:
       oprot.writeFieldBegin('lessonTables', TType.LIST, 6)
       oprot.writeListBegin(TType.STRUCT, len(self.lessonTables))
-      for iter20 in self.lessonTables:
-        iter20.write(oprot)
+      for iter26 in self.lessonTables:
+        iter26.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.lessonTableItems is not None:
+      oprot.writeFieldBegin('lessonTableItems', TType.LIST, 7)
+      oprot.writeListBegin(TType.STRUCT, len(self.lessonTableItems))
+      for iter27 in self.lessonTableItems:
+        iter27.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

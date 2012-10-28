@@ -56,6 +56,7 @@
   NSArray * __courses;
   NSArray * __lessonInfos;
   NSArray * __lessonTables;
+  NSArray * __lessonTableItems;
 
   BOOL __currentTime_isset;
   BOOL __chunkHighUSN_isset;
@@ -63,6 +64,7 @@
   BOOL __courses_isset;
   BOOL __lessonInfos_isset;
   BOOL __lessonTables_isset;
+  BOOL __lessonTableItems_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
@@ -72,9 +74,10 @@
 @property (nonatomic, retain, getter=courses, setter=setCourses:) NSArray * courses;
 @property (nonatomic, retain, getter=lessonInfos, setter=setLessonInfos:) NSArray * lessonInfos;
 @property (nonatomic, retain, getter=lessonTables, setter=setLessonTables:) NSArray * lessonTables;
+@property (nonatomic, retain, getter=lessonTableItems, setter=setLessonTableItems:) NSArray * lessonTableItems;
 #endif
 
-- (id) initWithCurrentTime: (timestamp) currentTime chunkHighUSN: (int32_t) chunkHighUSN updateCount: (int32_t) updateCount courses: (NSArray *) courses lessonInfos: (NSArray *) lessonInfos lessonTables: (NSArray *) lessonTables;
+- (id) initWithCurrentTime: (timestamp) currentTime chunkHighUSN: (int32_t) chunkHighUSN updateCount: (int32_t) updateCount courses: (NSArray *) courses lessonInfos: (NSArray *) lessonInfos lessonTables: (NSArray *) lessonTables lessonTableItems: (NSArray *) lessonTableItems;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -102,6 +105,10 @@
 - (NSArray *) lessonTables;
 - (void) setLessonTables: (NSArray *) lessonTables;
 - (BOOL) lessonTablesIsSet;
+
+- (NSArray *) lessonTableItems;
+- (void) setLessonTableItems: (NSArray *) lessonTableItems;
+- (BOOL) lessonTableItemsIsSet;
 
 @end
 

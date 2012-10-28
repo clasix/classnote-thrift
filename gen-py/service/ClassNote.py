@@ -1627,11 +1627,11 @@ class get_lessontables_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype24, _size21) = iprot.readListBegin()
-          for _i25 in xrange(_size21):
-            _elem26 = type.ttypes.LessonTable()
-            _elem26.read(iprot)
-            self.success.append(_elem26)
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = type.ttypes.LessonTable()
+            _elem33.read(iprot)
+            self.success.append(_elem33)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1648,8 +1648,8 @@ class get_lessontables_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter27 in self.success:
-        iter27.write(oprot)
+      for iter34 in self.success:
+        iter34.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1874,10 +1874,10 @@ class dept_provinces_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype31, _size28) = iprot.readListBegin()
-          for _i32 in xrange(_size28):
-            _elem33 = iprot.readString();
-            self.success.append(_elem33)
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = iprot.readString();
+            self.success.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1894,8 +1894,8 @@ class dept_provinces_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter34 in self.success:
-        oprot.writeString(iter34)
+      for iter41 in self.success:
+        oprot.writeString(iter41)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2013,10 +2013,10 @@ class dept_schools_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype38, _size35) = iprot.readListBegin()
-          for _i39 in xrange(_size35):
-            _elem40 = iprot.readString();
-            self.success.append(_elem40)
+          (_etype45, _size42) = iprot.readListBegin()
+          for _i46 in xrange(_size42):
+            _elem47 = iprot.readString();
+            self.success.append(_elem47)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2033,8 +2033,8 @@ class dept_schools_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter41 in self.success:
-        oprot.writeString(iter41)
+      for iter48 in self.success:
+        oprot.writeString(iter48)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -2164,10 +2164,10 @@ class dept_departments_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype45, _size42) = iprot.readListBegin()
-          for _i46 in xrange(_size42):
-            _elem47 = iprot.readString();
-            self.success.append(_elem47)
+          (_etype52, _size49) = iprot.readListBegin()
+          for _i53 in xrange(_size49):
+            _elem54 = iprot.readString();
+            self.success.append(_elem54)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -2184,8 +2184,8 @@ class dept_departments_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter48 in self.success:
-        oprot.writeString(iter48)
+      for iter55 in self.success:
+        oprot.writeString(iter55)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -3664,11 +3664,11 @@ class lessontable_set_args:
       elif fid == 3:
         if ftype == TType.LIST:
           self.lesson_tables = []
-          (_etype52, _size49) = iprot.readListBegin()
-          for _i53 in xrange(_size49):
-            _elem54 = type.ttypes.LessonTable()
-            _elem54.read(iprot)
-            self.lesson_tables.append(_elem54)
+          (_etype59, _size56) = iprot.readListBegin()
+          for _i60 in xrange(_size56):
+            _elem61 = type.ttypes.LessonTable()
+            _elem61.read(iprot)
+            self.lesson_tables.append(_elem61)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -3693,8 +3693,8 @@ class lessontable_set_args:
     if self.lesson_tables is not None:
       oprot.writeFieldBegin('lesson_tables', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.lesson_tables))
-      for iter55 in self.lesson_tables:
-        iter55.write(oprot)
+      for iter62 in self.lesson_tables:
+        iter62.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

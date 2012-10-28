@@ -208,7 +208,7 @@
 
 @implementation SyncChunk
 
-- (id) initWithCurrentTime: (timestamp) currentTime chunkHighUSN: (int32_t) chunkHighUSN updateCount: (int32_t) updateCount courses: (NSArray *) courses lessonInfos: (NSArray *) lessonInfos lessonTables: (NSArray *) lessonTables
+- (id) initWithCurrentTime: (timestamp) currentTime chunkHighUSN: (int32_t) chunkHighUSN updateCount: (int32_t) updateCount courses: (NSArray *) courses lessonInfos: (NSArray *) lessonInfos lessonTables: (NSArray *) lessonTables lessonTableItems: (NSArray *) lessonTableItems
 {
   self = [super init];
   __currentTime = currentTime;
@@ -223,6 +223,8 @@
   __lessonInfos_isset = YES;
   __lessonTables = [lessonTables retain];
   __lessonTables_isset = YES;
+  __lessonTableItems = [lessonTableItems retain];
+  __lessonTableItems_isset = YES;
   return self;
 }
 
@@ -259,6 +261,11 @@
     __lessonTables = [[decoder decodeObjectForKey: @"lessonTables"] retain];
     __lessonTables_isset = YES;
   }
+  if ([decoder containsValueForKey: @"lessonTableItems"])
+  {
+    __lessonTableItems = [[decoder decodeObjectForKey: @"lessonTableItems"] retain];
+    __lessonTableItems_isset = YES;
+  }
   return self;
 }
 
@@ -288,6 +295,10 @@
   {
     [encoder encodeObject: __lessonTables forKey: @"lessonTables"];
   }
+  if (__lessonTableItems_isset)
+  {
+    [encoder encodeObject: __lessonTableItems forKey: @"lessonTableItems"];
+  }
 }
 
 - (void) dealloc
@@ -295,6 +306,7 @@
   [__courses release];
   [__lessonInfos release];
   [__lessonTables release];
+  [__lessonTableItems release];
   [super dealloc];
 }
 
@@ -412,6 +424,27 @@
   __lessonTables_isset = NO;
 }
 
+- (NSArray *) lessonTableItems {
+  return [[__lessonTableItems retain] autorelease];
+}
+
+- (void) setLessonTableItems: (NSArray *) lessonTableItems {
+  [lessonTableItems retain];
+  [__lessonTableItems release];
+  __lessonTableItems = lessonTableItems;
+  __lessonTableItems_isset = YES;
+}
+
+- (BOOL) lessonTableItemsIsSet {
+  return __lessonTableItems_isset;
+}
+
+- (void) unsetLessonTableItems {
+  [__lessonTableItems release];
+  __lessonTableItems = nil;
+  __lessonTableItems_isset = NO;
+}
+
 - (void) read: (id <TProtocol>) inProtocol
 {
   NSString * fieldName;
@@ -511,6 +544,26 @@
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
+      case 7:
+        if (fieldType == TType_LIST) {
+          int _size9;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size9];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size9];
+          int _i10;
+          for (_i10 = 0; _i10 < _size9; ++_i10)
+          {
+            LessonTableItem *_elem11 = [[LessonTableItem alloc] init];
+            [_elem11 read: inProtocol];
+            [fieldValue addObject: _elem11];
+            [_elem11 release];
+          }
+          [inProtocol readListEnd];
+          [self setLessonTableItems: fieldValue];
+          [fieldValue release];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
       default:
         [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         break;
@@ -542,10 +595,10 @@
       [outProtocol writeFieldBeginWithName: @"courses" type: TType_LIST fieldID: 4];
       {
         [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__courses count]];
-        int i10;
-        for (i10 = 0; i10 < [__courses count]; i10++)
+        int i13;
+        for (i13 = 0; i13 < [__courses count]; i13++)
         {
-          [[__courses objectAtIndex: i10] write: outProtocol];
+          [[__courses objectAtIndex: i13] write: outProtocol];
         }
         [outProtocol writeListEnd];
       }
@@ -557,10 +610,10 @@
       [outProtocol writeFieldBeginWithName: @"lessonInfos" type: TType_LIST fieldID: 5];
       {
         [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__lessonInfos count]];
-        int i12;
-        for (i12 = 0; i12 < [__lessonInfos count]; i12++)
+        int i15;
+        for (i15 = 0; i15 < [__lessonInfos count]; i15++)
         {
-          [[__lessonInfos objectAtIndex: i12] write: outProtocol];
+          [[__lessonInfos objectAtIndex: i15] write: outProtocol];
         }
         [outProtocol writeListEnd];
       }
@@ -572,10 +625,25 @@
       [outProtocol writeFieldBeginWithName: @"lessonTables" type: TType_LIST fieldID: 6];
       {
         [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__lessonTables count]];
-        int i14;
-        for (i14 = 0; i14 < [__lessonTables count]; i14++)
+        int i17;
+        for (i17 = 0; i17 < [__lessonTables count]; i17++)
         {
-          [[__lessonTables objectAtIndex: i14] write: outProtocol];
+          [[__lessonTables objectAtIndex: i17] write: outProtocol];
+        }
+        [outProtocol writeListEnd];
+      }
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__lessonTableItems_isset) {
+    if (__lessonTableItems != nil) {
+      [outProtocol writeFieldBeginWithName: @"lessonTableItems" type: TType_LIST fieldID: 7];
+      {
+        [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__lessonTableItems count]];
+        int i19;
+        for (i19 = 0; i19 < [__lessonTableItems count]; i19++)
+        {
+          [[__lessonTableItems objectAtIndex: i19] write: outProtocol];
         }
         [outProtocol writeListEnd];
       }
@@ -600,6 +668,8 @@
   [ms appendFormat: @"%@", __lessonInfos];
   [ms appendString: @",lessonTables:"];
   [ms appendFormat: @"%@", __lessonTables];
+  [ms appendString: @",lessonTableItems:"];
+  [ms appendFormat: @"%@", __lessonTableItems];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
@@ -1925,16 +1995,16 @@
     {
       case 0:
         if (fieldType == TType_LIST) {
-          int _size15;
-          [inProtocol readListBeginReturningElementType: NULL size: &_size15];
-          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size15];
-          int _i16;
-          for (_i16 = 0; _i16 < _size15; ++_i16)
+          int _size20;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size20];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size20];
+          int _i21;
+          for (_i21 = 0; _i21 < _size20; ++_i21)
           {
-            LessonTable *_elem17 = [[LessonTable alloc] init];
-            [_elem17 read: inProtocol];
-            [fieldValue addObject: _elem17];
-            [_elem17 release];
+            LessonTable *_elem22 = [[LessonTable alloc] init];
+            [_elem22 read: inProtocol];
+            [fieldValue addObject: _elem22];
+            [_elem22 release];
           }
           [inProtocol readListEnd];
           [self setSuccess: fieldValue];
@@ -1960,10 +2030,10 @@
       [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
       {
         [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__success count]];
-        int i19;
-        for (i19 = 0; i19 < [__success count]; i19++)
+        int i24;
+        for (i24 = 0; i24 < [__success count]; i24++)
         {
-          [[__success objectAtIndex: i19] write: outProtocol];
+          [[__success objectAtIndex: i24] write: outProtocol];
         }
         [outProtocol writeListEnd];
       }
@@ -2468,14 +2538,14 @@
     {
       case 0:
         if (fieldType == TType_LIST) {
-          int _size20;
-          [inProtocol readListBeginReturningElementType: NULL size: &_size20];
-          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size20];
-          int _i21;
-          for (_i21 = 0; _i21 < _size20; ++_i21)
+          int _size25;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size25];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size25];
+          int _i26;
+          for (_i26 = 0; _i26 < _size25; ++_i26)
           {
-            NSString * _elem22 = [inProtocol readString];
-            [fieldValue addObject: _elem22];
+            NSString * _elem27 = [inProtocol readString];
+            [fieldValue addObject: _elem27];
           }
           [inProtocol readListEnd];
           [self setSuccess: fieldValue];
@@ -2501,10 +2571,10 @@
       [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
       {
         [outProtocol writeListBeginWithElementType: TType_STRING size: [__success count]];
-        int i24;
-        for (i24 = 0; i24 < [__success count]; i24++)
+        int i29;
+        for (i29 = 0; i29 < [__success count]; i29++)
         {
-          [outProtocol writeString: [__success objectAtIndex: i24]];
+          [outProtocol writeString: [__success objectAtIndex: i29]];
         }
         [outProtocol writeListEnd];
       }
@@ -2808,14 +2878,14 @@
     {
       case 0:
         if (fieldType == TType_LIST) {
-          int _size25;
-          [inProtocol readListBeginReturningElementType: NULL size: &_size25];
-          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size25];
-          int _i26;
-          for (_i26 = 0; _i26 < _size25; ++_i26)
+          int _size30;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size30];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size30];
+          int _i31;
+          for (_i31 = 0; _i31 < _size30; ++_i31)
           {
-            NSString * _elem27 = [inProtocol readString];
-            [fieldValue addObject: _elem27];
+            NSString * _elem32 = [inProtocol readString];
+            [fieldValue addObject: _elem32];
           }
           [inProtocol readListEnd];
           [self setSuccess: fieldValue];
@@ -2841,10 +2911,10 @@
       [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
       {
         [outProtocol writeListBeginWithElementType: TType_STRING size: [__success count]];
-        int i29;
-        for (i29 = 0; i29 < [__success count]; i29++)
+        int i34;
+        for (i34 = 0; i34 < [__success count]; i34++)
         {
-          [outProtocol writeString: [__success objectAtIndex: i29]];
+          [outProtocol writeString: [__success objectAtIndex: i34]];
         }
         [outProtocol writeListEnd];
       }
@@ -3205,14 +3275,14 @@
     {
       case 0:
         if (fieldType == TType_LIST) {
-          int _size30;
-          [inProtocol readListBeginReturningElementType: NULL size: &_size30];
-          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size30];
-          int _i31;
-          for (_i31 = 0; _i31 < _size30; ++_i31)
+          int _size35;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size35];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size35];
+          int _i36;
+          for (_i36 = 0; _i36 < _size35; ++_i36)
           {
-            NSString * _elem32 = [inProtocol readString];
-            [fieldValue addObject: _elem32];
+            NSString * _elem37 = [inProtocol readString];
+            [fieldValue addObject: _elem37];
           }
           [inProtocol readListEnd];
           [self setSuccess: fieldValue];
@@ -3238,10 +3308,10 @@
       [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
       {
         [outProtocol writeListBeginWithElementType: TType_STRING size: [__success count]];
-        int i34;
-        for (i34 = 0; i34 < [__success count]; i34++)
+        int i39;
+        for (i39 = 0; i39 < [__success count]; i39++)
         {
-          [outProtocol writeString: [__success objectAtIndex: i34]];
+          [outProtocol writeString: [__success objectAtIndex: i39]];
         }
         [outProtocol writeListEnd];
       }
@@ -7066,16 +7136,16 @@
         break;
       case 3:
         if (fieldType == TType_LIST) {
-          int _size35;
-          [inProtocol readListBeginReturningElementType: NULL size: &_size35];
-          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size35];
-          int _i36;
-          for (_i36 = 0; _i36 < _size35; ++_i36)
+          int _size40;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size40];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size40];
+          int _i41;
+          for (_i41 = 0; _i41 < _size40; ++_i41)
           {
-            LessonTable *_elem37 = [[LessonTable alloc] init];
-            [_elem37 read: inProtocol];
-            [fieldValue addObject: _elem37];
-            [_elem37 release];
+            LessonTable *_elem42 = [[LessonTable alloc] init];
+            [_elem42 read: inProtocol];
+            [fieldValue addObject: _elem42];
+            [_elem42 release];
           }
           [inProtocol readListEnd];
           [self setLesson_tables: fieldValue];
@@ -7112,10 +7182,10 @@
       [outProtocol writeFieldBeginWithName: @"lesson_tables" type: TType_LIST fieldID: 3];
       {
         [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__lesson_tables count]];
-        int i39;
-        for (i39 = 0; i39 < [__lesson_tables count]; i39++)
+        int i44;
+        for (i44 = 0; i44 < [__lesson_tables count]; i44++)
         {
-          [[__lesson_tables objectAtIndex: i39] write: outProtocol];
+          [[__lesson_tables objectAtIndex: i44] write: outProtocol];
         }
         [outProtocol writeListEnd];
       }
@@ -8759,10 +8829,10 @@
     [outProtocol writeFieldBeginWithName: @"lesson_tables" type: TType_LIST fieldID: 3];
     {
       [outProtocol writeListBeginWithElementType: TType_STRUCT size: [lesson_tables count]];
-      int i41;
-      for (i41 = 0; i41 < [lesson_tables count]; i41++)
+      int i46;
+      for (i46 = 0; i46 < [lesson_tables count]; i46++)
       {
-        [[lesson_tables objectAtIndex: i41] write: outProtocol];
+        [[lesson_tables objectAtIndex: i46] write: outProtocol];
       }
       [outProtocol writeListEnd];
     }
