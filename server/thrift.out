@@ -1,0 +1,7 @@
+nohup: ignoring input
+Traceback (most recent call last):
+  File "PythonServer.py", line 6, in <module>
+    from service import ClassNote
+  File "../gen-py/service/ClassNote.py", line 9, in <module>
+    from thrift.Thrift import TType, TMessageType, TException
+ImportError: No module named thrift.Thrift
