@@ -49,6 +49,14 @@ class ClassNoteHandler:
     def create_lessontable(self, auth_token):
         return self.ctrl.create_lessontable(auth_token)
 
+    def dept_provinces(self, auth_token):
+        return self.ctrl.dept_provinces();
+
+    def dept_schools(self, auth_token, province):
+        return self.ctrl.dept_schools(province)
+
+    def dept_departments(self, auth_token, province, school):
+        return self.ctrl.dept_departments(province, school)
 
     def user_get(self, auth_token, user_id):
         pass

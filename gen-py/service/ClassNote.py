@@ -55,6 +55,30 @@ class Iface:
     """
     pass
 
+  def dept_provinces(self, auth_token):
+    """
+    Parameters:
+     - auth_token
+    """
+    pass
+
+  def dept_schools(self, auth_token, province):
+    """
+    Parameters:
+     - auth_token
+     - province
+    """
+    pass
+
+  def dept_departments(self, auth_token, province, school):
+    """
+    Parameters:
+     - auth_token
+     - province
+     - school
+    """
+    pass
+
   def user_get(self, auth_token, user_id):
     """
     Parameters:
@@ -278,6 +302,102 @@ class Client(Iface):
     if result.success is not None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "create_lessontable failed: unknown result");
+
+  def dept_provinces(self, auth_token):
+    """
+    Parameters:
+     - auth_token
+    """
+    self.send_dept_provinces(auth_token)
+    return self.recv_dept_provinces()
+
+  def send_dept_provinces(self, auth_token):
+    self._oprot.writeMessageBegin('dept_provinces', TMessageType.CALL, self._seqid)
+    args = dept_provinces_args()
+    args.auth_token = auth_token
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dept_provinces(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dept_provinces_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dept_provinces failed: unknown result");
+
+  def dept_schools(self, auth_token, province):
+    """
+    Parameters:
+     - auth_token
+     - province
+    """
+    self.send_dept_schools(auth_token, province)
+    return self.recv_dept_schools()
+
+  def send_dept_schools(self, auth_token, province):
+    self._oprot.writeMessageBegin('dept_schools', TMessageType.CALL, self._seqid)
+    args = dept_schools_args()
+    args.auth_token = auth_token
+    args.province = province
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dept_schools(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dept_schools_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dept_schools failed: unknown result");
+
+  def dept_departments(self, auth_token, province, school):
+    """
+    Parameters:
+     - auth_token
+     - province
+     - school
+    """
+    self.send_dept_departments(auth_token, province, school)
+    return self.recv_dept_departments()
+
+  def send_dept_departments(self, auth_token, province, school):
+    self._oprot.writeMessageBegin('dept_departments', TMessageType.CALL, self._seqid)
+    args = dept_departments_args()
+    args.auth_token = auth_token
+    args.province = province
+    args.school = school
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dept_departments(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dept_departments_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dept_departments failed: unknown result");
 
   def user_get(self, auth_token, user_id):
     """
@@ -541,6 +661,9 @@ class Processor(Iface, TProcessor):
     self._processMap["sign_out"] = Processor.process_sign_out
     self._processMap["get_lessontables"] = Processor.process_get_lessontables
     self._processMap["create_lessontable"] = Processor.process_create_lessontable
+    self._processMap["dept_provinces"] = Processor.process_dept_provinces
+    self._processMap["dept_schools"] = Processor.process_dept_schools
+    self._processMap["dept_departments"] = Processor.process_dept_departments
     self._processMap["user_get"] = Processor.process_user_get
     self._processMap["lessontable_get"] = Processor.process_lessontable_get
     self._processMap["lessontable_set"] = Processor.process_lessontable_set
@@ -616,6 +739,39 @@ class Processor(Iface, TProcessor):
     result = create_lessontable_result()
     result.success = self._handler.create_lessontable(args.auth_token)
     oprot.writeMessageBegin("create_lessontable", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_dept_provinces(self, seqid, iprot, oprot):
+    args = dept_provinces_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = dept_provinces_result()
+    result.success = self._handler.dept_provinces(args.auth_token)
+    oprot.writeMessageBegin("dept_provinces", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_dept_schools(self, seqid, iprot, oprot):
+    args = dept_schools_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = dept_schools_result()
+    result.success = self._handler.dept_schools(args.auth_token, args.province)
+    oprot.writeMessageBegin("dept_schools", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_dept_departments(self, seqid, iprot, oprot):
+    args = dept_departments_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = dept_departments_result()
+    result.success = self._handler.dept_departments(args.auth_token, args.province, args.school)
+    oprot.writeMessageBegin("dept_departments", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1340,6 +1496,423 @@ class create_lessontable_result:
   def __ne__(self, other):
     return not (self == other)
 
+class dept_provinces_args:
+  """
+  Attributes:
+   - auth_token
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+  )
+
+  def __init__(self, auth_token=None,):
+    self.auth_token = auth_token
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_provinces_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_provinces_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRING,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype10, _size7) = iprot.readListBegin()
+          for _i11 in xrange(_size7):
+            _elem12 = iprot.readString();
+            self.success.append(_elem12)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_provinces_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRING, len(self.success))
+      for iter13 in self.success:
+        oprot.writeString(iter13)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_schools_args:
+  """
+  Attributes:
+   - auth_token
+   - province
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRING, 'province', None, None, ), # 2
+  )
+
+  def __init__(self, auth_token=None, province=None,):
+    self.auth_token = auth_token
+    self.province = province
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.province = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_schools_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.province is not None:
+      oprot.writeFieldBegin('province', TType.STRING, 2)
+      oprot.writeString(self.province)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_schools_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRING,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = iprot.readString();
+            self.success.append(_elem19)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_schools_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRING, len(self.success))
+      for iter20 in self.success:
+        oprot.writeString(iter20)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_departments_args:
+  """
+  Attributes:
+   - auth_token
+   - province
+   - school
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'auth_token', None, None, ), # 1
+    (2, TType.STRING, 'province', None, None, ), # 2
+    (3, TType.STRING, 'school', None, None, ), # 3
+  )
+
+  def __init__(self, auth_token=None, province=None, school=None,):
+    self.auth_token = auth_token
+    self.province = province
+    self.school = school
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.auth_token = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.province = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.school = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_departments_args')
+    if self.auth_token is not None:
+      oprot.writeFieldBegin('auth_token', TType.STRING, 1)
+      oprot.writeString(self.auth_token)
+      oprot.writeFieldEnd()
+    if self.province is not None:
+      oprot.writeFieldBegin('province', TType.STRING, 2)
+      oprot.writeString(self.province)
+      oprot.writeFieldEnd()
+    if self.school is not None:
+      oprot.writeFieldBegin('school', TType.STRING, 3)
+      oprot.writeString(self.school)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class dept_departments_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRING,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype24, _size21) = iprot.readListBegin()
+          for _i25 in xrange(_size21):
+            _elem26 = iprot.readString();
+            self.success.append(_elem26)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('dept_departments_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRING, len(self.success))
+      for iter27 in self.success:
+        oprot.writeString(iter27)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class user_get_args:
   """
   Attributes:
@@ -1569,11 +2142,11 @@ class lessontable_get_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype10, _size7) = iprot.readListBegin()
-          for _i11 in xrange(_size7):
-            _elem12 = type.ttypes.LessonTable()
-            _elem12.read(iprot)
-            self.success.append(_elem12)
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = type.ttypes.LessonTable()
+            _elem33.read(iprot)
+            self.success.append(_elem33)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1590,8 +2163,8 @@ class lessontable_get_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter13 in self.success:
-        iter13.write(oprot)
+      for iter34 in self.success:
+        iter34.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1654,11 +2227,11 @@ class lessontable_set_args:
       elif fid == 3:
         if ftype == TType.LIST:
           self.lesson_tables = []
-          (_etype17, _size14) = iprot.readListBegin()
-          for _i18 in xrange(_size14):
-            _elem19 = type.ttypes.LessonTable()
-            _elem19.read(iprot)
-            self.lesson_tables.append(_elem19)
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = type.ttypes.LessonTable()
+            _elem40.read(iprot)
+            self.lesson_tables.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1683,8 +2256,8 @@ class lessontable_set_args:
     if self.lesson_tables is not None:
       oprot.writeFieldBegin('lesson_tables', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.lesson_tables))
-      for iter20 in self.lesson_tables:
-        iter20.write(oprot)
+      for iter41 in self.lesson_tables:
+        iter41.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1850,11 +2423,11 @@ class courses_get_by_class_result:
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype24, _size21) = iprot.readListBegin()
-          for _i25 in xrange(_size21):
-            _elem26 = type.ttypes.Course()
-            _elem26.read(iprot)
-            self.success.append(_elem26)
+          (_etype45, _size42) = iprot.readListBegin()
+          for _i46 in xrange(_size42):
+            _elem47 = type.ttypes.Course()
+            _elem47.read(iprot)
+            self.success.append(_elem47)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1871,8 +2444,8 @@ class courses_get_by_class_result:
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter27 in self.success:
-        iter27.write(oprot)
+      for iter48 in self.success:
+        iter48.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

@@ -113,7 +113,24 @@ class Ctrl(object):
             provinces = self.db.query(Dept.province).group_by(Dept.province).all()
         except NoResultFound:
             provinces = []
+        provinces = [i[0] for i in provinces]
         return provinces
+
+    def dept_schools(self, province):
+        try:
+            schools = self.db.query(Dept.school).filter(Dept.province == province).group_by(Dept.school).all()
+        except NoResultFound:
+            schools = []
+        schools = [i[0] for i in schools]
+        return schools
+
+    def dept_departments(self, province, school):
+        try:
+            departments = self.db.query(Dept.dept).filter(Dept.province==province, Dept.school==school).group_by(Dept.dept).all()
+        except NoResultFound:
+            departments = []
+        departments = [i[0] for i in departments]
+        return departments
 
     def add_obj(self, obj):
         self.db.add(obj)

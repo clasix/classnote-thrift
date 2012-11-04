@@ -25,6 +25,21 @@ service ClassNote {
         1: string   auth_token
     )
 
+    list<string> dept_provinces(
+        1: string   auth_token
+    )
+
+    list<string> dept_schools(
+        1: string   auth_token,
+        2: string   province
+    )
+
+    list<string> dept_departments(
+        1: string   auth_token,
+        2: string   province,
+        3: string   school
+    )
+
     # User
     type.User user_get(
         1: string       auth_token,

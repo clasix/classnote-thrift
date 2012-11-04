@@ -13,6 +13,8 @@ from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
 config = {'dev_mode': False, 'mysql_user': sys.argv[1], 'mysql_passwd': sys.argv[2]}
+if len(sys.argv) > 3:
+    config['host'] = sys.argv[3]
 import model
 db = model.db_factory(config)
 from ctrl import Ctrl
