@@ -12,8 +12,8 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
 
 config = {'dev_mode': False, 'mysql_user': sys.argv[1], 'mysql_passwd': sys.argv[2]}
 if len(sys.argv) > 3:

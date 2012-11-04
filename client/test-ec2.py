@@ -29,8 +29,11 @@ try:
   # Connect!
   transport.open()
 
-  res = client.sign_up_email('test@gmail.com', '12345')
-  print res
+  provinces = client.dept_provinces("")
+  print provinces[0]
+  res = None
+  #res = client.sign_up_email('test@gmail.com', '12345')
+  #print res
   if res:
     auth_token = client.login_by_email('test@gmail.com', '12345')
     print 'auth_token is %s' % auth_token
