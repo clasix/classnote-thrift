@@ -1,7 +1,46 @@
 nohup: ignoring input
+ERROR:root:'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
 Traceback (most recent call last):
-  File "classnote.py", line 19, in <module>
-    db = model.db_factory(config)
-  File "/home/clasix/tmp/clasix/classnote-thrift/server/model.py", line 181, in db_factory
-    if settings['host']:
-KeyError: 'host'
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/server/TServer.py", line 84, in serve
+    self.processor.process(iprot, oprot)
+  File "../gen-py/service/ClassNote.py", line 688, in process
+    self._processMap[name](self, seqid, iprot, oprot)
+  File "../gen-py/service/ClassNote.py", line 753, in process_dept_provinces
+    result.write(oprot)
+  File "../gen-py/service/ClassNote.py", line 1605, in write
+    oprot.writeString(iter13)
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/protocol/TBinaryProtocol.py", line 123, in writeString
+    self.trans.write(str)
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/transport/TTransport.py", line 163, in write
+    self.__wbuf.write(buf)
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
+ERROR:root:'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
+Traceback (most recent call last):
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/server/TServer.py", line 84, in serve
+    self.processor.process(iprot, oprot)
+  File "../gen-py/service/ClassNote.py", line 688, in process
+    self._processMap[name](self, seqid, iprot, oprot)
+  File "../gen-py/service/ClassNote.py", line 753, in process_dept_provinces
+    result.write(oprot)
+  File "../gen-py/service/ClassNote.py", line 1605, in write
+    oprot.writeString(iter13)
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/protocol/TBinaryProtocol.py", line 123, in writeString
+    self.trans.write(str)
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/transport/TTransport.py", line 163, in write
+    self.__wbuf.write(buf)
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
+ERROR:root:'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
+Traceback (most recent call last):
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/server/TServer.py", line 84, in serve
+    self.processor.process(iprot, oprot)
+  File "../gen-py/service/ClassNote.py", line 688, in process
+    self._processMap[name](self, seqid, iprot, oprot)
+  File "../gen-py/service/ClassNote.py", line 753, in process_dept_provinces
+    result.write(oprot)
+  File "../gen-py/service/ClassNote.py", line 1605, in write
+    oprot.writeString(iter13)
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/protocol/TBinaryProtocol.py", line 123, in writeString
+    self.trans.write(str)
+  File "/home/clasix/tmp/venv/local/lib/python2.7/site-packages/thrift/transport/TTransport.py", line 163, in write
+    self.__wbuf.write(buf)
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
