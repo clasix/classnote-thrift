@@ -177,7 +177,7 @@ def db_factory(settings):
         engine = create_engine(sqlite_path, echo=True)
         engine.raw_connection().connection.text_factory = str
     else: # use mysql in production
-        mysql_path = 'mysql://%s:%s@localhost:3306/classnote'%(settings['mysql_user'], settings['mysql_passwd'])
+        mysql_path = 'mysql://%s:%s@localhost:3306/classnote?charset=utf8'%(settings['mysql_user'], settings['mysql_passwd'])
         engine = create_engine(mysql_path, encoding='utf8')
     SQLModel.metadata.create_all(engine)
     Session = sessionmaker(bind=engine, autocommit=True)
