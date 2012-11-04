@@ -178,7 +178,7 @@ def db_factory(settings):
         engine.raw_connection().connection.text_factory = str
     else: # use mysql in production
         hostname = 'localhost'
-        if settings['host']:
+        if settings.has_key('host'):
             hostname = settings['host']
         mysql_path = 'mysql://%s:%s@%s:3306/classnote?charset=utf8'%(settings['mysql_user'], settings['mysql_passwd'], hostname)
         engine = create_engine(mysql_path, encoding='utf8')

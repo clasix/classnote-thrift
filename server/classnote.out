@@ -1,0 +1,7 @@
+nohup: ignoring input
+Traceback (most recent call last):
+  File "classnote.py", line 19, in <module>
+    db = model.db_factory(config)
+  File "/home/clasix/tmp/clasix/classnote-thrift/server/model.py", line 181, in db_factory
+    if settings['host']:
+KeyError: 'host'
